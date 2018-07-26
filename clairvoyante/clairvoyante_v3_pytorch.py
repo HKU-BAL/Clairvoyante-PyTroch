@@ -44,6 +44,8 @@ import param
 
 class Net(nn.Module):
 
+    # Initialises Clairvoyante with 3 convolutional layers, 2 hidden fully connected layers and an output layer.
+    # Also, it initialises the NN's weights using He initializtion.
     def __init__(self, inputShape = (2*param.flankingBaseNum+1, 4, param.matrixNum),
                        outputShape1 = (4, ), outputShape2 = (2, ), outputShape3 = (4, ), outputShape4 = (6, ),
                        kernelSize1 = (1, 4), kernelSize2 = (2, 4), kernelSize3 = (3, 4),
@@ -104,42 +106,44 @@ class Net(nn.Module):
         nn.init.kaiming_normal_(self.YIndelLengthFCLayer.weight, mode='fan_in', nonlinearity='relu')
 
     # Implements the same padding feature in Tensorflow.
-    # KernelSize is a tuple as kernel is not a square.
+    # kernelSize is a tuple as kernel is not a square.
     def padding(self, kernelSize):
         ka1 = kernelSize[0] // 2
         kb1 = ka1 - 1 if kernelSize[0] % 2 == 0 else ka1
         ka2 = kernelSize[1] // 2
         kb2 = ka2 - 1 if kernelSize[1] % 2 == 0 else ka2
         print((kb2,ka2,kb1,ka1))
-        return((kb2,ka2,kb1,ka1))
+        return nn.ZeroPad2d((kb2,ka2,kb1,ka1))
 
     # Forward propagation
-    def forward(self, x):
-        # Max pooling over a self.pollSize1 window
+    def forward(self, XPH):
+        # Different non-linear activation functions.
         selu = nn.SELU()
         sigmoid = nn.Sigmoid()
+        # Dim specifies softmax over the row of the tensor.
         softmax = nn.Softmax(dim=1)
 
-        # pad1 = nn.ZeroPad2d((1,2,0,0))
-        pad1 = nn.ZeroPad2d(self.padding(self.kernelSize1))
-        print(selu(self.conv1(pad1(x))).shape)
-        pool1 = F.max_pool2d(selu(self.conv1(pad1(x))), self.pollSize1, stride=1)
+        # Convolution layers with max max_pooling and SELU.
+        pad1 = self.padding(self.kernelSize1)
+        print(selu(self.conv1(pad1(XPH))).shape)
+        pool1 = F.max_pool2d(selu(self.conv1(pad1(XPH))), self.pollSize1, stride=1)
         print(pool1.shape)
 
-        # If the size is a square you can only specify a single number
-        pad2 = nn.ZeroPad2d(self.padding(self.kernelSize2))
+        pad2 = self.padding(self.kernelSize2)
         print(selu(self.conv2(pad2(pool1))).shape)
         pool2 = F.max_pool2d(selu(self.conv2(pad2(pool1))), self.pollSize2, stride=1)
         print(pool2.shape)
 
-        pad3 = nn.ZeroPad2d(self.padding(self.kernelSize3))
+        pad3 = self.padding(self.kernelSize3)
         print(selu(self.conv3(pad3(pool2))).shape)
         pool3 = F.max_pool2d(selu(self.conv3(pad3(pool2))), self.pollSize3, stride=1)
         print(pool3.shape)
 
+        # Flattens output from pool3.
         conv3_flat = pool3.view(-1, self.flat_size)
         print(conv3_flat.shape)
 
+        # 2 Hidden Layers that uses SELU and alpha dropout.
         # Alphadropout uses bernoulli distribution rather than uniform distribution.
         selu4 = selu(self.fc4(conv3_flat))
         ad4 = nn.AlphaDropout(p=self.dropoutRateFC4Val)
@@ -151,12 +155,16 @@ class Net(nn.Module):
         dropout5 = ad5(selu5)
         print(dropout5.shape)
 
+        # Epsilon for softmax.
         epsilon = 1e-10
 
+        # 1 output layer that uses sigmoid for base change.
         YBaseChangeSigmoid = sigmoid(self.YBaseChangeSigmoidLayer(dropout4))
         self.YBaseChangeSigmoid = YBaseChangeSigmoid
         print(YBaseChangeSigmoid.shape)
 
+        # 3 output fully connected layers for zygosity, varType and indelLength.
+        # Uses SELU and softmax to output result.
         YZygosityFC = selu(self.YZygosityFCLayer(dropout5))
         YZygosityLogits = torch.add(YZygosityFC, epsilon)
         YZygositySoftmax = softmax(YZygosityLogits)
