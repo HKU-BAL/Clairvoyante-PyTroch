@@ -82,7 +82,11 @@ class Net(nn.Module):
         # an affine operation: y = Wx + b
         self.fc4 = nn.Linear(self.flat_size, self.hiddenLayerUnits4)
         self.fc5 = nn.Linear(self.hiddenLayerUnits4, self.hiddenLayerUnits5)
-        self.fc3 = nn.Linear(self.hiddenLayerUnits5, 12)
+
+        self.YBaseChangeSigmoidLayer = nn.Linear(self.hiddenLayerUnits4,self.outputShape1[0])
+        self.YZygosityFCLayer = nn.Linear(self.hiddenLayerUnits5,self.outputShape2[0])
+        self.YVarTypeFCLayer = nn.Linear(self.hiddenLayerUnits5, self.outputShape3[0])
+        self.YIndelLengthFCLayer = nn.Linear(self.hiddenLayerUnits5, self.outputShape4[0])
 
     # Implements the same padding feature in Tensorflow.
     # KernelSize is a tuple as kernel is not a square.
@@ -94,9 +98,12 @@ class Net(nn.Module):
         print((kb2,ka2,kb1,ka1))
         return((kb2,ka2,kb1,ka1))
 
+    # Forward propagation
     def forward(self, x):
         # Max pooling over a self.pollSize1 window
         selu = nn.SELU()
+        sigmoid = nn.Sigmoid()
+        softmax = nn.Softmax(dim=1)
 
         # pad1 = nn.ZeroPad2d((1,2,0,0))
         pad1 = nn.ZeroPad2d(self.padding(self.kernelSize1))
@@ -118,15 +125,42 @@ class Net(nn.Module):
         conv3_flat = pool3.view(-1, self.flat_size)
         print(conv3_flat.shape)
 
-        dropout4 = selu(self.fc4(conv3_flat))
+        # Alphadropout uses bernoulli distribution rather than uniform distribution.
+        selu4 = selu(self.fc4(conv3_flat))
+        ad4 = nn.AlphaDropout(p=self.dropoutRateFC4Val)
+        dropout4 = ad4(selu4)
         print(dropout4.shape)
 
-        dropout5 = selu(self.fc5(dropout4))
+        selu5 = selu(self.fc5(dropout4))
+        ad5 = nn.AlphaDropout(p=self.dropoutRateFC5Val)
+        dropout5 = ad5(selu5)
         print(dropout5.shape)
-        
-        # dropout6 = self.fc3(dropout5)
-        #
-        # return dropout6
+
+        epsilon = 1e-10
+
+        YBaseChangeSigmoid = sigmoid(self.YBaseChangeSigmoidLayer(dropout4))
+        self.YBaseChangeSigmoid = YBaseChangeSigmoid
+        print(YBaseChangeSigmoid.shape)
+
+        YZygosityFC = selu(self.YZygosityFCLayer(dropout5))
+        YZygosityLogits = torch.add(YZygosityFC, epsilon)
+        YZygositySoftmax = softmax(YZygosityLogits)
+        self.YZygositySoftmax = YZygositySoftmax
+        print(YZygositySoftmax.shape)
+
+        YVarTypeFC = selu(self.YVarTypeFCLayer(dropout5))
+        YVarTypeLogits = torch.add(YVarTypeFC, epsilon)
+        YVarTypeSoftmax = softmax(YVarTypeLogits)
+        self.YVarTypeSoftmax = YVarTypeSoftmax
+        print(YVarTypeSoftmax.shape)
+
+        YIndelLengthFC = selu(self.YIndelLengthFCLayer(dropout5))
+        YIndelLengthLogits = torch.add(YIndelLengthFC, epsilon)
+        YIndelLengthSoftmax = softmax(YIndelLengthLogits)
+        self.YIndelLengthSoftmax = YIndelLengthSoftmax
+        print(YIndelLengthSoftmax.shape)
+
+        return YBaseChangeSigmoid,YZygositySoftmax,YVarTypeSoftmax,YIndelLengthSoftmax
 
     # def num_flat_features(self, x):
     #     size = x.size()[1:]  # all dimensions except the batch dimension

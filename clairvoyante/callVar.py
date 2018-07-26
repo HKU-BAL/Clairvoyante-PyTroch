@@ -169,6 +169,7 @@ def Test(args, m, utils):
     # print(XBatch2.shape)
     m.predictNoRT(XBatch2)
     base = m.predictBaseRTVal; z = m.predictZygosityRTVal; t = m.predictVarTypeRTVal; l = m.predictIndelLengthRTVal
+    # print(base.shape, z.shape, t.shape, l.shape)
     if end2 == 0:
         end = end2; num = num2; XBatch = XBatch2; posBatch = posBatch2
         end2, num2, XBatch2, posBatch2 = next(tensorGenerator)

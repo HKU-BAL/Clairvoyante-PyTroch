@@ -130,31 +130,43 @@ class Clairvoyante(object):
             self.dropout5 = dropout5
 
             epsilon = tf.constant(value=1e-10)
+
             YBaseChangeSigmoid = tf.layers.dense(inputs=dropout4, units=self.outputShape1[0], activation=tf.nn.sigmoid, name='YBaseChangeSigmoid')
             self.YBaseChangeSigmoid = YBaseChangeSigmoid
+            print(YBaseChangeSigmoid.shape)
+
             YZygosityFC = tf.layers.dense(inputs=dropout5, units=self.outputShape2[0], activation=selu.selu, name='YZygosityFC')
             YZygosityLogits = tf.add(YZygosityFC, epsilon, name='YZygosityLogits')
             YZygositySoftmax = tf.nn.softmax(YZygosityLogits, name='YZygositySoftmax')
             self.YZygositySoftmax = YZygositySoftmax
+            print(YZygositySoftmax.shape)
+
             YVarTypeFC = tf.layers.dense(inputs=dropout5, units=self.outputShape3[0], activation=selu.selu, name='YVarTypeFC')
             YVarTypeLogits = tf.add(YVarTypeFC, epsilon, name='YVarTypeLogits')
             YVarTypeSoftmax = tf.nn.softmax(YVarTypeLogits, name='YVarTypeSoftmax')
             self.YVarTypeSoftmax = YVarTypeSoftmax
+            print(YVarTypeSoftmax.shape)
+
             YIndelLengthFC = tf.layers.dense(inputs=dropout5, units=self.outputShape4[0], activation=selu.selu, name='YIndelLengthFC')
             YIndelLengthLogits = tf.add(YIndelLengthFC, epsilon, name='YIndelLengthLogits')
             YIndelLengthSoftmax = tf.nn.softmax(YIndelLengthLogits, name='YIndelLengthSoftmax')
             self.YIndelLengthSoftmax = YIndelLengthSoftmax
+            print(YIndelLengthSoftmax.shape)
 
             loss1 = tf.reduce_sum(tf.pow(YBaseChangeSigmoid - tf.slice(YPH,[0,0],[-1,self.outputShape1[0]], name='YBaseChangeGetTruth'), 2, name='YBaseChangeMSE'), name='YBaseChangeReduceSum')
             YZygosityCrossEntropy = tf.nn.log_softmax(YZygosityLogits, name='YZygosityLogSoftmax')\
                                     * -tf.slice(YPH, [0,self.outputShape1[0]], [-1,self.outputShape2[0]], name='YZygosityGetTruth')
+
             loss2 = tf.reduce_sum(YZygosityCrossEntropy, name='YZygosityReduceSum')
             YVarTypeCrossEntropy = tf.nn.log_softmax(YVarTypeLogits, name='YVarTypeLogSoftmax')\
                                    * -tf.slice(YPH, [0,self.outputShape1[0]+self.outputShape2[0]], [-1,self.outputShape3[0]], name='YVarTypeGetTruth')
+
             loss3 = tf.reduce_sum(YVarTypeCrossEntropy, name='YVarTypeReduceSum')
             YIndelLengthCrossEntropy = tf.nn.log_softmax(YIndelLengthLogits, name='YIndelLengthLogSoftmax')\
                                        * -tf.slice(YPH, [0,self.outputShape1[0]+self.outputShape2[0]+self.outputShape3[0]], [-1,self.outputShape4[0]], name='YIndelLengthGetTruth')
+
             loss4 = tf.reduce_sum(YIndelLengthCrossEntropy, name='YIndelLengthReduceSum')
+
             lossL2 = tf.add_n([ tf.nn.l2_loss(v) for v in tf.trainable_variables() if 'bias' not in v.name ]) * l2RegularizationLambdaPH
             loss = loss1 + loss2 + loss3 + loss4 + lossL2
             self.loss = loss
