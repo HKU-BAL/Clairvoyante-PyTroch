@@ -67,26 +67,41 @@ class Net(nn.Module):
         self.trainLossRTVal = None; self.trainSummaryRTVal = None; self.getLossLossRTVal = None
         self.predictBaseRTVal = None; self.predictZygosityRTVal = None; self.predictVarTypeRTVal = None; self.predictIndelLengthRTVal = None
 
-        # 3 convolutional layers and 3 fully connected layers.
+        # 3 Convolutional Layers
         # channel = int(self.inputShape[1])
-        # kernel
         self.conv1 = nn.Conv2d(param.matrixNum, self.numFeature1, self.kernelSize1)
+        nn.init.kaiming_normal_(self.conv1.weight, mode='fan_in', nonlinearity='relu')
+
         self.conv2 = nn.Conv2d(self.numFeature1, self.numFeature2, self.kernelSize2)
+        nn.init.kaiming_normal_(self.conv2.weight, mode='fan_in', nonlinearity='relu')
+
         self.conv3 = nn.Conv2d(self.numFeature2, self.numFeature3, self.kernelSize3)
+        nn.init.kaiming_normal_(self.conv3.weight, mode='fan_in', nonlinearity='relu')
 
         # Calculate the size of the flattened size after the conv3
         self.flat_size = ( self.inputShape[0] - (self.pollSize1[0] - 1) - (self.pollSize2[0] - 1) - (self.pollSize3[0] - 1))
         self.flat_size *= ( self.inputShape[1] - (self.pollSize1[1] - 1) - (self.pollSize2[1] - 1) - (self.pollSize3[1] - 1))
         self.flat_size *= self.numFeature3
 
-        # an affine operation: y = Wx + b
+        # 2 FC Hidden Layers
         self.fc4 = nn.Linear(self.flat_size, self.hiddenLayerUnits4)
-        self.fc5 = nn.Linear(self.hiddenLayerUnits4, self.hiddenLayerUnits5)
+        nn.init.kaiming_normal_(self.fc4.weight, mode='fan_in', nonlinearity='relu')
 
+        self.fc5 = nn.Linear(self.hiddenLayerUnits4, self.hiddenLayerUnits5)
+        nn.init.kaiming_normal_(self.fc5.weight, mode='fan_in', nonlinearity='relu')
+
+        # 4 Output Layers
         self.YBaseChangeSigmoidLayer = nn.Linear(self.hiddenLayerUnits4,self.outputShape1[0])
+        nn.init.kaiming_normal_(self.YBaseChangeSigmoidLayer.weight, mode='fan_in', nonlinearity='relu')
+
         self.YZygosityFCLayer = nn.Linear(self.hiddenLayerUnits5,self.outputShape2[0])
+        nn.init.kaiming_normal_(self.YZygosityFCLayer.weight, mode='fan_in', nonlinearity='relu')
+
         self.YVarTypeFCLayer = nn.Linear(self.hiddenLayerUnits5, self.outputShape3[0])
+        nn.init.kaiming_normal_(self.YVarTypeFCLayer.weight, mode='fan_in', nonlinearity='relu')
+
         self.YIndelLengthFCLayer = nn.Linear(self.hiddenLayerUnits5, self.outputShape4[0])
+        nn.init.kaiming_normal_(self.YIndelLengthFCLayer.weight, mode='fan_in', nonlinearity='relu')
 
     # Implements the same padding feature in Tensorflow.
     # KernelSize is a tuple as kernel is not a square.
@@ -173,84 +188,84 @@ class Net(nn.Module):
 net = Net()
 print(net)
 
-# ########################################################################
-# # You just have to define the ``forward`` function, and the ``backward``
-# # function (where gradients are computed) is automatically defined for you
-# # using ``autograd``.
-# # You can use any of the Tensor operations in the ``forward`` function.
-# #
-# # The learnable parameters of a model are returned by ``net.parameters()``
+########################################################################
+# You just have to define the ``forward`` function, and the ``backward``
+# function (where gradients are computed) is automatically defined for you
+# using ``autograd``.
+# You can use any of the Tensor operations in the ``forward`` function.
 #
-# params = list(net.parameters())
-# print(len(params))
+# The learnable parameters of a model are returned by ``net.parameters()``
+
+params = list(net.parameters())
+print(len(params))
 # print(params[0].size())  # conv1's .weight
-#
-# ########################################################################
-# # Let try a random 32x32 input
-# # Note: Expected input size to this net(LeNet) is 32x32. To use this net on
-# # MNIST dataset, please resize the images from the dataset to 32x32.
-#
+
+########################################################################
+# Let try a random 32x32 input
+# Note: Expected input size to this net(LeNet) is 32x32. To use this net on
+# MNIST dataset, please resize the images from the dataset to 32x32.
+
 input = torch.randn(param.matrixNum, 2*param.flankingBaseNum+1, 4)
 print(input.shape)
 out = net(input.unsqueeze_(0))
 print(out)
-#
+
 # ########################################################################
 # # Zero the gradient buffers of all parameters and backprops with random
 # # gradients:
 # net.zero_grad()
 # out.backward(torch.randn(1, 10))
 #
-# ########################################################################
-# # .. note::
-# #
-# #     ``torch.nn`` only supports mini-batches. The entire ``torch.nn``
-# #     package only supports inputs that are a mini-batch of samples, and not
-# #     a single sample.
-# #
-# #     For example, ``nn.Conv2d`` will take in a 4D Tensor of
-# #     ``nSamples x nChannels x Height x Width``.
-# #
-# #     If you have a single sample, just use ``input.unsqueeze(0)`` to add
-# #     a fake batch dimension.
-# #
-# # Before proceeding further, let's recap all the classes you’ve seen so far.
-# #
-# # **Recap:**
-# #   -  ``torch.Tensor`` - A *multi-dimensional array* with support for autograd
-# #      operations like ``backward()``. Also *holds the gradient* w.r.t. the
-# #      tensor.
-# #   -  ``nn.Module`` - Neural network module. *Convenient way of
-# #      encapsulating parameters*, with helpers for moving them to GPU,
-# #      exporting, loading, etc.
-# #   -  ``nn.Parameter`` - A kind of Tensor, that is *automatically
-# #      registered as a parameter when assigned as an attribute to a*
-# #      ``Module``.
-# #   -  ``autograd.Function`` - Implements *forward and backward definitions
-# #      of an autograd operation*. Every ``Tensor`` operation, creates at
-# #      least a single ``Function`` node, that connects to functions that
-# #      created a ``Tensor`` and *encodes its history*.
-# #
-# # **At this point, we covered:**
-# #   -  Defining a neural network
-# #   -  Processing inputs and calling backward
-# #
-# # **Still Left:**
-# #   -  Computing the loss
-# #   -  Updating the weights of the network
-# #
-# # Loss Function
-# # -------------
-# # A loss function takes the (output, target) pair of inputs, and computes a
-# # value that estimates how far away the output is from the target.
-# #
-# # There are several different
-# # `loss functions <http://pytorch.org/docs/nn.html#loss-functions>`_ under the
-# # nn package .
-# # A simple loss is: ``nn.MSELoss`` which computes the mean-squared error
-# # between the input and the target.
-# #
-# # For example:
+########################################################################
+# .. note::
+#
+#     ``torch.nn`` only supports mini-batches. The entire ``torch.nn``
+#     package only supports inputs that are a mini-batch of samples, and not
+#     a single sample.
+#
+#     For example, ``nn.Conv2d`` will take in a 4D Tensor of
+#     ``nSamples x nChannels x Height x Width``.
+#
+#     If you have a single sample, just use ``input.unsqueeze(0)`` to add
+#     a fake batch dimension.
+#
+# Before proceeding further, let's recap all the classes you’ve seen so far.
+#
+# **Recap:**
+#   -  ``torch.Tensor`` - A *multi-dimensional array* with support for autograd
+#      operations like ``backward()``. Also *holds the gradient* w.r.t. the
+#      tensor.
+#   -  ``nn.Module`` - Neural network module. *Convenient way of
+#      encapsulating parameters*, with helpers for moving them to GPU,
+#      exporting, loading, etc.
+#   -  ``nn.Parameter`` - A kind of Tensor, that is *automatically
+#      registered as a parameter when assigned as an attribute to a*
+#      ``Module``.
+#   -  ``autograd.Function`` - Implements *forward and backward definitions
+#      of an autograd operation*. Every ``Tensor`` operation, creates at
+#      least a single ``Function`` node, that connects to functions that
+#      created a ``Tensor`` and *encodes its history*.
+#
+# **At this point, we covered:**
+#   -  Defining a neural network
+#   -  Processing inputs and calling backward
+#
+# **Still Left:**
+#   -  Computing the loss
+#   -  Updating the weights of the network
+#
+# Loss Function
+# -------------
+# A loss function takes the (output, target) pair of inputs, and computes a
+# value that estimates how far away the output is from the target.
+#
+# There are several different
+# `loss functions <http://pytorch.org/docs/nn.html#loss-functions>`_ under the
+# nn package .
+# A simple loss is: ``nn.MSELoss`` which computes the mean-squared error
+# between the input and the target.
+#
+# For example:
 #
 # output = net(input)
 # target = torch.arange(1, 11)  # a dummy target, for example
