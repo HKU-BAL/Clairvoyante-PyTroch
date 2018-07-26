@@ -45,7 +45,7 @@ import param
 class Net(nn.Module):
 
     # Initialises Clairvoyante with 3 convolutional layers, 2 hidden fully connected layers and an output layer.
-    # Also, it initialises the NN's weights using He initializtion.
+    # It specifies the parameters for these layers and it initialises the NN's weights using He initializtion.
     def __init__(self, inputShape = (2*param.flankingBaseNum+1, 4, param.matrixNum),
                        outputShape1 = (4, ), outputShape2 = (2, ), outputShape3 = (4, ), outputShape4 = (6, ),
                        kernelSize1 = (1, 4), kernelSize2 = (2, 4), kernelSize3 = (3, 4),
