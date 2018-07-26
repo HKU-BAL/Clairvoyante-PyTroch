@@ -85,6 +85,7 @@ class Net(nn.Module):
         self.fc3 = nn.Linear(self.hiddenLayerUnits5, 12)
 
     # Implements the same padding feature in Tensorflow.
+    # KernelSize is a tuple as kernel is not a square.
     def padding(self, kernelSize):
         ka1 = kernelSize[0] // 2
         kb1 = ka1 - 1 if kernelSize[0] % 2 == 0 else ka1
@@ -92,8 +93,6 @@ class Net(nn.Module):
         kb2 = ka2 - 1 if kernelSize[1] % 2 == 0 else ka2
         print((kb2,ka2,kb1,ka1))
         return((kb2,ka2,kb1,ka1))
-        # print(tuple((k - 1) // 2 for k in kernelSize))
-        # return nn.ZeroPad2d(tuple((k - 1) // 2 for k in kernelSize))
 
     def forward(self, x):
         # Max pooling over a self.pollSize1 window
@@ -124,6 +123,7 @@ class Net(nn.Module):
 
         dropout5 = selu(self.fc5(dropout4))
         print(dropout5.shape)
+        
         # dropout6 = self.fc3(dropout5)
         #
         # return dropout6
