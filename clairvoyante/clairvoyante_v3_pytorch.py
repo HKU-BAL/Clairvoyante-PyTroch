@@ -306,11 +306,12 @@ loss4 = YIndelLengthCrossEntropy.sum()
 print(loss4)
 
 l2_reg = None
-for W in net.parameters():
-    if l2_reg is None:
-        l2_reg = W.norm(2)
-    else:
-        l2_reg = l2_reg + W.norm(2)
+for name, W in net.named_parameters():
+    if name not in ['bias']:
+        if l2_reg is None:
+            l2_reg = W.norm(2)
+        else:
+            l2_reg = l2_reg + W.norm(2)
 print(l2_reg)
 
 lossL2 = l2_reg * net.l2RegularizationLambdaVal
