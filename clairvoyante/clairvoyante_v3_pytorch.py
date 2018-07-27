@@ -155,22 +155,27 @@ class Net(nn.Module):
         # Calculates MSE without computing average.
         mse = nn.MSELoss(size_average=False)
         loss1 = mse(net.YBaseChangeSigmoid, YPH.narrow(1, 0, net.outputShape1[0]))
-        print(loss1)
+        print("Loss1: "+str(loss1)+"\n")
 
         log_softmax = nn.LogSoftmax(dim=1)
+
         print(net.YZygosityLogits)
-
         YZygosityCrossEntropy = log_softmax(net.YZygosityLogits) * -YPH.narrow(1, net.outputShape1[0], net.outputShape2[0])
+        print(YZygosityCrossEntropy)
         loss2 = YZygosityCrossEntropy.sum()
-        print(loss2)
+        print("Loss2: "+str(loss2)+"\n")
 
+        print(net.YVarTypeLogits)
         YVarTypeCrossEntropy = log_softmax(net.YVarTypeLogits) * -YPH.narrow(1, net.outputShape1[0]+net.outputShape2[0], net.outputShape3[0])
+        print(YVarTypeCrossEntropy)
         loss3 = YVarTypeCrossEntropy.sum()
-        print(loss3)
+        print("Loss3: " + str(loss3)+"\n")
 
+        print(net.YIndelLengthLogits)
         YIndelLengthCrossEntropy = log_softmax(net.YIndelLengthLogits) * -YPH.narrow(1, net.outputShape1[0]+net.outputShape2[0]+net.outputShape3[0], net.outputShape4[0])
+        print(YIndelLengthCrossEntropy)
         loss4 = YIndelLengthCrossEntropy.sum()
-        print(loss4)
+        print("Loss4: " + str(loss4)+"\n")
 
         l2_reg = None
         for name, W in net.named_parameters():
@@ -182,7 +187,7 @@ class Net(nn.Module):
         # print(l2_reg)
 
         lossL2 = l2_reg * net.l2RegularizationLambdaVal
-        print(lossL2)
+        print("LossL2: " + str(lossL2)+"\n")
 
         loss = loss1 + loss2 + loss3 + loss4 + lossL2
         net.loss = loss
@@ -198,11 +203,12 @@ class Net(nn.Module):
             # zero the parameter gradients
             optimizer.zero_grad()
             out = net(batchX)
-            # print(batchY)
+            print(out)
+            print("\n")
             loss = self.costFunction(batchY)
             loss.backward()
             optimizer.step()
-            print("Trained: " + str(epoch) + " ------- " + str(loss) + "\n")
+            print("Epoch: " + str(epoch) + " ----------------------- Loss: " + str(loss) + "\n")
 
         return loss
 
