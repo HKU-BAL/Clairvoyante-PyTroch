@@ -305,19 +305,19 @@ YIndelLengthCrossEntropy = log_softmax(net.YIndelLengthLogits) * -YPH.narrow(1, 
 loss4 = YIndelLengthCrossEntropy.sum()
 print(loss4)
 
-# l2_reg = None
-# for W in net.parameters():
-#     if W.dim != 1:
-#         if l2_reg is None:
-#             l2_reg = W.pow(2)
-#         else:
-#             l2_reg = l2_reg + W.norm(2)
-#
-# lossL2 = l2_reg * net.l2RegularizationLambdaVal
-# print(lossL2)
+l2_reg = None
+for W in net.parameters():
+    if l2_reg is None:
+        l2_reg = W.norm(2)
+    else:
+        l2_reg = l2_reg + W.norm(2)
+print(l2_reg)
 
-# loss = loss1 + loss2 + loss3 + loss4 + lossL2
-loss = loss1 + loss2 + loss3 + loss4
+lossL2 = l2_reg * net.l2RegularizationLambdaVal
+print(lossL2)
+
+loss = loss1 + loss2 + loss3 + loss4 + lossL2
+# loss = loss1 + loss2 + loss3 + loss4
 net.loss = loss
 print(loss)
 #
@@ -401,7 +401,7 @@ print(loss)
 import torch.optim as optim
 
 # create your optimizer
-optimizer = optim.SGD(net.parameters(), lr=net.learningRateVal, weight_decay=net.l2RegularizationLambdaVal)
+optimizer = optim.SGD(net.parameters(), lr=net.learningRateVal)
 
 # # in your training loop:
 # optimizer.zero_grad()   # zero the gradient buffers
