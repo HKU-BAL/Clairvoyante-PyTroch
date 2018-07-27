@@ -205,6 +205,7 @@ class Net(nn.Module):
             out = net(batchX)
             print(out)
             print("\n")
+            # Why is loss negative?
             loss = self.costFunction(batchY)
             loss.backward()
             optimizer.step()
