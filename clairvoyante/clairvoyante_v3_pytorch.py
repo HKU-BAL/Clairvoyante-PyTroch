@@ -307,11 +307,11 @@ print(loss4)
 
 # l2_reg = None
 # for W in net.parameters():
-#     print(W)
-#     if l2_reg is None:
-#         l2_reg = W.norm(2)
-#     else:
-#         l2_reg = l2_reg + W.norm(2)
+#     if W.dim != 1:
+#         if l2_reg is None:
+#             l2_reg = W.pow(2)
+#         else:
+#             l2_reg = l2_reg + W.norm(2)
 #
 # lossL2 = l2_reg * net.l2RegularizationLambdaVal
 # print(lossL2)
@@ -365,55 +365,64 @@ print(loss)
 # print('conv1.bias.grad after backward')
 # print(net.conv1.bias.grad)
 #
-# ########################################################################
-# # Now, we have seen how to use loss functions.
-# #
-# # **Read Later:**
-# #
-# #   The neural network package contains various modules and loss functions
-# #   that form the building blocks of deep neural networks. A full list with
-# #   documentation is `here <http://pytorch.org/docs/nn>`_.
-# #
-# # **The only thing left to learn is:**
-# #
-# #   - Updating the weights of the network
-# #
-# # Update the weights
-# # ------------------
-# # The simplest update rule used in practice is the Stochastic Gradient
-# # Descent (SGD):
-# #
-# #      ``weight = weight - learning_rate * gradient``
-# #
-# # We can implement this using simple python code:
-# #
-# # .. code:: python
-# #
-# #     learning_rate = 0.01
-# #     for f in net.parameters():
-# #         f.data.sub_(f.grad.data * learning_rate)
-# #
-# # However, as you use neural networks, you want to use various different
-# # update rules such as SGD, Nesterov-SGD, Adam, RMSProp, etc.
-# # To enable this, we built a small package: ``torch.optim`` that
-# # implements all these methods. Using it is very simple:
+########################################################################
+# Now, we have seen how to use loss functions.
 #
-# import torch.optim as optim
+# **Read Later:**
 #
-# # create your optimizer
-# optimizer = optim.SGD(net.parameters(), lr=0.01)
+#   The neural network package contains various modules and loss functions
+#   that form the building blocks of deep neural networks. A full list with
+#   documentation is `here <http://pytorch.org/docs/nn>`_.
 #
+# **The only thing left to learn is:**
+#
+#   - Updating the weights of the network
+#
+# Update the weights
+# ------------------
+# The simplest update rule used in practice is the Stochastic Gradient
+# Descent (SGD):
+#
+#      ``weight = weight - learning_rate * gradient``
+#
+# We can implement this using simple python code:
+#
+# .. code:: python
+#
+#     learning_rate = 0.01
+#     for f in net.parameters():
+#         f.data.sub_(f.grad.data * learning_rate)
+#
+# However, as you use neural networks, you want to use various different
+# update rules such as SGD, Nesterov-SGD, Adam, RMSProp, etc.
+# To enable this, we built a small package: ``torch.optim`` that
+# implements all these methods. Using it is very simple:
+
+import torch.optim as optim
+
+# create your optimizer
+optimizer = optim.SGD(net.parameters(), lr=net.learningRateVal, weight_decay=net.l2RegularizationLambdaVal)
+
 # # in your training loop:
 # optimizer.zero_grad()   # zero the gradient buffers
-# output = net(input)
-# loss = criterion(output, target)
-# loss.backward()
+# for x in range(10):
+#
+#     print('conv1.bias.grad before backward')
+#     print(net.conv1.bias.grad)
+#
+#     loss.backward()
+#
+#     print('conv1.bias.grad after backward')
+#     print(net.conv1.bias.grad)
+#     print(net.conv1.bias.shape)
+#     print(loss)
+#
 # optimizer.step()    # Does the update
+
+
+###############################################################
+# .. Note::
 #
-#
-# ###############################################################
-# # .. Note::
-# #
-# #       Observe how gradient buffers had to be manually set to zero using
-# #       ``optimizer.zero_grad()``. This is because gradients are accumulated
-# #       as explained in `Backprop`_ section.
+#       Observe how gradient buffers had to be manually set to zero using
+#       ``optimizer.zero_grad()``. This is because gradients are accumulated
+#       as explained in `Backprop`_ section.
