@@ -167,18 +167,21 @@ class Net(nn.Module):
         # Uses SELU and softmax to output result.
         YZygosityFC = selu(self.YZygosityFCLayer(dropout5))
         YZygosityLogits = torch.add(YZygosityFC, epsilon)
+        self.YZygosityLogits = YZygosityLogits
         YZygositySoftmax = softmax(YZygosityLogits)
         self.YZygositySoftmax = YZygositySoftmax
         print(YZygositySoftmax.shape)
 
         YVarTypeFC = selu(self.YVarTypeFCLayer(dropout5))
         YVarTypeLogits = torch.add(YVarTypeFC, epsilon)
+        self.YVarTypeLogits = YVarTypeLogits
         YVarTypeSoftmax = softmax(YVarTypeLogits)
         self.YVarTypeSoftmax = YVarTypeSoftmax
         print(YVarTypeSoftmax.shape)
 
         YIndelLengthFC = selu(self.YIndelLengthFCLayer(dropout5))
         YIndelLengthLogits = torch.add(YIndelLengthFC, epsilon)
+        self.YIndelLengthLogits = YIndelLengthLogits
         YIndelLengthSoftmax = softmax(YIndelLengthLogits)
         self.YIndelLengthSoftmax = YIndelLengthSoftmax
         print(YIndelLengthSoftmax.shape)
@@ -216,7 +219,7 @@ print(len(params))
 input = torch.randn(param.matrixNum, 2*param.flankingBaseNum+1, 4)
 print(input.shape)
 out = net(input.unsqueeze_(0))
-print(out)
+# print(out)
 
 # ########################################################################
 # # Zero the gradient buffers of all parameters and backprops with random
@@ -276,12 +279,47 @@ print(out)
 # For example:
 #
 # output = net(input)
-# target = torch.arange(1, 11)  # a dummy target, for example
-# target = target.view(1, -1)  # make it the same shape as output
-# criterion = nn.MSELoss()
+YPH = torch.randn(1, 16)
+
+print("LOSS")
+# loss1 = (net.YBaseChangeSigmoid - YPH.narrow(1, 0, net.outputShape1[0])).pow(2).sum()
+# print(loss1)
+
+# Calculates MSE without computing average.
+mse = nn.MSELoss(size_average=False)
+loss1 = mse(net.YBaseChangeSigmoid, YPH.narrow(1, 0, net.outputShape1[0]))
+print(loss1)
+
+log_softmax = nn.LogSoftmax(dim=1)
+print(net.YZygosityLogits)
+
+YZygosityCrossEntropy = log_softmax(net.YZygosityLogits) * -YPH.narrow(1, net.outputShape1[0], net.outputShape2[0])
+loss2 = YZygosityCrossEntropy.sum()
+print(loss2)
+
+YVarTypeCrossEntropy = log_softmax(net.YVarTypeLogits) * -YPH.narrow(1, net.outputShape1[0]+net.outputShape2[0], net.outputShape3[0])
+loss3 = YVarTypeCrossEntropy.sum()
+print(loss3)
+
+YIndelLengthCrossEntropy = log_softmax(net.YIndelLengthLogits) * -YPH.narrow(1, net.outputShape1[0]+net.outputShape2[0]+net.outputShape3[0], net.outputShape4[0])
+loss4 = YIndelLengthCrossEntropy.sum()
+print(loss4)
+
+# l2_reg = None
+# for W in net.parameters():
+#     print(W)
+#     if l2_reg is None:
+#         l2_reg = W.norm(2)
+#     else:
+#         l2_reg = l2_reg + W.norm(2)
 #
-# loss = criterion(output, target)
-# print(loss)
+# lossL2 = l2_reg * net.l2RegularizationLambdaVal
+# print(lossL2)
+
+# loss = loss1 + loss2 + loss3 + loss4 + lossL2
+loss = loss1 + loss2 + loss3 + loss4
+net.loss = loss
+print(loss)
 #
 # ########################################################################
 # # Now, if you follow ``loss`` in the backward direction, using its
