@@ -31,7 +31,7 @@ def GetTensor( tensor_fn, num ):
     rows = np.empty((num, ((2*param.flankingBaseNum+1)*4*param.matrixNum)), dtype=np.float32)
     pos = []
     for row in fo: # A variant per row
-        print(row)
+        #print(row)
         row = row.decode("utf-8")
         try:
             chrom, coord, seq, rows[c] = UnpackATensorRecord(*(row.split()))
