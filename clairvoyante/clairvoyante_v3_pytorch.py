@@ -80,6 +80,8 @@ class Net(nn.Module):
 
     # Forward propagation
     def forward(self, XPH):
+        # print(XPH)
+
         # Different non-linear activation functions.
         selu = nn.SELU()
         sigmoid = nn.Sigmoid()
@@ -123,7 +125,7 @@ class Net(nn.Module):
 
         # 1 output layer that uses sigmoid for base change.
         YBaseChangeSigmoid = sigmoid(self.YBaseChangeSigmoidLayer(dropout4))
-        self.YBaseChangeSigmoid = YBaseChangeSigmoid
+        self.YBaseChangeSigmoid = YBaseChangeSigmoid.data.numpy()
         # print(YBaseChangeSigmoid.shape)
 
         # 3 output fully connected layers for zygosity, varType and indelLength.
@@ -131,25 +133,28 @@ class Net(nn.Module):
         YZygosityFC = selu(self.YZygosityFCLayer(dropout5))
         YZygosityLogits = torch.add(YZygosityFC, epsilon)
         self.YZygosityLogits = YZygosityLogits
+        # print(YZygosityLogits)
         YZygositySoftmax = softmax(YZygosityLogits)
-        self.YZygositySoftmax = YZygositySoftmax
+        self.YZygositySoftmax = YZygositySoftmax.data.numpy()
         # print(YZygositySoftmax.shape)
 
         YVarTypeFC = selu(self.YVarTypeFCLayer(dropout5))
         YVarTypeLogits = torch.add(YVarTypeFC, epsilon)
         self.YVarTypeLogits = YVarTypeLogits
+        # print(YVarTypeLogits)
         YVarTypeSoftmax = softmax(YVarTypeLogits)
-        self.YVarTypeSoftmax = YVarTypeSoftmax
+        self.YVarTypeSoftmax = YVarTypeSoftmax.data.numpy()
         # print(YVarTypeSoftmax.shape)
 
         YIndelLengthFC = selu(self.YIndelLengthFCLayer(dropout5))
         YIndelLengthLogits = torch.add(YIndelLengthFC, epsilon)
         self.YIndelLengthLogits = YIndelLengthLogits
+        # print(YIndelLengthLogits)
         YIndelLengthSoftmax = softmax(YIndelLengthLogits)
-        self.YIndelLengthSoftmax = YIndelLengthSoftmax
+        self.YIndelLengthSoftmax = YIndelLengthSoftmax.data.numpy()
         # print(YIndelLengthSoftmax.shape)
 
-        return YBaseChangeSigmoid,YZygositySoftmax,YVarTypeSoftmax,YIndelLengthSoftmax
+        return YBaseChangeSigmoid.data.numpy(),YZygositySoftmax.data.numpy(),YVarTypeSoftmax.data.numpy(),YIndelLengthSoftmax.data.numpy()
 
     def costFunction(self, YPH):
         # Calculates MSE without computing average.
@@ -179,7 +184,11 @@ class Net(nn.Module):
 
         l2_reg = None
         for name, W in net.named_parameters():
-            if name not in ['bias']:
+            if 'bias' not in name:
+                print(name)
+                print("Weights:\n")
+                print(W)
+                print("\n")
                 if l2_reg is None:
                     l2_reg = W.norm(2)
                 else:
@@ -195,6 +204,14 @@ class Net(nn.Module):
 
         return loss
 
+    def predictNoRT(self, XArray):
+        XArray = torch.from_numpy(XArray).permute(0,3,1,2)
+        # print(XArray.shape)
+        self.predictBaseRTVal = None; self.predictZygosityRTVal = None; self.predictVarTypeRTVal = None; self.predictIndelLengthRTVal = None
+        self.predictBaseRTVal, self.predictZygosityRTVal, self.predictVarTypeRTVal, self.predictIndelLengthRTVal = self.forward(XArray)
+        # print(self.predictBaseRTVal, self.predictZygosityRTVal, self.predictVarTypeRTVal, self.predictIndelLengthRTVal)
+
+
     def train(self, batchX, batchY):
         # create your optimizer
         optimizer = optim.Adam(net.parameters(), lr=net.learningRateVal)
@@ -202,6 +219,8 @@ class Net(nn.Module):
         for epoch in range(10):
             # zero the parameter gradients
             optimizer.zero_grad()
+            print(batchX)
+            print("\n")
             out = net(batchX)
             print(out)
             print("\n")
@@ -213,14 +232,13 @@ class Net(nn.Module):
 
         return loss
 
-if __name__ == "__main__":
-    net = Net()
-    print(net)
-
-    params = list(net.parameters())
-    print(len(params))
-
-    input = torch.randn(1, param.matrixNum, 2*param.flankingBaseNum+1, 4)
-    YPH = torch.randn(1, 16)
-
-    net.train(input, YPH)
+# if __name__ == "__main__":
+#     net = Net()
+#     print(net)
+#
+#     params = list(net.parameters())
+#
+#     input = torch.randn(1, param.matrixNum, 2*param.flankingBaseNum+1, 4).random_(0,5)
+#     YPH = torch.randn(1, 16)
+#
+#     net.train(input, YPH)

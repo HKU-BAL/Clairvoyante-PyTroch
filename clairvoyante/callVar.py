@@ -7,13 +7,14 @@ import logging
 import numpy as np
 from threading import Thread
 from math import log
+import clairvoyante_v3_pytorch as ct
 
 logging.basicConfig(format='%(message)s', level=logging.INFO)
-num2base = dict(zip((0, 1, 2, 3), "ACGT"))
-v1Type2Name = dict(zip((0, 1, 2, 3, 4), ('HET', 'HOM', 'INS', 'DEL', 'REF')))
-v2Zygosity2Name = dict(zip((0, 1), ('HET', 'HOM')))
-v2Type2Name = dict(zip((0, 1, 2, 3), ('REF', 'SNP', 'INS', 'DEL')))
-v2Length2Name = dict(zip((0, 1, 2, 3, 4, 5), ('0', '1', '2', '3', '4', '4+')))
+num2base = dict(list(zip((0, 1, 2, 3), "ACGT")))
+v1Type2Name = dict(list(zip((0, 1, 2, 3, 4), ('HET', 'HOM', 'INS', 'DEL', 'REF'))))
+v2Zygosity2Name = dict(list(zip((0, 1), ('HET', 'HOM'))))
+v2Type2Name = dict(list(zip((0, 1, 2, 3), ('REF', 'SNP', 'INS', 'DEL'))))
+v2Length2Name = dict(list(zip((0, 1, 2, 3, 4, 5), ('0', '1', '2', '3', '4', '4+'))))
 maxVarLength = 5
 inferIndelLengthMinimumAF = 0.125
 
@@ -39,10 +40,11 @@ def Run(args):
             param.NUM_THREADS = 4
     else:
         param.NUM_THREADS = args.threads
-    m = cv.Clairvoyante()
-    m.init()
+    m = ct.Net()
+    # print(m)
+    # m.init()
 
-    m.restoreParameters(os.path.abspath(args.chkpnt_fn))
+    # m.restoreParameters(os.path.abspath(args.chkpnt_fn))
     Test(args, m, utils)
 
 
@@ -143,25 +145,26 @@ def Output(args, call_fh, num, XBatch, posBatch, base, z, t, l):
             elif varZygosity == 0: gtStr = "0/1"
             elif varZygosity == 1: gtStr = "1/1"
 
-            print >> call_fh, "%s\t%d\t.\t%s\t%s\t%d\t.\t%s\tGT:GQ:DP\t%s:%d:%d" % (chromosome, coordination, refBase, altBase, qual, infoStr, gtStr, qual, dp)
+            print("%s\t%d\t.\t%s\t%s\t%d\t.\t%s\tGT:GQ:DP\t%s:%d:%d" % (chromosome, coordination, refBase, altBase, qual, infoStr, gtStr, qual, dp), file=call_fh)
 
 
 def PrintVCFHeader(args, call_fh):
-    print >> call_fh, '##fileformat=VCFv4.1'
-    print >> call_fh, '##ALT=<ID=DEL,Description="Deletion">'
-    print >> call_fh, '##ALT=<ID=INS,Description="Insertion of novel sequence">'
-    print >> call_fh, '##INFO=<ID=SVTYPE,Number=1,Type=String,Description="Type of structural variant">'
-    print >> call_fh, '##INFO=<ID=LENGUESS,Number=.,Type=Integer,Description="Best guess of the indel length">'
-    print >> call_fh, '##FORMAT=<ID=GT,Number=1,Type=String,Description="Genotype">'
-    print >> call_fh, '##FORMAT=<ID=GQ,Number=1,Type=Integer,Description="Genotype Quality">'
-    print >> call_fh, '##FORMAT=<ID=DP,Number=1,Type=Integer,Description="Read Depth">'
-    print >> call_fh, '#CHROM\tPOS\tID\tREF\tALT\tQUAL\tFILTER\tINFO\tFORMAT\t%s' % (args.sampleName)
+    print('##fileformat=VCFv4.1', file=call_fh)
+    print('##ALT=<ID=DEL,Description="Deletion">', file=call_fh)
+    print('##ALT=<ID=INS,Description="Insertion of novel sequence">', file=call_fh)
+    print('##INFO=<ID=SVTYPE,Number=1,Type=String,Description="Type of structural variant">', file=call_fh)
+    print('##INFO=<ID=LENGUESS,Number=.,Type=Integer,Description="Best guess of the indel length">', file=call_fh)
+    print('##FORMAT=<ID=GT,Number=1,Type=String,Description="Genotype">', file=call_fh)
+    print('##FORMAT=<ID=GQ,Number=1,Type=Integer,Description="Genotype Quality">', file=call_fh)
+    print('##FORMAT=<ID=DP,Number=1,Type=Integer,Description="Read Depth">', file=call_fh)
+    print('#CHROM\tPOS\tID\tREF\tALT\tQUAL\tFILTER\tINFO\tFORMAT\t%s' % (args.sampleName), file=call_fh)
 
 def Test(args, m, utils):
     call_fh = open(args.call_fn, "w")
     if args.v2 == True or args.v3 == True:
         PrintVCFHeader(args, call_fh)
     tensorGenerator = utils.GetTensor( args.tensor_fn, param.predictBatchSize )
+    # print(tensorGenerator)
     logging.info("Calling variants ...")
     predictStart = time.time()
     end = 0; end2 = 0; terminate = 0
