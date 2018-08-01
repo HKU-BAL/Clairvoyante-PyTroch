@@ -164,7 +164,7 @@ class Net(nn.Module):
         YPH = YPH.float()
         # print("YPH: "+ str(YPH) + "\n")
         # Calculates MSE without computing average.
-        mse = nn.MSELoss(size_average=False)
+        mse = nn.MSELoss(reduction='sum')
         loss1 = mse(self.YBaseChangeSigmoid, YPH.narrow(1, 0, self.outputShape1[0]))
         # print("Loss1: "+str(loss1)+"\n")
 
