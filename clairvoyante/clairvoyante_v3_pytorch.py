@@ -161,31 +161,31 @@ class Net(nn.Module):
     def costFunction(self, YPH):
         # Calculates MSE without computing average.
         mse = nn.MSELoss(size_average=False)
-        loss1 = mse(net.YBaseChangeSigmoid, YPH.narrow(1, 0, net.outputShape1[0]))
+        loss1 = mse(self.YBaseChangeSigmoid, YPH.narrow(1, 0, self.outputShape1[0]))
         print("Loss1: "+str(loss1)+"\n")
 
         log_softmax = nn.LogSoftmax(dim=1)
 
-        print(net.YZygosityLogits)
-        YZygosityCrossEntropy = log_softmax(net.YZygosityLogits) * -YPH.narrow(1, net.outputShape1[0], net.outputShape2[0])
+        print(self.YZygosityLogits)
+        YZygosityCrossEntropy = log_softmax(self.YZygosityLogits) * -YPH.narrow(1, self.outputShape1[0], self.outputShape2[0])
         print(YZygosityCrossEntropy)
         loss2 = YZygosityCrossEntropy.sum()
         print("Loss2: "+str(loss2)+"\n")
 
-        print(net.YVarTypeLogits)
-        YVarTypeCrossEntropy = log_softmax(net.YVarTypeLogits) * -YPH.narrow(1, net.outputShape1[0]+net.outputShape2[0], net.outputShape3[0])
+        print(self.YVarTypeLogits)
+        YVarTypeCrossEntropy = log_softmax(self.YVarTypeLogits) * -YPH.narrow(1, self.outputShape1[0]+self.outputShape2[0], self.outputShape3[0])
         print(YVarTypeCrossEntropy)
         loss3 = YVarTypeCrossEntropy.sum()
         print("Loss3: " + str(loss3)+"\n")
 
-        print(net.YIndelLengthLogits)
-        YIndelLengthCrossEntropy = log_softmax(net.YIndelLengthLogits) * -YPH.narrow(1, net.outputShape1[0]+net.outputShape2[0]+net.outputShape3[0], net.outputShape4[0])
+        print(self.YIndelLengthLogits)
+        YIndelLengthCrossEntropy = log_softmax(self.YIndelLengthLogits) * -YPH.narrow(1, self.outputShape1[0]+self.outputShape2[0]+self.outputShape3[0], self.outputShape4[0])
         print(YIndelLengthCrossEntropy)
         loss4 = YIndelLengthCrossEntropy.sum()
         print("Loss4: " + str(loss4)+"\n")
 
         l2_reg = None
-        for name, W in net.named_parameters():
+        for name, W in self.named_parameters():
             if 'bias' not in name:
                 print(name)
                 print("Weights:\n")
@@ -197,11 +197,11 @@ class Net(nn.Module):
                     l2_reg = l2_reg + W.norm(2)
         # print(l2_reg)
 
-        lossL2 = l2_reg * net.l2RegularizationLambdaVal
+        lossL2 = l2_reg * self.l2RegularizationLambdaVal
         print("LossL2: " + str(lossL2)+"\n")
 
         loss = loss1 + loss2 + loss3 + loss4 + lossL2
-        net.loss = loss
+        self.loss = loss
         # print(loss)
 
         return loss
@@ -212,6 +212,15 @@ class Net(nn.Module):
         else:
             self.learningRateVal = learningRate
         return self.learningRateVal
+
+    def getLoss(self, batchX, batchY):
+        batchX = torch.from_numpy(batchX).permute(0,3,1,2)
+
+        out = self(batchX)
+
+        loss = self.costFunction(torch.from_numpy(batchY))
+
+        return loss
 
     # def setL2RegularizationLambda(self, l2RegularizationLambda=None):
     #     if  l2RegularizationLambda == None:
@@ -260,7 +269,7 @@ class Net(nn.Module):
 
     # def train(self, batchX, batchY):
     #     # create your optimizer
-    #     optimizer = optim.Adam(net.parameters(), lr=net.learningRateVal)
+    #     optimizer = optim.Adam(self.parameters(), lr=self.learningRateVal)
     #
     #     for epoch in range(10):
     #         # zero the parameter gradients
@@ -282,9 +291,9 @@ class Net(nn.Module):
 #     net = Net()
 #     print(net)
 #
-#     params = list(net.parameters())
+#     params = list(self.parameters())
 #
 #     input = torch.randn(1, param.matrixNum, 2*param.flankingBaseNum+1, 4).random_(0,5)
 #     YPH = torch.randn(1, 16)
 #
-#     net.train(input, YPH)
+#     self.train(input, YPH)
