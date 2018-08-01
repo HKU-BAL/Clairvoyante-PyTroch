@@ -268,7 +268,7 @@ class Net(nn.Module):
         loss.backward()
         self.optimizer.step()
 
-        print("Epoch: " + str(self.counter) + " ---------------------------- Loss: " + str(loss) + "\n")
+        print("Epoch: " + str(self.counter) + " ---------------------------- Loss: " + str(loss.data.numpy()) + "\n")
         self.counter += 1
         return loss.data.numpy(), None
 
