@@ -159,6 +159,7 @@ class Net(nn.Module):
         return YBaseChangeSigmoid.data.numpy(),YZygositySoftmax.data.numpy(),YVarTypeSoftmax.data.numpy(),YIndelLengthSoftmax.data.numpy()
 
     def costFunction(self, YPH):
+        YPH = YPH.float()
         # Calculates MSE without computing average.
         mse = nn.MSELoss(size_average=False)
         loss1 = mse(self.YBaseChangeSigmoid, YPH.narrow(1, 0, self.outputShape1[0]))
