@@ -259,8 +259,8 @@ class Net(nn.Module):
     def train(self, batchX, batchY):
         batchX = torch.from_numpy(batchX).permute(0,3,1,2)
         self.optimizer.zero_grad()
-        print("BatchX: " + str(batchX[0]))
-        print("\n")
+        # print("BatchX: " + str(batchX[0]))
+        # print("\n")
         out = self(batchX)
         print("Out: " + str(out))
         print("\n")
