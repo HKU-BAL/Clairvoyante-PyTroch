@@ -243,7 +243,7 @@ class Net(nn.Module):
         # print(self.predictBaseRTVal, self.predictZygosityRTVal, self.predictVarTypeRTVal, self.predictIndelLengthRTVal)
 
     def train(self, batchX, batchY):
-        batchX = torch.from_numpy(batchX).permute(batchX.shape[0],3,1,2)
+        batchX = torch.from_numpy(batchX).permute(0,3,1,2)
         self.optimizer.zero_grad()
         # print(batchX)
         # print("\n")
