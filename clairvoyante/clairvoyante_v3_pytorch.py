@@ -162,6 +162,8 @@ class Net(nn.Module):
 
     def costFunction(self, YPH):
         YPH = YPH.float()
+        print(YPH)
+        print("YPH: "+ str(YPH))
         # Calculates MSE without computing average.
         mse = nn.MSELoss(size_average=False)
         loss1 = mse(self.YBaseChangeSigmoid, YPH.narrow(1, 0, self.outputShape1[0]))
@@ -205,7 +207,7 @@ class Net(nn.Module):
 
         loss = loss1 + loss2 + loss3 + loss4 + lossL2
         self.loss = loss
-        print("Final Loss" + str(loss))
+        # print("Final Loss" + str(loss))
 
         return loss
 
@@ -257,11 +259,11 @@ class Net(nn.Module):
     def train(self, batchX, batchY):
         batchX = torch.from_numpy(batchX).permute(0,3,1,2)
         self.optimizer.zero_grad()
-        # print(batchX)
-        # print("\n")
+        print("BatchX: " + str(batchX))
+        print("\n")
         out = self(batchX)
-        # print(out)
-        # print("\n")
+        print("Out: " + out)
+        print("\n")
         # Why is loss negative?
         loss = self.costFunction(torch.from_numpy(batchY))
         loss.backward()
