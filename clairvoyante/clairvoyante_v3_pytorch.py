@@ -188,10 +188,10 @@ class Net(nn.Module):
         l2_reg = None
         for name, W in self.named_parameters():
             if 'bias' not in name:
-                print(name)
-                print("Weights:\n")
-                print(W)
-                print("\n")
+                # print(name)
+                # print("Weights:\n")
+                # print(W)
+                # print("\n")
                 if l2_reg is None:
                     l2_reg = W.norm(2)
                 else:
@@ -264,6 +264,8 @@ class Net(nn.Module):
         loss = self.costFunction(torch.from_numpy(batchY))
         loss.backward()
         self.optimizer.step()
+
+        print("Epoch: " + str(epoch) + " ---------------------------- Loss: " + str(loss) + "\n")
 
         return loss, None
 
