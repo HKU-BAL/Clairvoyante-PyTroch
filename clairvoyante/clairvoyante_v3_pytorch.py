@@ -70,6 +70,8 @@ class Net(nn.Module):
 
         self.optimizer = optim.Adam(self.parameters(), lr=self.learningRateVal)
 
+        self.counter = 1
+
     # Implements the same padding feature in Tensorflow.
     # kernelSize is a tuple as kernel is not a square.
     def padding(self, kernelSize):
@@ -203,7 +205,7 @@ class Net(nn.Module):
 
         loss = loss1 + loss2 + loss3 + loss4 + lossL2
         self.loss = loss
-        # print(loss)
+        print("Final Loss" + str(loss))
 
         return loss
 
@@ -265,8 +267,8 @@ class Net(nn.Module):
         loss.backward()
         self.optimizer.step()
 
-        print("Epoch: " + str(epoch) + " ---------------------------- Loss: " + str(loss) + "\n")
-
+        print("Epoch: " + str(self.counter) + " ---------------------------- Loss: " + str(loss) + "\n")
+        self.counter += 1
         return loss, None
 
 
