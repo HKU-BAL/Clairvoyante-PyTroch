@@ -162,32 +162,31 @@ class Net(nn.Module):
 
     def costFunction(self, YPH):
         YPH = YPH.float()
-        print(YPH)
-        print("YPH: "+ str(YPH))
+        # print("YPH: "+ str(YPH) + "\n")
         # Calculates MSE without computing average.
         mse = nn.MSELoss(size_average=False)
         loss1 = mse(self.YBaseChangeSigmoid, YPH.narrow(1, 0, self.outputShape1[0]))
-        print("Loss1: "+str(loss1)+"\n")
+        # print("Loss1: "+str(loss1)+"\n")
 
         log_softmax = nn.LogSoftmax(dim=1)
 
-        print(self.YZygosityLogits)
+        # print(self.YZygosityLogits)
         YZygosityCrossEntropy = log_softmax(self.YZygosityLogits) * -YPH.narrow(1, self.outputShape1[0], self.outputShape2[0])
-        print(YZygosityCrossEntropy)
+        # print(YZygosityCrossEntropy)
         loss2 = YZygosityCrossEntropy.sum()
-        print("Loss2: "+str(loss2)+"\n")
+        # print("Loss2: "+str(loss2)+"\n")
 
-        print(self.YVarTypeLogits)
+        # print(self.YVarTypeLogits)
         YVarTypeCrossEntropy = log_softmax(self.YVarTypeLogits) * -YPH.narrow(1, self.outputShape1[0]+self.outputShape2[0], self.outputShape3[0])
-        print(YVarTypeCrossEntropy)
+        # print(YVarTypeCrossEntropy)
         loss3 = YVarTypeCrossEntropy.sum()
-        print("Loss3: " + str(loss3)+"\n")
+        # print("Loss3: " + str(loss3)+"\n")
 
-        print(self.YIndelLengthLogits)
+        # print(self.YIndelLengthLogits)
         YIndelLengthCrossEntropy = log_softmax(self.YIndelLengthLogits) * -YPH.narrow(1, self.outputShape1[0]+self.outputShape2[0]+self.outputShape3[0], self.outputShape4[0])
-        print(YIndelLengthCrossEntropy)
+        # print(YIndelLengthCrossEntropy)
         loss4 = YIndelLengthCrossEntropy.sum()
-        print("Loss4: " + str(loss4)+"\n")
+        # print("Loss4: " + str(loss4)+"\n")
 
         l2_reg = None
         for name, W in self.named_parameters():
@@ -203,7 +202,7 @@ class Net(nn.Module):
         # print(l2_reg)
 
         lossL2 = l2_reg * self.l2RegularizationLambdaVal
-        print("LossL2: " + str(lossL2)+"\n")
+        # print("LossL2: " + str(lossL2)+"\n")
 
         loss = loss1 + loss2 + loss3 + loss4 + lossL2
         self.loss = loss
@@ -262,8 +261,8 @@ class Net(nn.Module):
         # print("BatchX: " + str(batchX[0]))
         # print("\n")
         out = self(batchX)
-        print("Out: " + str(out))
-        print("\n")
+        # print("Out: " + str(out))
+        # print("\n")
         # Why is loss negative?
         loss = self.costFunction(torch.from_numpy(batchY))
         loss.backward()
