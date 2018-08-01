@@ -208,7 +208,7 @@ class Net(nn.Module):
         self.loss = loss
         # print("Final Loss" + str(loss))
 
-        return loss.data.numpy()
+        return loss
 
     def setLearningRate(self, learningRate=None):
         if learningRate == None:
@@ -224,7 +224,7 @@ class Net(nn.Module):
 
         loss = self.costFunction(torch.from_numpy(batchY))
 
-        return loss
+        return loss.data.numpy()
 
     # def setL2RegularizationLambda(self, l2RegularizationLambda=None):
     #     if  l2RegularizationLambda == None:
@@ -264,14 +264,13 @@ class Net(nn.Module):
         # print("Out: " + str(out))
         # print("\n")
         # Why is loss negative?
-        loss = torch.from_numpy(self.costFunction(torch.from_numpy(batchY)))
+        loss = self.costFunction(torch.from_numpy(batchY))
         loss.backward()
         self.optimizer.step()
-        loss = loss.data.numpy()
 
         print("Epoch: " + str(self.counter) + " ---------------------------- Loss: " + str(loss) + "\n")
         self.counter += 1
-        return loss, None
+        return loss.data.numpy(), None
 
 
     # def train(self, batchX, batchY):
