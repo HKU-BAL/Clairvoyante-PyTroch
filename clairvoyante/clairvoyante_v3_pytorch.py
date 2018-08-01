@@ -259,10 +259,10 @@ class Net(nn.Module):
     def train(self, batchX, batchY):
         batchX = torch.from_numpy(batchX).permute(0,3,1,2)
         self.optimizer.zero_grad()
-        print("BatchX: " + str(batchX))
+        print("BatchX: " + str(batchX[0]))
         print("\n")
         out = self(batchX)
-        print("Out: " + out)
+        print("Out: " + str(out))
         print("\n")
         # Why is loss negative?
         loss = self.costFunction(torch.from_numpy(batchY))
