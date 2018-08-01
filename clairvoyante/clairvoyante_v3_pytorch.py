@@ -231,7 +231,7 @@ class Net(nn.Module):
     #         self.saver.restore(self.session, fn)
 
     def predict(self, XArray):
-
+        XArray = torch.from_numpy(XArray).permute(0,3,1,2)
         base, zygosity, varType, indelLength = self.forward(XArray)
         return base, zygosity, varType, indelLength
 
@@ -243,6 +243,7 @@ class Net(nn.Module):
         # print(self.predictBaseRTVal, self.predictZygosityRTVal, self.predictVarTypeRTVal, self.predictIndelLengthRTVal)
 
     def train(self, batchX, batchY):
+        batchX = torch.from_numpy(XArray).permute(batchX.shape[0],3,1,2)
         self.optimizer.zero_grad()
         # print(batchX)
         # print("\n")
@@ -250,7 +251,7 @@ class Net(nn.Module):
         # print(out)
         # print("\n")
         # Why is loss negative?
-        loss = self.costFunction(batchY)
+        loss = self.costFunction(torch.from_numpy(batchY).permute(batchY.shape[0],3,1,2))
         loss.backward()
         self.optimizer.step()
 
