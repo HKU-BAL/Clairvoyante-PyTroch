@@ -166,6 +166,7 @@ class Net(nn.Module):
         # Calculates MSE without computing average.
         mse = nn.MSELoss(reduction='sum')
         loss1 = mse(self.YBaseChangeSigmoid, YPH.narrow(1, 0, self.outputShape1[0]))
+        print(YPH.narrow(1, 0, self.outputShape1[0]))
         print("Loss1: "+str(loss1)+"\n")
 
         log_softmax = nn.LogSoftmax(dim=1)
@@ -173,18 +174,21 @@ class Net(nn.Module):
         print(self.YZygosityLogits)
         YZygosityCrossEntropy = log_softmax(self.YZygosityLogits) * -YPH.narrow(1, self.outputShape1[0], self.outputShape2[0])
         print(YZygosityCrossEntropy)
+        print(YPH.narrow(1, self.outputShape1[0], self.outputShape2[0]))
         loss2 = YZygosityCrossEntropy.sum()
         print("Loss2: "+str(loss2)+"\n")
 
         print(self.YVarTypeLogits)
         YVarTypeCrossEntropy = log_softmax(self.YVarTypeLogits) * -YPH.narrow(1, self.outputShape1[0]+self.outputShape2[0], self.outputShape3[0])
         print(YVarTypeCrossEntropy)
+        print(YPH.narrow(1, self.outputShape1[0]+self.outputShape2[0], self.outputShape3[0]))
         loss3 = YVarTypeCrossEntropy.sum()
         print("Loss3: " + str(loss3)+"\n")
 
         print(self.YIndelLengthLogits)
         YIndelLengthCrossEntropy = log_softmax(self.YIndelLengthLogits) * -YPH.narrow(1, self.outputShape1[0]+self.outputShape2[0]+self.outputShape3[0], self.outputShape4[0])
         print(YIndelLengthCrossEntropy)
+        print(YPH.narrow(1, self.outputShape1[0]+self.outputShape2[0]+self.outputShape3[0], self.outputShape4[0]))
         loss4 = YIndelLengthCrossEntropy.sum()
         print("Loss4: " + str(loss4)+"\n")
 
