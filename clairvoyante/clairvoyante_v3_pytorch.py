@@ -251,7 +251,7 @@ class Net(nn.Module):
         # print(out)
         # print("\n")
         # Why is loss negative?
-        loss = self.costFunction(torch.from_numpy(batchY).permute(0,3,1,2))
+        loss = self.costFunction(torch.from_numpy(batchY))
         loss.backward()
         self.optimizer.step()
 
