@@ -264,9 +264,10 @@ class Net(nn.Module):
         # print("Out: " + str(out))
         # print("\n")
         # Why is loss negative?
-        loss = self.costFunction(torch.from_numpy(batchY))
+        loss = torch.from_numpy(self.costFunction(torch.from_numpy(batchY)))
         loss.backward()
         self.optimizer.step()
+        loss = loss.data.numpy()
 
         print("Epoch: " + str(self.counter) + " ---------------------------- Loss: " + str(loss) + "\n")
         self.counter += 1
