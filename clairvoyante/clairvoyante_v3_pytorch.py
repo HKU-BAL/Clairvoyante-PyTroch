@@ -208,7 +208,7 @@ class Net(nn.Module):
         self.loss = loss
         # print("Final Loss" + str(loss))
 
-        return loss
+        return loss.data.numpy()
 
     def setLearningRate(self, learningRate=None):
         if learningRate == None:
