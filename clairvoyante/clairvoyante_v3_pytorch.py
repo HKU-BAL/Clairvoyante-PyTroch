@@ -68,6 +68,8 @@ class Net(nn.Module):
         self.YIndelLengthFCLayer = nn.Linear(self.hiddenLayerUnits5, self.outputShape4[0])
         nn.init.kaiming_normal_(self.YIndelLengthFCLayer.weight, mode='fan_in', nonlinearity='relu')
 
+        self.optimizer = optim.Adam(self.parameters(), lr=self.learningRateVal)
+
     # Implements the same padding feature in Tensorflow.
     # kernelSize is a tuple as kernel is not a square.
     def padding(self, kernelSize):
@@ -125,7 +127,7 @@ class Net(nn.Module):
 
         # 1 output layer that uses sigmoid for base change.
         YBaseChangeSigmoid = sigmoid(self.YBaseChangeSigmoidLayer(dropout4))
-        self.YBaseChangeSigmoid = YBaseChangeSigmoid.data.numpy()
+        self.YBaseChangeSigmoid = YBaseChangeSigmoid
         # print(YBaseChangeSigmoid.shape)
 
         # 3 output fully connected layers for zygosity, varType and indelLength.
@@ -135,7 +137,7 @@ class Net(nn.Module):
         self.YZygosityLogits = YZygosityLogits
         # print(YZygosityLogits)
         YZygositySoftmax = softmax(YZygosityLogits)
-        self.YZygositySoftmax = YZygositySoftmax.data.numpy()
+        self.YZygositySoftmax = YZygositySoftmax
         # print(YZygositySoftmax.shape)
 
         YVarTypeFC = selu(self.YVarTypeFCLayer(dropout5))
@@ -143,7 +145,7 @@ class Net(nn.Module):
         self.YVarTypeLogits = YVarTypeLogits
         # print(YVarTypeLogits)
         YVarTypeSoftmax = softmax(YVarTypeLogits)
-        self.YVarTypeSoftmax = YVarTypeSoftmax.data.numpy()
+        self.YVarTypeSoftmax = YVarTypeSoftmax
         # print(YVarTypeSoftmax.shape)
 
         YIndelLengthFC = selu(self.YIndelLengthFCLayer(dropout5))
@@ -151,7 +153,7 @@ class Net(nn.Module):
         self.YIndelLengthLogits = YIndelLengthLogits
         # print(YIndelLengthLogits)
         YIndelLengthSoftmax = softmax(YIndelLengthLogits)
-        self.YIndelLengthSoftmax = YIndelLengthSoftmax.data.numpy()
+        self.YIndelLengthSoftmax = YIndelLengthSoftmax
         # print(YIndelLengthSoftmax.shape)
 
         return YBaseChangeSigmoid.data.numpy(),YZygositySoftmax.data.numpy(),YVarTypeSoftmax.data.numpy(),YIndelLengthSoftmax.data.numpy()
@@ -204,6 +206,35 @@ class Net(nn.Module):
 
         return loss
 
+    def setLearningRate(self, learningRate=None):
+        if learningRate == None:
+            self.learningRateVal = self.learningRateVal * self.learningRateDecay
+        else:
+            self.learningRateVal = learningRate
+        return self.learningRateVal
+
+    # def setL2RegularizationLambda(self, l2RegularizationLambda=None):
+    #     if  l2RegularizationLambda == None:
+    #         self.l2RegularizationLambdaVal = self.l2RegularizationLambdaVal * self.l2RegularizationLambdaDecay
+    #     else:
+    #         self.l2RegularizationLambdaVal = l2RegularizationLambda
+    #     return self.l2RegularizationLambdaVal
+    #
+    # def saveParameters(self, fn):
+    #     with self.g.as_default():
+    #         self.saver = tf.train.Saver()
+    #         self.saver.save(self.session, fn)
+    #
+    # def restoreParameters(self, fn):
+    #     with self.g.as_default():
+    #         self.saver = tf.train.Saver()
+    #         self.saver.restore(self.session, fn)
+
+    def predict(self, XArray):
+
+        base, zygosity, varType, indelLength = self.forward(XArray)
+        return base, zygosity, varType, indelLength
+
     def predictNoRT(self, XArray):
         XArray = torch.from_numpy(XArray).permute(0,3,1,2)
         # print(XArray.shape)
@@ -211,26 +242,40 @@ class Net(nn.Module):
         self.predictBaseRTVal, self.predictZygosityRTVal, self.predictVarTypeRTVal, self.predictIndelLengthRTVal = self.forward(XArray)
         # print(self.predictBaseRTVal, self.predictZygosityRTVal, self.predictVarTypeRTVal, self.predictIndelLengthRTVal)
 
-
     def train(self, batchX, batchY):
-        # create your optimizer
-        optimizer = optim.Adam(net.parameters(), lr=net.learningRateVal)
+        self.optimizer.zero_grad()
+        # print(batchX)
+        # print("\n")
+        out = self(batchX)
+        # print(out)
+        # print("\n")
+        # Why is loss negative?
+        loss = self.costFunction(batchY)
+        loss.backward()
+        self.optimizer.step()
 
-        for epoch in range(10):
-            # zero the parameter gradients
-            optimizer.zero_grad()
-            print(batchX)
-            print("\n")
-            out = net(batchX)
-            print(out)
-            print("\n")
-            # Why is loss negative?
-            loss = self.costFunction(batchY)
-            loss.backward()
-            optimizer.step()
-            print("Epoch: " + str(epoch) + " ----------------------- Loss: " + str(loss) + "\n")
+        return loss, None
 
-        return loss
+
+    # def train(self, batchX, batchY):
+    #     # create your optimizer
+    #     optimizer = optim.Adam(net.parameters(), lr=net.learningRateVal)
+    #
+    #     for epoch in range(10):
+    #         # zero the parameter gradients
+    #         optimizer.zero_grad()
+    #         print(batchX)
+    #         print("\n")
+    #         out = net(batchX)
+    #         print(out)
+    #         print("\n")
+    #         # Why is loss negative?
+    #         loss = self.costFunction(batchY)
+    #         loss.backward()
+    #         optimizer.step()
+    #         print("Epoch: " + str(epoch) + " ----------------------- Loss: " + str(loss) + "\n")
+    #
+    #     return loss
 
 # if __name__ == "__main__":
 #     net = Net()

@@ -88,7 +88,7 @@ def GetTrainingArray( tensor_fn, var_fn, bed_fn, shuffle = True ):
             if bed_fn != None:
                 if len(tree[ctgName].search(pos)) == 0:
                     continue
-            key = ctgName + ":" + str(pos)
+            key = ctgName.decode("utf-8") + ":" + str(pos)
 
             baseVec = [0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0.]
             #          --------------  ------  ------------    ------------------
