@@ -3,6 +3,7 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 import param
+import sys
 import torch.optim as optim
 
 class Net(nn.Module):
@@ -275,6 +276,7 @@ class Net(nn.Module):
         print("Epoch: " + str(self.counter) + " ---------------------------- Loss: " + str(loss.data.numpy()) + "\n")
         self.counter += 1
         torch.save(self.state_dict(), "../pytorchModels/demoRun/parameters.txt")
+        sys.stdout.flush()
         return loss.data.numpy(), None
 
 
