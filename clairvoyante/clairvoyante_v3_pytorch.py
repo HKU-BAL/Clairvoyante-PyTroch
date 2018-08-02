@@ -243,10 +243,8 @@ class Net(nn.Module):
     #         self.saver = tf.train.Saver()
     #         self.saver.save(self.session, fn)
     #
-    # def restoreParameters(self, fn):
-    #     with self.g.as_default():
-    #         self.saver = tf.train.Saver()
-    #         self.saver.restore(self.session, fn)
+    def restoreParameters(self, path):
+        self.load_state_dict(torch.load(path))
 
     def predict(self, XArray):
         XArray = torch.from_numpy(XArray).permute(0,3,1,2)

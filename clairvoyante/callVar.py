@@ -43,7 +43,7 @@ def Run(args):
     m = cpt.Net()
     # m.init()
     #
-    # m.restoreParameters(os.path.abspath(args.chkpnt_fn))
+    m.restoreParameters(os.path.abspath(args.chkpnt_fn))
     Test(args, m, utils)
 
 
