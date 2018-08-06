@@ -76,8 +76,8 @@ class Net(nn.Module):
 
         # Device configuration
         # self.device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
-        self.device = torch.cuda.device(1)
-        print(torch.cuda.get_device_name(1))
+        self.device = torch.cuda.device(0)
+        print(torch.cuda.get_device_name(0))
 
     # Implements the same padding feature in Tensorflow.
     # kernelSize is a tuple as kernel is not a square.
