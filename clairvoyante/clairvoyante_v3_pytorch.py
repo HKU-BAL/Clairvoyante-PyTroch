@@ -75,7 +75,7 @@ class Net(nn.Module):
         self.counter = 1
 
         # Device configuration
-        self.device = torch.device('cuda:1' if torch.cuda.is_available() else 'cpu')
+        self.device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
         print(torch.cuda.get_device_name(self.device))
 
     # Implements the same padding feature in Tensorflow.
