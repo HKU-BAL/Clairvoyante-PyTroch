@@ -153,22 +153,39 @@ class Clairvoyante(object):
             self.YIndelLengthSoftmax = YIndelLengthSoftmax
             # print(YIndelLengthSoftmax.shape)
             # print(YPH.shape)
-
+            # print(YBaseChangeSigmoid)
+            # print(tf.slice(YPH,[0,0],[-1,self.outputShape1[0]])
             loss1 = tf.reduce_sum(tf.pow(YBaseChangeSigmoid - tf.slice(YPH,[0,0],[-1,self.outputShape1[0]], name='YBaseChangeGetTruth'), 2, name='YBaseChangeMSE'), name='YBaseChangeReduceSum')
+            # print("Loss1: "+str(loss1)+"\n")
 
+            # print(YZygosityLogits)
+            # print(YZygosityCrossEntropy)
+            # print(tf.slice(YPH, [0,self.outputShape1[0]], [-1,self.outputShape2[0]]))
             YZygosityCrossEntropy = tf.nn.log_softmax(YZygosityLogits, name='YZygosityLogSoftmax')\
                                     * -tf.slice(YPH, [0,self.outputShape1[0]], [-1,self.outputShape2[0]], name='YZygosityGetTruth')
             loss2 = tf.reduce_sum(YZygosityCrossEntropy, name='YZygosityReduceSum')
+            # print("Loss2: "+str(loss2)+"\n")
 
+
+            # print(YVarTypeLogits)
+            # print(YVarTypeCrossEntropy)
+            # print(tf.slice(YPH, [0,self.outputShape1[0]+self.outputShape2[0]))
             YVarTypeCrossEntropy = tf.nn.log_softmax(YVarTypeLogits, name='YVarTypeLogSoftmax')\
                                    * -tf.slice(YPH, [0,self.outputShape1[0]+self.outputShape2[0]], [-1,self.outputShape3[0]], name='YVarTypeGetTruth')
             loss3 = tf.reduce_sum(YVarTypeCrossEntropy, name='YVarTypeReduceSum')
+            # print("Loss3: " + str(loss3)+"\n")
 
+            # print(YIndelLengthLogits)
+            # print(YIndelLengthCrossEntropy)
+            # print(tf.slice(YPH, [0,self.outputShape1[0]+self.outputShape2[0]+self.outputShape3[0]], [-1,self.outputShape4[0]]))
             YIndelLengthCrossEntropy = tf.nn.log_softmax(YIndelLengthLogits, name='YIndelLengthLogSoftmax')\
                                        * -tf.slice(YPH, [0,self.outputShape1[0]+self.outputShape2[0]+self.outputShape3[0]], [-1,self.outputShape4[0]], name='YIndelLengthGetTruth')
             loss4 = tf.reduce_sum(YIndelLengthCrossEntropy, name='YIndelLengthReduceSum')
+            # print("Loss4: " + str(loss4)+"\n")
 
             lossL2 = tf.add_n([ tf.nn.l2_loss(v) for v in tf.trainable_variables() if 'bias' not in v.name ]) * l2RegularizationLambdaPH
+            # print("LossL2: " + str(lossL2)+"\n")
+
 
             loss = loss1 + loss2 + loss3 + loss4 + lossL2
             self.loss = loss
