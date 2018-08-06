@@ -94,7 +94,7 @@ class Net(nn.Module):
     # Forward propagation
     def forward(self, XPH):
         # print(XPH)
-        XPH = XPH.to(self.device)
+        XPH = XPH
 
         # Different non-linear activation functions.
         selu = nn.SELU()
@@ -168,35 +168,35 @@ class Net(nn.Module):
         self.YIndelLengthSoftmax = YIndelLengthSoftmax
         # print(YIndelLengthSoftmax.shape)
 
-        return YBaseChangeSigmoid.data.cpu().numpy(),YZygositySoftmax.data.cpu().numpy(),YVarTypeSoftmax.data.cpu().numpy(),YIndelLengthSoftmax.data.cpu().numpy()
+        return YBaseChangeSigmoid.data.numpy(),YZygositySoftmax.data.numpy(),YVarTypeSoftmax.data.numpy(),YIndelLengthSoftmax.data.numpy()
 
     def costFunction(self, YPH):
-        YPH = YPH.float().to(self.device)
+        YPH = YPH.float()
         # print("YPH: "+ str(YPH) + "\n")
         # Calculates MSE without computing average.
         mse = nn.MSELoss(reduction='sum')
-        loss1 = mse(self.YBaseChangeSigmoid.to(self.device), YPH.narrow(1, 0, self.outputShape1[0]).to(self.device))
+        loss1 = mse(self.YBaseChangeSigmoid, YPH.narrow(1, 0, self.outputShape1[0]))
         # print(YPH.narrow(1, 0, self.outputShape1[0]))
         # print("Loss1: "+str(loss1)+"\n")
 
         log_softmax = nn.LogSoftmax(dim=1)
 
         # print(self.YZygosityLogits)
-        YZygosityCrossEntropy = log_softmax(self.YZygosityLogits.to(self.device)) * -YPH.narrow(1, self.outputShape1[0], self.outputShape2[0]).to(self.device)
+        YZygosityCrossEntropy = log_softmax(self.YZygosityLogits) * -YPH.narrow(1, self.outputShape1[0], self.outputShape2[0])
         # print(YZygosityCrossEntropy)
         # print(YPH.narrow(1, self.outputShape1[0], self.outputShape2[0]))
         loss2 = YZygosityCrossEntropy.sum()
         # print("Loss2: "+str(loss2)+"\n")
 
         # print(self.YVarTypeLogits)
-        YVarTypeCrossEntropy = log_softmax(self.YVarTypeLogits.to(self.device)) * -YPH.narrow(1, self.outputShape1[0]+self.outputShape2[0], self.outputShape3[0]).to(self.device)
+        YVarTypeCrossEntropy = log_softmax(self.YVarTypeLogits) * -YPH.narrow(1, self.outputShape1[0]+self.outputShape2[0], self.outputShape3[0])
         # print(YVarTypeCrossEntropy)
         # print(YPH.narrow(1, self.outputShape1[0]+self.outputShape2[0], self.outputShape3[0]))
         loss3 = YVarTypeCrossEntropy.sum()
         # print("Loss3: " + str(loss3)+"\n")
 
         # print(self.YIndelLengthLogits)
-        YIndelLengthCrossEntropy = log_softmax(self.YIndelLengthLogits.to(self.device)) * -YPH.narrow(1, self.outputShape1[0]+self.outputShape2[0]+self.outputShape3[0], self.outputShape4[0]).to(self.device)
+        YIndelLengthCrossEntropy = log_softmax(self.YIndelLengthLogits) * -YPH.narrow(1, self.outputShape1[0]+self.outputShape2[0]+self.outputShape3[0], self.outputShape4[0])
         # print(YIndelLengthCrossEntropy)
         # print(YPH.narrow(1, self.outputShape1[0]+self.outputShape2[0]+self.outputShape3[0], self.outputShape4[0]))
         loss4 = YIndelLengthCrossEntropy.sum()
@@ -205,7 +205,7 @@ class Net(nn.Module):
         l2_reg = None
         for name, W in self.named_parameters():
             if 'bias' not in name:
-                W = W.to(self.device)
+                # W = W.to(self.device)
                 # print(name)
                 # print("Weights:\n")
                 # print(W)
@@ -216,7 +216,7 @@ class Net(nn.Module):
                     l2_reg = l2_reg + W.norm(2)
         # print(l2_reg)
 
-        lossL2 = l2_reg * self.l2RegularizationLambdaVal.to(self.device)
+        lossL2 = l2_reg * self.l2RegularizationLambdaVal
         # print("LossL2: " + str(lossL2)+"\n")
 
         loss = loss1 + loss2 + loss3 + loss4 + lossL2

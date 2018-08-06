@@ -16,7 +16,7 @@ def Run(args):
     logging.info("Initializing model ...")
     utils.SetupEnv()
     device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
-    m = cv.Net().to(device)
+    m = cv.Net()
     # m.init()
 
     TrainAll(args, m)
