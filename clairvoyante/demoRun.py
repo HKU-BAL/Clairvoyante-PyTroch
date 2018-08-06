@@ -5,6 +5,7 @@ import param
 import logging
 import numpy as np
 import utils_v2 as utils
+import torch
 # import clairvoyante_v2 as cv
 import clairvoyante_v3_pytorch as cv
 
