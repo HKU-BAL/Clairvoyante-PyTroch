@@ -176,6 +176,7 @@ class Net(nn.Module):
         # Calculates MSE without computing average.
         mse = nn.MSELoss(reduction='sum')
         loss1 = mse(self.YBaseChangeSigmoid, YPH.narrow(1, 0, self.outputShape1[0]))
+        print(self.YBaseChangeSigmoid)
         print(YPH.narrow(1, 0, self.outputShape1[0]))
         print("Loss1: "+str(loss1)+"\n")
 
