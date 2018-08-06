@@ -75,7 +75,7 @@ class Net(nn.Module):
         self.counter = 1
 
         # # Device configuration
-        # self.device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
+        self.device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
         # # self.device = torch.cuda.device(0)
         # print(torch.cuda.get_device_name(0))
         #
@@ -94,7 +94,7 @@ class Net(nn.Module):
     # Forward propagation
     def forward(self, XPH):
         # print(XPH)
-        XPH = XPH.to(self.device)
+        XPH = XPH.to(device)
 
         # Different non-linear activation functions.
         selu = nn.SELU()
