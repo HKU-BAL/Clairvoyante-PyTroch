@@ -14,7 +14,8 @@ def Run(args):
     # create a Clairvoyante
     logging.info("Initializing model ...")
     utils.SetupEnv()
-    m = cv.Net()
+    device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
+    m = cv.Net().to(device)
     # m.init()
 
     TrainAll(args, m)
