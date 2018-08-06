@@ -36,13 +36,13 @@ class Net(nn.Module):
         # 3 Convolutional Layers
         # channel = int(self.inputShape[1])
         self.conv1 = nn.Conv2d(param.matrixNum, self.numFeature1, self.kernelSize1)
-        nn.init.kaiming_normal_(self.conv1.weight, mode='fan_in')
+        nn.init.kaiming_normal_(self.conv1.weight, mode='fan_in', nonlinearity='relu')
 
         self.conv2 = nn.Conv2d(self.numFeature1, self.numFeature2, self.kernelSize2)
-        nn.init.kaiming_normal_(self.conv2.weight, mode='fan_in')
+        nn.init.kaiming_normal_(self.conv2.weight, mode='fan_in', nonlinearity='relu')
 
         self.conv3 = nn.Conv2d(self.numFeature2, self.numFeature3, self.kernelSize3)
-        nn.init.kaiming_normal_(self.conv3.weight, mode='fan_in')
+        nn.init.kaiming_normal_(self.conv3.weight, mode='fan_in', nonlinearity='relu')
 
         # Calculate the size of the flattened size after the conv3
         self.flat_size = ( self.inputShape[0] - (self.pollSize1[0] - 1) - (self.pollSize2[0] - 1) - (self.pollSize3[0] - 1))
@@ -51,23 +51,23 @@ class Net(nn.Module):
 
         # 2 FC Hidden Layers
         self.fc4 = nn.Linear(self.flat_size, self.hiddenLayerUnits4)
-        nn.init.kaiming_normal_(self.fc4.weight, mode='fan_in')
+        nn.init.kaiming_normal_(self.fc4.weight, mode='fan_in', nonlinearity='relu')
 
         self.fc5 = nn.Linear(self.hiddenLayerUnits4, self.hiddenLayerUnits5)
-        nn.init.kaiming_normal_(self.fc5.weight, mode='fan_in')
+        nn.init.kaiming_normal_(self.fc5.weight, mode='fan_in', nonlinearity='relu')
 
         # 4 Output Layers
         self.YBaseChangeSigmoidLayer = nn.Linear(self.hiddenLayerUnits4,self.outputShape1[0])
-        nn.init.kaiming_normal_(self.YBaseChangeSigmoidLayer.weight, mode='fan_in')
+        nn.init.kaiming_normal_(self.YBaseChangeSigmoidLayer.weight, mode='fan_in', nonlinearity='relu')
 
         self.YZygosityFCLayer = nn.Linear(self.hiddenLayerUnits5,self.outputShape2[0])
-        nn.init.kaiming_normal_(self.YZygosityFCLayer.weight, mode='fan_in')
+        nn.init.kaiming_normal_(self.YZygosityFCLayer.weight, mode='fan_in', nonlinearity='relu')
 
         self.YVarTypeFCLayer = nn.Linear(self.hiddenLayerUnits5, self.outputShape3[0])
-        nn.init.kaiming_normal_(self.YVarTypeFCLayer.weight, mode='fan_in')
+        nn.init.kaiming_normal_(self.YVarTypeFCLayer.weight, mode='fan_in', nonlinearity='relu')
 
         self.YIndelLengthFCLayer = nn.Linear(self.hiddenLayerUnits5, self.outputShape4[0])
-        nn.init.kaiming_normal_(self.YIndelLengthFCLayer.weight, mode='fan_in')
+        nn.init.kaiming_normal_(self.YIndelLengthFCLayer.weight, mode='fan_in', nonlinearity='relu')
 
         self.optimizer = optim.Adam(self.parameters(), lr=self.learningRateVal)
 
@@ -75,9 +75,11 @@ class Net(nn.Module):
         self.counter = 1
 
         # Device configuration
-        # self.device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
-        self.device = torch.cuda.device(0)
+        self.device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
+        # self.device = torch.cuda.device(0)
         print(torch.cuda.get_device_name(0))
+
+        self.to(self.deivce)
 
     # Implements the same padding feature in Tensorflow.
     # kernelSize is a tuple as kernel is not a square.
@@ -92,6 +94,7 @@ class Net(nn.Module):
     # Forward propagation
     def forward(self, XPH):
         # print(XPH)
+        XPH = XPH.to(self.device)
 
         # Different non-linear activation functions.
         selu = nn.SELU()
@@ -168,39 +171,39 @@ class Net(nn.Module):
         return YBaseChangeSigmoid.data.numpy(),YZygositySoftmax.data.numpy(),YVarTypeSoftmax.data.numpy(),YIndelLengthSoftmax.data.numpy()
 
     def costFunction(self, YPH):
-        YPH = YPH.float()
+        YPH = YPH.float().to(self.device)
         # print("YPH: "+ str(YPH) + "\n")
         # Calculates MSE without computing average.
         mse = nn.MSELoss(reduction='sum')
-        loss1 = mse(self.YBaseChangeSigmoid, YPH.narrow(1, 0, self.outputShape1[0]))
+        loss1 = mse(self.YBaseChangeSigmoid.to(self.device), YPH.narrow(1, 0, self.outputShape1[0]).to(self.device))
         # print(YPH.narrow(1, 0, self.outputShape1[0]))
         # print("Loss1: "+str(loss1)+"\n")
 
         log_softmax = nn.LogSoftmax(dim=1)
 
         # print(self.YZygosityLogits)
-        YZygosityCrossEntropy = log_softmax(self.YZygosityLogits) * -YPH.narrow(1, self.outputShape1[0], self.outputShape2[0])
+        YZygosityCrossEntropy = log_softmax(self.YZygosityLogits.to(self.device)) * -YPH.narrow(1, self.outputShape1[0], self.outputShape2[0]).to(self.device)
         # print(YZygosityCrossEntropy)
         # print(YPH.narrow(1, self.outputShape1[0], self.outputShape2[0]))
         loss2 = YZygosityCrossEntropy.sum()
         # print("Loss2: "+str(loss2)+"\n")
 
         # print(self.YVarTypeLogits)
-        YVarTypeCrossEntropy = log_softmax(self.YVarTypeLogits) * -YPH.narrow(1, self.outputShape1[0]+self.outputShape2[0], self.outputShape3[0])
+        YVarTypeCrossEntropy = log_softmax(self.YVarTypeLogits.to(self.device)) * -YPH.narrow(1, self.outputShape1[0]+self.outputShape2[0], self.outputShape3[0]).to(self.device)
         # print(YVarTypeCrossEntropy)
         # print(YPH.narrow(1, self.outputShape1[0]+self.outputShape2[0], self.outputShape3[0]))
         loss3 = YVarTypeCrossEntropy.sum()
         # print("Loss3: " + str(loss3)+"\n")
 
         # print(self.YIndelLengthLogits)
-        YIndelLengthCrossEntropy = log_softmax(self.YIndelLengthLogits) * -YPH.narrow(1, self.outputShape1[0]+self.outputShape2[0]+self.outputShape3[0], self.outputShape4[0])
+        YIndelLengthCrossEntropy = log_softmax(self.YIndelLengthLogits.to(self.device)) * -YPH.narrow(1, self.outputShape1[0]+self.outputShape2[0]+self.outputShape3[0], self.outputShape4[0]).to(self.device)
         # print(YIndelLengthCrossEntropy)
         # print(YPH.narrow(1, self.outputShape1[0]+self.outputShape2[0]+self.outputShape3[0], self.outputShape4[0]))
         loss4 = YIndelLengthCrossEntropy.sum()
         # print("Loss4: " + str(loss4)+"\n")
 
         l2_reg = None
-        for name, W in self.named_parameters():
+        for name, W in self.named_parameters().to(self.device):
             if 'bias' not in name:
                 # print(name)
                 # print("Weights:\n")
@@ -212,7 +215,7 @@ class Net(nn.Module):
                     l2_reg = l2_reg + W.norm(2)
         # print(l2_reg)
 
-        lossL2 = l2_reg * self.l2RegularizationLambdaVal
+        lossL2 = l2_reg * self.l2RegularizationLambdaVal.to(self.device)
         # print("LossL2: " + str(lossL2)+"\n")
 
         loss = loss1 + loss2 + loss3 + loss4 + lossL2
