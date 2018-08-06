@@ -137,6 +137,7 @@ class Net(nn.Module):
         # Epsilon for softmax.
         epsilon = 1e-10
 
+
         # 1 output layer that uses sigmoid for base change.
         YBaseChangeSigmoid = sigmoid(self.YBaseChangeSigmoidLayer(dropout4))
         self.YBaseChangeSigmoid = YBaseChangeSigmoid
@@ -145,6 +146,7 @@ class Net(nn.Module):
         # 3 output fully connected layers for zygosity, varType and indelLength.
         # Uses SELU and softmax to output result.
         YZygosityFC = selu(self.YZygosityFCLayer(dropout5))
+        print("ZFC: "+str(YZygosityFC)+"\n")
         YZygosityLogits = torch.add(YZygosityFC, epsilon)
         self.YZygosityLogits = YZygosityLogits
         # print(YZygosityLogits)
@@ -153,6 +155,7 @@ class Net(nn.Module):
         # print(YZygositySoftmax.shape)
 
         YVarTypeFC = selu(self.YVarTypeFCLayer(dropout5))
+        print("VFC: "+str(YVarTypeFC)+"\n")
         YVarTypeLogits = torch.add(YVarTypeFC, epsilon)
         self.YVarTypeLogits = YVarTypeLogits
         # print(YVarTypeLogits)
@@ -161,6 +164,7 @@ class Net(nn.Module):
         # print(YVarTypeSoftmax.shape)
 
         YIndelLengthFC = selu(self.YIndelLengthFCLayer(dropout5))
+        print("IFC: "+str(YIndelLengthFC)+"\n")
         YIndelLengthLogits = torch.add(YIndelLengthFC, epsilon)
         self.YIndelLengthLogits = YIndelLengthLogits
         # print(YIndelLengthLogits)
@@ -172,7 +176,7 @@ class Net(nn.Module):
 
     def costFunction(self, YPH):
         YPH = YPH.float()
-        print("YPH: "+ str(YPH) + "\n")
+        print("YPH: "+ str(YPH[0]) + "\n")
         # Calculates MSE without computing average.
         mse = nn.MSELoss(reduction='sum')
         loss1 = mse(self.YBaseChangeSigmoid, YPH.narrow(1, 0, self.outputShape1[0]))
