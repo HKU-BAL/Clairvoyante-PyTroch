@@ -94,7 +94,7 @@ class Net(nn.Module):
     # Forward propagation
     def forward(self, XPH):
         # print(XPH)
-        XPH = XPH.to(device)
+        XPH = XPH.to(self.device)
 
         # Different non-linear activation functions.
         selu = nn.SELU()
