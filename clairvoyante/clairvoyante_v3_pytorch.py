@@ -36,13 +36,13 @@ class Net(nn.Module):
         # 3 Convolutional Layers
         # channel = int(self.inputShape[1])
         self.conv1 = nn.Conv2d(param.matrixNum, self.numFeature1, self.kernelSize1)
-        nn.init.kaiming_normal_(self.conv1.weight, mode='fan_in', nonlinearity='relu')
+        nn.init.kaiming_normal_(self.conv1.weight, mode='fan_in')
 
         self.conv2 = nn.Conv2d(self.numFeature1, self.numFeature2, self.kernelSize2)
-        nn.init.kaiming_normal_(self.conv2.weight, mode='fan_in', nonlinearity='relu')
+        nn.init.kaiming_normal_(self.conv2.weight, mode='fan_in')
 
         self.conv3 = nn.Conv2d(self.numFeature2, self.numFeature3, self.kernelSize3)
-        nn.init.kaiming_normal_(self.conv3.weight, mode='fan_in', nonlinearity='relu')
+        nn.init.kaiming_normal_(self.conv3.weight, mode='fan_in')
 
         # Calculate the size of the flattened size after the conv3
         self.flat_size = ( self.inputShape[0] - (self.pollSize1[0] - 1) - (self.pollSize2[0] - 1) - (self.pollSize3[0] - 1))
@@ -51,27 +51,32 @@ class Net(nn.Module):
 
         # 2 FC Hidden Layers
         self.fc4 = nn.Linear(self.flat_size, self.hiddenLayerUnits4)
-        nn.init.kaiming_normal_(self.fc4.weight, mode='fan_in', nonlinearity='relu')
+        nn.init.kaiming_normal_(self.fc4.weight, mode='fan_in')
 
         self.fc5 = nn.Linear(self.hiddenLayerUnits4, self.hiddenLayerUnits5)
-        nn.init.kaiming_normal_(self.fc5.weight, mode='fan_in', nonlinearity='relu')
+        nn.init.kaiming_normal_(self.fc5.weight, mode='fan_in')
 
         # 4 Output Layers
         self.YBaseChangeSigmoidLayer = nn.Linear(self.hiddenLayerUnits4,self.outputShape1[0])
-        nn.init.kaiming_normal_(self.YBaseChangeSigmoidLayer.weight, mode='fan_in', nonlinearity='relu')
+        nn.init.kaiming_normal_(self.YBaseChangeSigmoidLayer.weight, mode='fan_in')
 
         self.YZygosityFCLayer = nn.Linear(self.hiddenLayerUnits5,self.outputShape2[0])
-        nn.init.kaiming_normal_(self.YZygosityFCLayer.weight, mode='fan_in', nonlinearity='relu')
+        nn.init.kaiming_normal_(self.YZygosityFCLayer.weight, mode='fan_in')
 
         self.YVarTypeFCLayer = nn.Linear(self.hiddenLayerUnits5, self.outputShape3[0])
-        nn.init.kaiming_normal_(self.YVarTypeFCLayer.weight, mode='fan_in', nonlinearity='relu')
+        nn.init.kaiming_normal_(self.YVarTypeFCLayer.weight, mode='fan_in')
 
         self.YIndelLengthFCLayer = nn.Linear(self.hiddenLayerUnits5, self.outputShape4[0])
-        nn.init.kaiming_normal_(self.YIndelLengthFCLayer.weight, mode='fan_in', nonlinearity='relu')
+        nn.init.kaiming_normal_(self.YIndelLengthFCLayer.weight, mode='fan_in')
 
         self.optimizer = optim.Adam(self.parameters(), lr=self.learningRateVal)
 
+        # Used for epoch counting
         self.counter = 1
+
+        # Device configuration
+        self.device = torch.device('cuda:1' if torch.cuda.is_available() else 'cpu')
+        print(torch.cuda.get_device_name(self.device))
 
     # Implements the same padding feature in Tensorflow.
     # kernelSize is a tuple as kernel is not a square.
