@@ -168,7 +168,7 @@ class Net(nn.Module):
         self.YIndelLengthSoftmax = YIndelLengthSoftmax
         # print(YIndelLengthSoftmax.shape)
 
-        return YBaseChangeSigmoid.data.numpy(),YZygositySoftmax.data.numpy(),YVarTypeSoftmax.data.numpy(),YIndelLengthSoftmax.data.numpy()
+        return YBaseChangeSigmoid.data.cpu().numpy(),YZygositySoftmax.data.cpu().numpy(),YVarTypeSoftmax.data.cpu().numpy(),YIndelLengthSoftmax.data.cpu().numpy()
 
     def costFunction(self, YPH):
         YPH = YPH.float().to(self.device)
