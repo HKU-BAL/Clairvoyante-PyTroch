@@ -8,6 +8,7 @@ import numpy as np
 from threading import Thread
 from math import log
 import clairvoyante_v3_pytorch as cpt
+import torch
 
 logging.basicConfig(format='%(message)s', level=logging.INFO)
 num2base = dict(zip((0, 1, 2, 3), "ACGT"))
@@ -40,7 +41,9 @@ def Run(args):
             param.NUM_THREADS = 4
     else:
         param.NUM_THREADS = args.threads
-    m = cpt.Net()
+    device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
+    m = cpt.Net().to(device)
+
     # m.init()
     #
     m.restoreParameters(os.path.abspath(args.chkpnt_fn))

@@ -74,12 +74,12 @@ class Net(nn.Module):
         # Used for epoch counting
         self.counter = 1
 
-        # Device configuration
-        self.device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
-        # self.device = torch.cuda.device(0)
-        print(torch.cuda.get_device_name(0))
-
-        self.to(self.deivce)
+        # # Device configuration
+        # self.device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
+        # # self.device = torch.cuda.device(0)
+        # print(torch.cuda.get_device_name(0))
+        #
+        # self.to(self.deivce)
 
     # Implements the same padding feature in Tensorflow.
     # kernelSize is a tuple as kernel is not a square.
