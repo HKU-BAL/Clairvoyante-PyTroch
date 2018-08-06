@@ -203,8 +203,9 @@ class Net(nn.Module):
         # print("Loss4: " + str(loss4)+"\n")
 
         l2_reg = None
-        for name, W in self.named_parameters().to(self.device):
+        for name, W in self.named_parameters():
             if 'bias' not in name:
+                W = W.to(self.device)
                 # print(name)
                 # print("Weights:\n")
                 # print(W)
