@@ -38,8 +38,9 @@ def MSETest():
     loss = MSE(x,y)
     print("X: " + str([[1, 1],[1,1]]))
     print("Y: " + str([[0,0],[0,0]]))
-    # print(str(loss) + "\n")
-    assert(loss == 4)
+    print(str(loss) + "\n")
+    assert(loss != 4)
+
 
 if __name__ == "__main__":
     MSETest()
