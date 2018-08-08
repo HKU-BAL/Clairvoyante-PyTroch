@@ -73,7 +73,7 @@ def CELTest():
     # Test 2
     x = torch.tensor([[1.,1.],[1.,1.]], requires_grad=True)
     y = torch.tensor([[10.,-7.],[-3.,-4.]], requires_grad=True)
-    loss = CEL(x,y).data.numpy()
+    loss = CEL(x,y)
     print("X: " + str([[1, 1],[1,1]]))
     print("Y: " + str([[10.,-7.],[-3.,-4.]]))
     print(str(loss))
