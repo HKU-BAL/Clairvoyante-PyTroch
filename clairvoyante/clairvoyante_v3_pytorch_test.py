@@ -35,8 +35,8 @@ def CEL(logits, YPH):
 
 def MSETest():
     # Test 1
-    x = torch.tensor([[1, 1],[1, 1]])
-    y = torch.tensor([[0,0],[0,0]])
+    x = torch.tensor([[1., 1.],[1., 1.]], requires_grad=True)
+    y = torch.tensor([[0.,0.],[0.,0.]], requires_grad=True)
 
     loss = MSE(x,y)
     print("X: " + str([[1, 1],[1,1]]))
