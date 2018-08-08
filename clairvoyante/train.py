@@ -110,6 +110,7 @@ def TrainAll(args, m, utils):
         for t in threadPool: t.join()
 
         XBatch = XBatch2; YBatch = YBatch2
+        print(m.trainLossRTVal)
         if datasetPtr < validationStart:
             trainLossSum += m.trainLossRTVal
             summary = m.trainSummaryRTVal

@@ -300,7 +300,8 @@ class Net(nn.Module):
 
     def trainNoRT(self, batchX, batchY):
 
-        self.trainLossRTVal = None; self.trainSummaryRTVal = None
+        self.trainLossRTVal = None
+        self.trainSummaryRTVal = None
 
         batchX = torch.from_numpy(batchX).permute(0,3,1,2)
         self.optimizer.zero_grad()
@@ -320,8 +321,6 @@ class Net(nn.Module):
         sys.stdout.flush()
 
         self.trainLossRTVal = loss.data.numpy()
-
-
 
     # def train(self, batchX, batchY):
     #     # create your optimizer
