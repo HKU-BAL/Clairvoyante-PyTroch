@@ -7,6 +7,7 @@ import logging
 import pickle
 import numpy as np
 from threading import Thread
+import clairvoyante_v3_pytorch as cpt
 
 logging.basicConfig(format='%(message)s', level=logging.INFO)
 
@@ -26,8 +27,8 @@ def Run(args):
         else:
             import clairvoyante_v3 as cv
     utils.SetupEnv()
-    m = cv.Clairvoyante()
-    m.init()
+    m = cpt.Net()
+    # m.init()
 
     if args.chkpnt_fn != None:
         m.restoreParameters(os.path.abspath(args.chkpnt_fn))
@@ -266,4 +267,3 @@ if __name__ == "__main__":
         sys.exit(1)
 
     Run(args)
-

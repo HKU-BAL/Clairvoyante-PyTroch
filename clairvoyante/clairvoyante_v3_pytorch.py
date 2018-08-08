@@ -288,7 +288,7 @@ class Net(nn.Module):
 
         print("Epoch: " + str(self.counter) + " ---------------------------- Loss: " + str(loss.data.numpy()) + "\n")
         self.counter += 1
-        torch.save(self.state_dict(), "../pytorchModels/demoRunCPU_v3leakyHe/demoRunCPU3_parameters.txt")
+        torch.save(self.state_dict(), "../pytorchModels/demoRunCPU_v4Train/demoRunCPU4_parameters.txt")
         sys.stdout.flush()
         return loss.data.numpy(), None
 
