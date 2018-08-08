@@ -17,9 +17,6 @@ import torch.optim as optim
 def MSE(sigmoid, YPH):
     mse = nn.MSELoss(reduction='sum')
     loss = mse(sigmoid, YPH)
-    print(sigmoid)
-    print(YPH)
-    print("MSELoss: "+str(loss)+"\n")
 
     return loss
 
@@ -41,7 +38,7 @@ def MSETest():
     loss = MSE(x,y)
     print("X: " + str([[1, 1],[1,1]]))
     print("Y: " + str([[0,0],[0,0]]))
-    print(""+str(loss) + "\n")
+    print(str(loss) + "\n")
     assert(loss == 4)
     print("\n")
 
