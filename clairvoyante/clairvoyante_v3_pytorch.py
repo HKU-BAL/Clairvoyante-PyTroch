@@ -298,6 +298,30 @@ class Net(nn.Module):
         sys.stdout.flush()
         return loss.data.numpy(), None
 
+    def trainNoRT(self, batchX, batchY):
+
+        self.trainLossRTVal = None; self.trainSummaryRTVal = None
+
+        batchX = torch.from_numpy(batchX).permute(0,3,1,2)
+        self.optimizer.zero_grad()
+        # print("BatchX: " + str(batchX[0]))
+        # print("\n")
+        out = self(batchX)
+        # print("Out: " + str(out))
+        # print("\n")
+        # Why is loss negative?
+        loss = self.costFunction(torch.from_numpy(batchY))
+        loss.backward()
+        self.optimizer.step()
+
+        print("Epoch: " + str(self.counter) + " ---------------------------- Loss: " + str(loss.data.numpy()) + "\n")
+        self.counter += 1
+        torch.save(self.state_dict(), "../pytorchModels/demoRunCPU_v4Train/demoRunCPU4_parameters.txt")
+        sys.stdout.flush()
+
+        self.trainLossRTVal = loss.data.numpy()
+
+
 
     # def train(self, batchX, batchY):
     #     # create your optimizer
