@@ -137,7 +137,6 @@ class Net(nn.Module):
         # Epsilon for softmax.
         epsilon = 1e-10
 
-
         # 1 output layer that uses sigmoid for base change.
         YBaseChangeSigmoid = sigmoid(self.YBaseChangeSigmoidLayer(dropout4))
         self.YBaseChangeSigmoid = YBaseChangeSigmoid
@@ -237,6 +236,13 @@ class Net(nn.Module):
             self.learningRateVal = learningRate
         return self.learningRateVal
 
+    def setL2RegularizationLambda(self, l2RegularizationLambda=None):
+        if  l2RegularizationLambda == None:
+            self.l2RegularizationLambdaVal = self.l2RegularizationLambdaVal * self.l2RegularizationLambdaDecay
+        else:
+            self.l2RegularizationLambdaVal = l2RegularizationLambda
+        return self.l2RegularizationLambdaVal
+
     def getLoss(self, batchX, batchY):
         batchX = torch.from_numpy(batchX).permute(0,3,1,2)
 
@@ -246,18 +252,18 @@ class Net(nn.Module):
 
         return loss.data.numpy()
 
-    # def setL2RegularizationLambda(self, l2RegularizationLambda=None):
-    #     if  l2RegularizationLambda == None:
-    #         self.l2RegularizationLambdaVal = self.l2RegularizationLambdaVal * self.l2RegularizationLambdaDecay
-    #     else:
-    #         self.l2RegularizationLambdaVal = l2RegularizationLambda
-    #     return self.l2RegularizationLambdaVal
-    #
-    # def saveParameters(self, fn):
-    #     with self.g.as_default():
-    #         self.saver = tf.train.Saver()
-    #         self.saver.save(self.session, fn)
-    #
+    def getLossNoRT(self, batchX, batchY):
+
+        self.getLossLossRTVal = None
+
+        batchX = torch.from_numpy(batchX).permute(0,3,1,2)
+
+        out = self(batchX)
+
+        loss = self.costFunction(torch.from_numpy(batchY))
+
+        self.getLossLossRTVal = loss.data.numpy()
+
     def restoreParameters(self, path):
         self.load_state_dict(torch.load(path))
 
