@@ -63,9 +63,9 @@ def CELTest():
     # Test 1
     x = torch.tensor([[1.,1.],[1.,1.]], requires_grad=True)
     y = torch.tensor([[0.,0.],[0.,0.]], requires_grad=True)
-    loss = CEL(x,y)
     print("X: " + str([[1, 1],[1,1]]))
     print("Y: " + str([[0,0],[0,0]]))
+    loss = CEL(x,y)
     print(str(loss))
     assert(loss == 0)
     print("Success \n")
@@ -73,9 +73,9 @@ def CELTest():
     # Test 2
     x = torch.tensor([[1.,1.],[1.,1.]], requires_grad=True)
     y = torch.tensor([[10.,-7.],[-3.,-4.]], requires_grad=True)
-    loss = CEL(x,y)
     print("X: " + str([[1, 1],[1,1]]))
     print("Y: " + str([[10.,-7.],[-3.,-4.]]))
+    loss = CEL(x,y)
     print(str(loss))
     assert(loss == 4)
     print("Success \n")
