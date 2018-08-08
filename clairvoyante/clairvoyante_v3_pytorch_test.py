@@ -18,23 +18,21 @@ def MSE(sigmoid, YPH):
     mse = nn.MSELoss(reduction='sum')
     loss = mse(sigmoid, YPH)
 
-    return loss
+    return loss.data.numpy()
 
 def CEL(logits, YPH):
     log_softmax = nn.LogSoftmax(dim=1)
     CrossEntropy = log_softmax(logits) * -YPH
     print(CrossEntropy)
-    print(YPH)
     loss = CrossEntropy.sum()
-    print("CELoss: "+str(loss)+"\n")
 
-    return loss
+    return loss.data.numpy()
 
 def MSETest():
     # Test 1
     x = torch.tensor([[1., 1.],[1., 1.]], requires_grad=True)
     y = torch.tensor([[0.,0.],[0.,0.]], requires_grad=True)
-    loss = MSE(x,y).data.numpy()
+    loss = MSE(x,y)
     print("X: " + str([[1, 1],[1,1]]))
     print("Y: " + str([[0,0],[0,0]]))
     print(str(loss))
@@ -44,7 +42,7 @@ def MSETest():
     # Test 2
     x = torch.tensor([[1., 1.],[1., 1.]], requires_grad=True)
     y = torch.tensor([[1.,1.],[1.,1.]], requires_grad=True)
-    loss = MSE(x,y).data.numpy()
+    loss = MSE(x,y)
     print("X: " + str([[1, 1],[1,1]]))
     print("Y: " + str([[1,1],[1,1]]))
     print(str(loss))
@@ -54,7 +52,7 @@ def MSETest():
     # Test 3
     x = torch.tensor([[3., -1.],[-1., 3.]], requires_grad=True)
     y = torch.tensor([[-2.,-5.],[-6.,7.]], requires_grad=True)
-    loss = MSE(x,y).data.numpy()
+    loss = MSE(x,y)
     print("X: " + str([[3., -1.],[-1.,3.]]))
     print("Y: " + str([[-2.,-5.],[-6.,7.]]))
     print(str(loss))
@@ -65,7 +63,7 @@ def CELTest():
     # Test 1
     x = torch.tensor([[1.,1.],[1.,1.]], requires_grad=True)
     y = torch.tensor([[0.,0.],[0.,0.]], requires_grad=True)
-    loss = CEL(x,y).data.numpy()
+    loss = CEL(x,y)
     print("X: " + str([[1, 1],[1,1]]))
     print("Y: " + str([[0,0],[0,0]]))
     print(str(loss))
@@ -77,7 +75,7 @@ def CELTest():
     y = torch.tensor([[10.,-7.],[-3.,-4.]], requires_grad=True)
     loss = CEL(x,y).data.numpy()
     print("X: " + str([[1, 1],[1,1]]))
-    print("Y: " + str([[0,0],[0,0]]))
+    print("Y: " + str([[10.,-7.],[-3.,-4.]]))
     print(str(loss))
     assert(loss == 4)
     print("Success \n")
