@@ -31,14 +31,13 @@ def CEL(logits, YPH):
     return loss
 
 def MSETest():
-
     # Test 1
     x = torch.tensor([[1., 1.],[1., 1.]], requires_grad=True)
     y = torch.tensor([[0.,0.],[0.,0.]], requires_grad=True)
     loss = MSE(x,y).data.numpy()
     print("X: " + str([[1, 1],[1,1]]))
     print("Y: " + str([[0,0],[0,0]]))
-    print(str(loss) + "\n")
+    print(str(loss))
     assert(loss == 4)
     print("Success \n")
 
@@ -48,7 +47,7 @@ def MSETest():
     loss = MSE(x,y).data.numpy()
     print("X: " + str([[1, 1],[1,1]]))
     print("Y: " + str([[1,1],[1,1]]))
-    print(str(loss) + "\n")
+    print(str(loss))
     assert(loss == 0)
     print("Success \n")
 
@@ -58,10 +57,31 @@ def MSETest():
     loss = MSE(x,y).data.numpy()
     print("X: " + str([[3., -1.],[-1.,3.]]))
     print("Y: " + str([[-2.,-5.],[-6.,7.]]))
-    print(str(loss) + "\n")
+    print(str(loss))
     assert(loss == 82)
     print("Success \n")
 
+def CELTest():
+    # Test 1
+    x = torch.tensor([[1.,1.],[1.,1.]], requires_grad=True)
+    y = torch.tensor([[0.,0.],[0.,0.]], requires_grad=True)
+    loss = CEL(x,y).data.numpy()
+    print("X: " + str([[1, 1],[1,1]]))
+    print("Y: " + str([[0,0],[0,0]]))
+    print(str(loss))
+    assert(loss == 0)
+    print("Success \n")
+
+    # Test 2
+    x = torch.tensor([[1.,1.],[1.,1.]], requires_grad=True)
+    y = torch.tensor([[10.,-7.],[-3.,-4.]], requires_grad=True)
+    loss = CEL(x,y).data.numpy()
+    print("X: " + str([[1, 1],[1,1]]))
+    print("Y: " + str([[0,0],[0,0]]))
+    print(str(loss))
+    assert(loss == 4)
+    print("Success \n")
 
 if __name__ == "__main__":
     MSETest()
+    CELTest()
