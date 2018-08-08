@@ -40,9 +40,6 @@ def MSETest():
     print("Y: " + str([[0,0],[0,0]]))
     print(str(loss) + "\n")
     assert(loss == 4)
-    print("\n")
-
-
 
 if __name__ == "__main__":
     MSETest()
