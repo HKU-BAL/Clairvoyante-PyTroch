@@ -62,7 +62,8 @@ def Run(args):
     CVBin = CheckFileExist(basedir + "/callVar.py")
     pypyBin = CheckCmdExist(args.pypy)
     samtoolsBin = CheckCmdExist(args.samtools)
-    chkpnt_fn = CheckFileExist(args.chkpnt_fn, sfx=".meta")
+    # chkpnt_fn = CheckFileExist(args.chkpnt_fn, sfx=".meta")
+    chkpnt_fn = args.chkpnt_fn
     bam_fn = CheckFileExist(args.bam_fn)
     ref_fn = CheckFileExist(args.ref_fn)
     if args.bed_fn == None:
