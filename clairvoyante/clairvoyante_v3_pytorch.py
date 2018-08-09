@@ -266,6 +266,9 @@ class Net(nn.Module):
 
     def restoreParameters(self, path):
         self.load_state_dict(torch.load(path))
+        for name, W in self.named_parameters():
+            if 'bias' not in name:
+                print(W)
 
     def predict(self, XArray):
         XArray = torch.from_numpy(XArray).permute(0,3,1,2)
