@@ -270,6 +270,7 @@ class Net(nn.Module):
         for name, W in self.named_parameters():
             f.write(name)
             f.write(str(W))
+            f.write("\n")
             f.write(str(W.shape))
             f.write("\n")
 
