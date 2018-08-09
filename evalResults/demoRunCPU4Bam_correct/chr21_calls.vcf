@@ -6,7 +6,7 @@
 ##FORMAT=<ID=GT,Number=1,Type=String,Description="Genotype">
 ##FORMAT=<ID=GQ,Number=1,Type=Integer,Description="Genotype Quality">
 ##FORMAT=<ID=DP,Number=1,Type=Integer,Description="Read Depth">
-#OM	POS	ID	REF	ALT	QUAL	FILTER	INFO	FORMAT	SAMPLE
+#CHROM	POS	ID	REF	ALT	QUAL	FILTER	INFO	FORMAT	SAMPLE
 21	14072221	.	G	A	34	.	.	GT:GQ:DP	1/1:34:34
 21	14073147	.	A	G	31	.	.	GT:GQ:DP	0/1:31:55
 21	14073373	.	A	C	32	.	.	GT:GQ:DP	0/1:32:49
