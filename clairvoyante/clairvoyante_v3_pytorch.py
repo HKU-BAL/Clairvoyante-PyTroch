@@ -266,10 +266,10 @@ class Net(nn.Module):
 
     def restoreParameters(self, path):
         self.load_state_dict(torch.load(path))
+        f = open("TrainCPU4_parameters.txt", "a")
         for name, W in self.named_parameters():
-            if 'bias' not in name:
-                print(name)
-                print(W)
+            f.write(name)
+            f.write(str(W))
 
     def predict(self, XArray):
         XArray = torch.from_numpy(XArray).permute(0,3,1,2)
