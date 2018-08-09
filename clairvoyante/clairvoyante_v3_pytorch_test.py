@@ -61,13 +61,14 @@ def MSETest():
 
 def CELTest():
     # Test 1
-    x = torch.tensor([[1.,1.],[1.,1.]], requires_grad=True)
-    y = torch.tensor([[0.,0.],[0.,0.]], requires_grad=True)
-    print("X: " + str([[1, 1],[1,1]]))
-    print("Y: " + str([[0,0],[0,0]]))
+    x = torch.tensor([[1.,1.],[1.,1.],[2.,3.]], requires_grad=True)
+    y = torch.tensor([[0.,0.],[0.,0.],[1.,1.]], requires_grad=True)
+    print("X: " + str([[1.,1.],[1.,1.],[2.,3.]]))
+    print("Y: " + str([[0.,0.],[0.,0.],[1.,1.]]))
     loss = CEL(x,y)
+    loss = round(loss,7)
     print(str(loss))
-    assert(loss == 0)
+    assert(loss == -0.1819863)
     print("Success \n")
 
     # Test 2
