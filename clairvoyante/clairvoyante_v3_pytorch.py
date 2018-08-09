@@ -265,7 +265,7 @@ class Net(nn.Module):
         self.getLossLossRTVal = loss.data.numpy()
 
     def restoreParameters(self, path):
-        # self.load_state_dict(torch.load(path))
+        self.load_state_dict(torch.load(path))
         for name, W in self.named_parameters():
             if 'bias' not in name:
                 print(name)
