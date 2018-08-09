@@ -21,7 +21,7 @@ def MSE(sigmoid, YPH):
     return loss.data.numpy()
 
 def CEL(logits, YPH):
-    log_softmax = nn.LogSoftmax(dim=1)
+    log_softmax = nn.LogSoftmax(dim=0)
     CrossEntropy = log_softmax(logits) * -YPH
     print(CrossEntropy)
     loss = CrossEntropy.sum()
@@ -71,13 +71,14 @@ def CELTest():
     print("Success \n")
 
     # Test 2
-    x = torch.tensor([[1.,1.],[1.,1.]], requires_grad=True)
+    x = torch.tensor([[10.,10.],[10.,10.]], requires_grad=True)
     y = torch.tensor([[10.,-7.],[-3.,-4.]], requires_grad=True)
-    print("X: " + str([[1, 1],[1,1]]))
+    print("X: " + str([[10, 10],[10,10]]))
     print("Y: " + str([[10.,-7.],[-3.,-4.]]))
     loss = CEL(x,y)
+    loss = round(loss,7)
     print(str(loss))
-    assert(loss == 4)
+    assert(loss == -2.7725906)
     print("Success \n")
 
 if __name__ == "__main__":
