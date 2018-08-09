@@ -268,6 +268,7 @@ class Net(nn.Module):
         self.load_state_dict(torch.load(path))
         for name, W in self.named_parameters():
             if 'bias' not in name:
+                print(name)
                 print(W)
 
     def predict(self, XArray):
