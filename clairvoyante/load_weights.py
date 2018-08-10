@@ -28,10 +28,11 @@ if __name__ == "__main__":
         if name_list[1] == "kernel":
             name_list[1] = "weight"
 
+        if name_list[0][0] = 'Y':
+            name_list[0] += "Layer"
+
         par_name = name_list[0] + "." + name_list[1]
         dimension = make_tuple(name_list[2])
-
-
 
         # print(par_name)
         # print(dimension)
