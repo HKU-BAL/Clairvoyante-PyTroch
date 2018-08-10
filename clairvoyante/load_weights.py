@@ -35,7 +35,7 @@ if __name__ == "__main__":
         # print(dimension)
         # print(par.reshape(dimension))
 
-        print(mpt.state_dict())
+        print(mp.state_dict())
 
     #     for name, W in mp.named_parameters():
     #         # Conv Weights
