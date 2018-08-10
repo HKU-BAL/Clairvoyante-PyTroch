@@ -1,6 +1,7 @@
 import tensorflow as tf
 import selu
 import param
+import numpy as np
 
 class Clairvoyante(object):
 
@@ -290,14 +291,12 @@ class Clairvoyante(object):
             self.saver.restore(self.session, fn)
 
             variables_names = [v.name for v in tf.trainable_variables()]
-	    values = self.session.run(variables_names)
-	    for k, v in zip(variables_names, values):
-    	        print "Variable: ", k
-    		print "Shape: ", v.shape
-    		print v
-		print "\n"
-                
-               
+	        values = self.session.run(variables_names)
+	        for k, v in zip(variables_names, values):
+                np.savetxt("../illumina_2_parameters/"+k[:-2]+".txt", v)
+        	    # print "Variable: ", k
+        		# print "Shape: ", v.shape
+        		# print v
 
     def summaryFileWriter(self, logsPath):
         summaryWriter = tf.summary.FileWriter(logsPath, graph=self.g)
