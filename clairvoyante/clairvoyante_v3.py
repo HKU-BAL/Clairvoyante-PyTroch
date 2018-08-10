@@ -289,9 +289,9 @@ class Clairvoyante(object):
             self.saver = tf.train.Saver()
             self.saver.restore(self.session, fn)
 
-        for variable in tf.trainable_variables():
-            print(variable)
-            print("\n")
+        # for variable in tf.trainable_variables():
+        #     print(variable)
+        #     print("\n")
 
     def summaryFileWriter(self, logsPath):
         summaryWriter = tf.summary.FileWriter(logsPath, graph=self.g)
