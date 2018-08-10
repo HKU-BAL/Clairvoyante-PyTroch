@@ -21,6 +21,8 @@ class Net(nn.Module):
                        l2RegularizationLambda = param.l2RegularizationLambda, l2RegularizationLambdaDecay = param.l2RegularizationLambdaDecay):
         super(Net, self).__init__()
 
+        print(inputShape)
+
         self.inputShape = inputShape
         self.outputShape1 = outputShape1; self.outputShape2 = outputShape2; self.outputShape3 = outputShape3; self.outputShape4 = outputShape4
         self.kernelSize1 = kernelSize1; self.kernelSize2 = kernelSize2; self.kernelSize3 = kernelSize3
@@ -93,7 +95,8 @@ class Net(nn.Module):
 
     # Forward propagation
     def forward(self, XPH):
-        # print(XPH)
+        print("Shape")
+        print(XPH.shape)
         XPH = XPH
 
         # Different non-linear activation functions.

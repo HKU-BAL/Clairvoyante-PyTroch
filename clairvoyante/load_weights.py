@@ -48,7 +48,7 @@ if __name__ == "__main__":
             # print(W)
             # print(dimension)
             # print(par.reshape(dimension))
-            W = torch.from_numpy(par.reshape(dimension)).permute(3,2,0,1)
+            W = torch.from_numpy(par).permute(3,2,0,1)
             # print(W)
             # print(W.shape)
             # break
@@ -59,7 +59,7 @@ if __name__ == "__main__":
             # print(W)
             # print(dimension)
             # print(par.reshape(dimension))
-            W = torch.from_numpy(par.reshape(dimension))
+            W = torch.from_numpy(par)
             # print(W)
             # print(W.shape)
             # break
@@ -70,7 +70,7 @@ if __name__ == "__main__":
             # print(W)
             # print(dimension)
             # print(par.reshape(dimension))
-            W = torch.from_numpy(par.reshape(dimension)).permute(1,0)
+            W = torch.from_numpy(par).permute(1,0)
             # print(W)
             # print(W.shape)
             # break
@@ -89,4 +89,4 @@ if __name__ == "__main__":
         print(W)
         print("\n")
 
-    torch.save(mp.state_dict(), "../pytorchModels/illumina_2/illumina_2_parameters.txt")
+    torch.save(mp.state_dict(), "../pytorchModels/illumina_2/illumina_2_NS_parameters.txt")
