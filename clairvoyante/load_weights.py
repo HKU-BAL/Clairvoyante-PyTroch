@@ -34,8 +34,8 @@ if __name__ == "__main__":
         # print(par_name)
         # print(dimension)
         # print(par.reshape(dimension))
-
-        print(mp.state_dict())
+	for param in mp.parameters():
+            print(param)
 
     #     for name, W in mp.named_parameters():
     #         # Conv Weights
@@ -81,4 +81,4 @@ if __name__ == "__main__":
     #     print(W)
     #     print("\n")
 
-    torch.save(mp.state_dict(), "../pytorchModels/illumina_2/illumina_2_parameters.txt")
+    #torch.save(mp.state_dict(), "../pytorchModels/illumina_2/illumina_2_parameters.txt")
