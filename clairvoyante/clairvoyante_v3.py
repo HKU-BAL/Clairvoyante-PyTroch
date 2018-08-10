@@ -293,7 +293,7 @@ class Clairvoyante(object):
             variables_names = [v.name for v in tf.trainable_variables()]
             values = self.session.run(variables_names)
             for k, v in zip(variables_names, values):
-                f_name = "../illumina_2_parameters/"+k[:-2].replace('/','_')+str(v.shape)+".txt"
+                f_name = "../illumina_2_parameters/"+k[:-2].replace('/','_')+"_"+str(v.shape)+".txt"
                 f = open(f_name, "a")
                 np.savetxt(f_name, v.flatten())
 
