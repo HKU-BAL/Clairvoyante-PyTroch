@@ -74,7 +74,7 @@ if __name__ == "__main__":
             # print(W.shape)
             # break
         # print("\n")
-        print(name)
+        print(par_name)
         print(W.shape)
         print(W)
         print("\n")
