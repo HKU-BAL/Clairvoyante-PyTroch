@@ -25,7 +25,7 @@ if __name__ == "__main__":
     mp = cpt.Net()
 
     for filename in os.listdir('../illumina_2_parameters/'):
-        par = np.loadtxt(filename)
+        par = np.loadtxt('../illumina_2_parameters/' + filename)
         name_list = filename[:-4].split('_')
         par_name = name_list[0] + "_" + name_list[1]
         dimension = make_tuple(name_list[2])
