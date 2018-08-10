@@ -89,4 +89,4 @@ if __name__ == "__main__":
         print(W)
         print("\n")
 
-    #torch.save(mp.state_dict(), "../pytorchModels/illumina_2/illumina_2_parameters.txt")
+    torch.save(mp.state_dict(), "../pytorchModels/illumina_2/illumina_2_parameters.txt")
