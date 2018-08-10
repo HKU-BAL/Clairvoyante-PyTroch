@@ -70,7 +70,7 @@ if __name__ == "__main__":
             # print(W)
             # print(dimension)
             # print(par.reshape(dimension))
-            W = torch.from_numpy(par.reshape(dimension)).permute(0,1)
+            W = torch.from_numpy(par.reshape(dimension)).permute(1,0)
             # print(W)
             # print(W.shape)
             # break
