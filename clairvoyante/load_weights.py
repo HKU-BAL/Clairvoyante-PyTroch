@@ -52,6 +52,7 @@ if __name__ == "__main__":
     print("Actual params: ")
     for name, W in mp.named_parameters():
         print(name)
+        print(W.shape)
         print(W)
         print("\n")
 
