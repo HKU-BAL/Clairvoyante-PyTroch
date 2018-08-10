@@ -17,4 +17,4 @@ if __name__ == "__main__":
     m = cv.Clairvoyante()
     m.init()
 
-    # m.restoreParameters('../trainedModels/fullv3-illumina-novoalign-hg001+hg002-hg38/learningRate1e-3.epoch500')
+    m.restoreParameters('../trainedModels/fullv3-illumina-novoalign-hg001+hg002-hg38/learningRate1e-3.epoch500')
