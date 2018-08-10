@@ -244,7 +244,7 @@ class Net(nn.Module):
         return self.l2RegularizationLambdaVal
 
     def getLoss(self, batchX, batchY):
-        batchX = torch.from_numpy(batchX).permute(0,3,1,2)
+        batchX = torch.from_numpy(batchX).permute(3,2,0,1)
 
         out = self(batchX)
 
@@ -256,7 +256,7 @@ class Net(nn.Module):
 
         self.getLossLossRTVal = None
 
-        batchX = torch.from_numpy(batchX).permute(0,3,1,2)
+        batchX = torch.from_numpy(batchX).permute(3,2,0,1)
 
         out = self(batchX)
 
@@ -266,27 +266,29 @@ class Net(nn.Module):
 
     def restoreParameters(self, path):
         self.load_state_dict(torch.load(path))
-        f = open("../illumina_parameters.txt", "a")
-        for name, W in self.named_parameters():
-            f.write(name)
-            f.write(str(W.shape))
-            f.write(str(W))
-            f.write("\n")
+        # f = open("../illumina_parameters.txt", "a")
+        # for name, W in self.named_parameters():
+        #     f.write(name)
+        #     f.write(str(W.shape))
+        #     f.write(str(W))
+        #     f.write("\n")
 
     def predict(self, XArray):
-        XArray = torch.from_numpy(XArray).permute(0,3,1,2)
+        print(XArray.shape)
+        XArray = torch.from_numpy(XArray).permute(3,2,0,1)
         base, zygosity, varType, indelLength = self.forward(XArray)
         return base, zygosity, varType, indelLength
 
     def predictNoRT(self, XArray):
-        XArray = torch.from_numpy(XArray).permute(0,3,1,2)
+        print(XArray.shape)
+        XArray = torch.from_numpy(XArray).permute(3,2,0,1)
         # print(XArray.shape)
         self.predictBaseRTVal = None; self.predictZygosityRTVal = None; self.predictVarTypeRTVal = None; self.predictIndelLengthRTVal = None
         self.predictBaseRTVal, self.predictZygosityRTVal, self.predictVarTypeRTVal, self.predictIndelLengthRTVal = self.forward(XArray)
         # print(self.predictBaseRTVal, self.predictZygosityRTVal, self.predictVarTypeRTVal, self.predictIndelLengthRTVal)
 
     def train(self, batchX, batchY):
-        batchX = torch.from_numpy(batchX).permute(0,3,1,2)
+        batchX = torch.from_numpy(batchX).permute(3,2,0,1)
         self.optimizer.zero_grad()
         # print("BatchX: " + str(batchX[0]))
         # print("\n")
@@ -309,7 +311,7 @@ class Net(nn.Module):
         self.trainLossRTVal = None
         self.trainSummaryRTVal = None
 
-        batchX = torch.from_numpy(batchX).permute(0,3,1,2)
+        batchX = torch.from_numpy(batchX).permute(3,2,0,1)
         self.optimizer.zero_grad()
         # print("BatchX: " + str(batchX[0]))
         # print("\n")
