@@ -288,12 +288,13 @@ class Clairvoyante(object):
     def restoreParameters(self, fn):
         with self.g.as_default():
             self.saver = tf.train.Saver()
-            self.saver.restore(self.session, fn)
-
+            self.saver.restore(self.session, fn) 
+	    
             variables_names = [v.name for v in tf.trainable_variables()]
-	        values = self.session.run(variables_names)
-	        for k, v in zip(variables_names, values):
-                np.savetxt("../illumina_2_parameters/"+k[:-2]+".txt", v)
+	    values = self.session.run(variables_names)
+	    for k, v in zip(variables_names, values):
+            	f = open("../illumina_2_parameters/"+k[:-2].replace('/','_')+".txt", "a")
+	    	np.savetxt("../illumina_2_parameters/"+k[:-2].replace('/','_')+".txt", v.flatten())
         	    # print "Variable: ", k
         		# print "Shape: ", v.shape
         		# print v
