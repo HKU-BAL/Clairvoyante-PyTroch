@@ -35,48 +35,50 @@ if __name__ == "__main__":
         # print(dimension)
         # print(par.reshape(dimension))
 
-        for name, W in mp.named_parameters():
-            # Conv Weights
-            if par_name in name and "conv" in name and "weight" in name:
-                print(par_name)
-                print(name)
-                print(W)
-                print(dimension)
-                print(par.reshape(dimension))
-                W = torch.from_numpy(par.reshape(dimension)).permute(0,3,1,2)
-                print(W)
-                print(W.shape)
-                break
-            # Biases
-            elif par_name in name and "bias" in name:
-                print(par_name)
-                print(name)
-                print(W)
-                print(dimension)
-                print(par.reshape(dimension))
-                W = torch.from_numpy(par.reshape(dimension))
-                print(W)
-                print(W.shape)
-                break
-            # FC weights
-            elif par_name in name and "weight" in name:
-                print(par_name)
-                print(name)
-                print(W)
-                print(dimension)
-                print(par.reshape(dimension))
-                W = torch.from_numpy(par.reshape(dimension)).permute(0,1)
-                print(W)
-                print(W.shape)
-                break
-        print("\n")
+        print(mpt.state_dict())
 
-    print("\n")
-    print("Actual params: ")
-    for name, W in mp.named_parameters():
-        print(name)
-        print(W.shape)
-        print(W)
-        print("\n")
+    #     for name, W in mp.named_parameters():
+    #         # Conv Weights
+    #         if par_name in name and "conv" in name and "weight" in name:
+    #             print(par_name)
+    #             print(name)
+    #             print(W)
+    #             print(dimension)
+    #             print(par.reshape(dimension))
+    #             W = torch.from_numpy(par.reshape(dimension)).permute(0,3,1,2)
+    #             print(W)
+    #             print(W.shape)
+    #             break
+    #         # Biases
+    #         elif par_name in name and "bias" in name:
+    #             print(par_name)
+    #             print(name)
+    #             print(W)
+    #             print(dimension)
+    #             print(par.reshape(dimension))
+    #             W = torch.from_numpy(par.reshape(dimension))
+    #             print(W)
+    #             print(W.shape)
+    #             break
+    #         # FC weights
+    #         elif par_name in name and "weight" in name:
+    #             print(par_name)
+    #             print(name)
+    #             print(W)
+    #             print(dimension)
+    #             print(par.reshape(dimension))
+    #             W = torch.from_numpy(par.reshape(dimension)).permute(0,1)
+    #             print(W)
+    #             print(W.shape)
+    #             break
+    #     print("\n")
+    #
+    # print("\n")
+    # print("Actual params: ")
+    # for name, W in mp.named_parameters():
+    #     print(name)
+    #     print(W.shape)
+    #     print(W)
+    #     print("\n")
 
     torch.save(mp.state_dict(), "../pytorchModels/illumina_2/illumina_2_parameters.txt")
