@@ -33,6 +33,7 @@ if __name__ == "__main__":
 
         print(par_name)
         print(dimension)
+        print(par.reshape(dimension))
 
         for name, W in mp.named_parameters():
             # Conv Weights
@@ -48,6 +49,7 @@ if __name__ == "__main__":
                 W = torch.from_numpy(par.reshape(dimension)).permute(0,1)
                 break
 
+    print("Actual params: ")
     for name, W in mp.named_parameters():
         print(name)
         print(W)
