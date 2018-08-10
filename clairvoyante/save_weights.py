@@ -24,10 +24,16 @@ if __name__ == "__main__":
 
     mp = cpt.Net()
 
+    # Gets each param in folder and load it into pytorch model.
     for filename in os.listdir('../illumina_2_parameters/'):
         par = np.loadtxt('../illumina_2_parameters/' + filename)
+        # Gets rid of .txt extension.
         name_list = filename[:-4].split('_')
-        par_name = name_list[0] + "_" + name_list[1]
+
+        if name_list[1] == "kernel":
+            name_list[1] = "weight"
+
+        par_name = name_list[0] + "." + name_list[1]
         dimension = make_tuple(name_list[2])
         print(par_name)
         print(dimension)
