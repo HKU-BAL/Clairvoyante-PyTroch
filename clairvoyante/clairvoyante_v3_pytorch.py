@@ -77,11 +77,10 @@ class Net(nn.Module):
         self.counter = 1
 
         # # Device configuration
-        self.device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
-        # # self.device = torch.cuda.device(0)
-        # print(torch.cuda.get_device_name(0))
-        #
-        # self.to(self.deivce)
+        # self.device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
+        self.device = torch.cuda.device(0)
+        print(torch.cuda.get_device_name(0))
+        self.to(self.deivce)
 
     # Implements the same padding feature in Tensorflow.
     # kernelSize is a tuple as kernel is not a square.
@@ -247,11 +246,11 @@ class Net(nn.Module):
         return self.l2RegularizationLambdaVal
 
     def getLoss(self, batchX, batchY):
-        batchX = torch.from_numpy(batchX).permute(0,3,1,2)
+        batchX = torch.from_numpy(batchX).to(self.device).permute(0,3,1,2)
 
         out = self(batchX)
 
-        loss = self.costFunction(torch.from_numpy(batchY))
+        loss = self.costFunction(torch.from_numpy(batchY).to(self.device))
 
         return loss.data.numpy()
 
@@ -259,11 +258,11 @@ class Net(nn.Module):
 
         self.getLossLossRTVal = None
 
-        batchX = torch.from_numpy(batchX).permute(0,3,1,2)
+        batchX = torch.from_numpy(batchX).to(self.device).permute(0,3,1,2)
 
         out = self(batchX)
 
-        loss = self.costFunction(torch.from_numpy(batchY))
+        loss = self.costFunction(torch.from_numpy(batchY).to(self.device))
 
         self.getLossLossRTVal = loss.data.numpy()
 
@@ -279,7 +278,7 @@ class Net(nn.Module):
     def predict(self, XArray):
         print(XArray.shape)
         print(XArray[0])
-        XArray = torch.from_numpy(XArray).permute(0,3,1,2)
+        XArray = torch.from_numpy(XArray).to(self.device).permute(0,3,1,2)
         print(XArray[0])
         base, zygosity, varType, indelLength = self.forward(XArray)
         return base, zygosity, varType, indelLength
@@ -287,7 +286,7 @@ class Net(nn.Module):
     def predictNoRT(self, XArray):
         print(XArray.shape)
         print(XArray[0])
-        XArray = torch.from_numpy(XArray).permute(0,3,1,2)
+        XArray = torch.from_numpy(XArray).to(self.device).permute(0,3,1,2)
         print(XArray[0])
         # print(XArray.shape)
         self.predictBaseRTVal = None; self.predictZygosityRTVal = None; self.predictVarTypeRTVal = None; self.predictIndelLengthRTVal = None
@@ -295,7 +294,7 @@ class Net(nn.Module):
         # print(self.predictBaseRTVal, self.predictZygosityRTVal, self.predictVarTypeRTVal, self.predictIndelLengthRTVal)
 
     def train(self, batchX, batchY):
-        batchX = torch.from_numpy(batchX).permute(0,3,1,2)
+        batchX = torch.from_numpy(batchX).to(self.device).permute(0,3,1,2)
         self.optimizer.zero_grad()
         # print("BatchX: " + str(batchX[0]))
         # print("\n")
@@ -303,7 +302,7 @@ class Net(nn.Module):
         # print("Out: " + str(out))
         # print("\n")
         # Why is loss negative?
-        loss = self.costFunction(torch.from_numpy(batchY))
+        loss = self.costFunction(torch.from_numpy(batchY).to(self.device))
         loss.backward()
         self.optimizer.step()
 
