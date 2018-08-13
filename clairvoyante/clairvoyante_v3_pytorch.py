@@ -252,7 +252,7 @@ class Net(nn.Module):
 
         loss = self.costFunction(torch.from_numpy(batchY).to(self.device))
 
-        return loss.data.numpy()
+        return loss.cpu().data.numpy()
 
     def getLossNoRT(self, batchX, batchY):
 
@@ -264,7 +264,7 @@ class Net(nn.Module):
 
         loss = self.costFunction(torch.from_numpy(batchY).to(self.device))
 
-        self.getLossLossRTVal = loss.data.numpy()
+        self.getLossLossRTVal = loss.cpu().data.numpy()
 
     def restoreParameters(self, path):
         self.load_state_dict(torch.load(path))
