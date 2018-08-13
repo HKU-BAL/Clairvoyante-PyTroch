@@ -308,7 +308,7 @@ class Net(nn.Module):
 
         loss = loss.cpu().data.numpy()
 
-        print("Epoch: " + str(self.counter) + " ---------------------------- Loss: " + str(loss/int(total*param.trainingDatasetPercentage)) + "\n")
+        print("Epoch: " + str(self.counter) + " ---------------------------- Loss: " + str(loss) + "\n")
         self.counter += 1
         torch.save(self.state_dict(), "../pytorchModels/trainAll/trainAll_parameters.txt")
         sys.stdout.flush()
@@ -333,7 +333,7 @@ class Net(nn.Module):
 
         loss = loss.cpu().data.numpy()
 
-        print("Epoch: " + str(self.counter) + " ---------------------------- Loss: " + str(loss/int(total*param.trainingDatasetPercentage)) + "\n")
+        print("Epoch: " + str(self.counter) + " ---------------------------- Loss: " + str(loss) + "\n")
         self.counter += 1
         torch.save(self.state_dict(), "../pytorchModels/trainAll/trainAll_parameters.txt")
         sys.stdout.flush()
