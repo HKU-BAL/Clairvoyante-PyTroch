@@ -170,7 +170,7 @@ def Test(args, m, utils):
     end2, num2, XBatch2, posBatch2 = next(tensorGenerator)
     file = open("testfile.txt","w")
     file.write(str(XBatch2[0]))
-    print(XBatch2[0])
+    print(XBatch2)
     m.predictNoRT(XBatch2)
     base = m.predictBaseRTVal; z = m.predictZygosityRTVal; t = m.predictVarTypeRTVal; l = m.predictIndelLengthRTVal
     if end2 == 0:

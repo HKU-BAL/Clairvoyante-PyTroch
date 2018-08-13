@@ -103,7 +103,7 @@ class Net(nn.Module):
         selu = nn.SELU()
         sigmoid = nn.Sigmoid()
         # Dim specifies softmax over the row of the tensor.
-        softmax = nn.Softmax(dim=0)
+        softmax = nn.Softmax(dim=1)
 
         # Convolution layers with max max_pooling and SELU.
         pad1 = self.padding(self.kernelSize1)
