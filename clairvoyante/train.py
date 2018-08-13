@@ -27,7 +27,10 @@ def Run(args):
         else:
             import clairvoyante_v3 as cv
     utils.SetupEnv()
+    # m = cpt.Net()
+    device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
     m = cpt.Net()
+    m.to(device)
     # m.init()
 
     if args.chkpnt_fn != None:
