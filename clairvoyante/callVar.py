@@ -41,9 +41,9 @@ def Run(args):
             param.NUM_THREADS = 4
     else:
         param.NUM_THREADS = args.threads
-    device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
+    # device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
     m = cpt.Net()
-    m.to(device)
+    # m.to(device)
 
     # m.init()
     #
