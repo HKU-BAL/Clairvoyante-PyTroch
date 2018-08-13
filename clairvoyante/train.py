@@ -7,6 +7,7 @@ import logging
 import pickle
 import numpy as np
 from threading import Thread
+import torch
 import clairvoyante_v3_pytorch as cpt
 
 logging.basicConfig(format='%(message)s', level=logging.INFO)
