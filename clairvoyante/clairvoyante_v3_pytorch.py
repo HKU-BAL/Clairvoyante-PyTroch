@@ -278,13 +278,17 @@ class Net(nn.Module):
 
     def predict(self, XArray):
         print(XArray.shape)
+        print(XArray[0])
         XArray = torch.from_numpy(XArray).permute(0,3,1,2)
+        print(XArray[0])
         base, zygosity, varType, indelLength = self.forward(XArray)
         return base, zygosity, varType, indelLength
 
     def predictNoRT(self, XArray):
         print(XArray.shape)
+        print(XArray[0])
         XArray = torch.from_numpy(XArray).permute(0,3,1,2)
+        print(XArray[0])
         # print(XArray.shape)
         self.predictBaseRTVal = None; self.predictZygosityRTVal = None; self.predictVarTypeRTVal = None; self.predictIndelLengthRTVal = None
         self.predictBaseRTVal, self.predictZygosityRTVal, self.predictVarTypeRTVal, self.predictIndelLengthRTVal = self.forward(XArray)
