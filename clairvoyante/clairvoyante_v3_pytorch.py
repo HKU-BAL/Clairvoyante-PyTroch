@@ -306,11 +306,13 @@ class Net(nn.Module):
         loss.backward()
         self.optimizer.step()
 
-        print("Epoch: " + str(self.counter) + " ---------------------------- Loss: " + str(loss.data.numpy()) + "\n")
+        loss = loss.cpu().data.numpy()
+
+        print("Epoch: " + str(self.counter) + " ---------------------------- Loss: " + str(loss/int(total*param.trainingDatasetPercentage)) + "\n")
         self.counter += 1
-        torch.save(self.state_dict(), "../pytorchModels/demoRunCPU_v4Train/demoRunCPU4_parameters.txt")
+        torch.save(self.state_dict(), "../pytorchModels/trainAll/trainAll_parameters.txt")
         sys.stdout.flush()
-        return loss.data.numpy(), None
+        return loss, None
 
     def trainNoRT(self, batchX, batchY):
 
@@ -329,12 +331,14 @@ class Net(nn.Module):
         loss.backward()
         self.optimizer.step()
 
-        print("Epoch: " + str(self.counter) + " ---------------------------- Loss: " + str(loss.data.numpy()) + "\n")
+        loss = loss.cpu().data.numpy()
+
+        print("Epoch: " + str(self.counter) + " ---------------------------- Loss: " + str(loss/int(total*param.trainingDatasetPercentage)) + "\n")
         self.counter += 1
         torch.save(self.state_dict(), "../pytorchModels/trainAll/trainAll_parameters.txt")
         sys.stdout.flush()
 
-        self.trainLossRTVal = loss.data.numpy()
+        self.trainLossRTVal = loss
 
     # def train(self, batchX, batchY):
     #     # create your optimizer
