@@ -21,7 +21,7 @@ class Net(nn.Module):
                        l2RegularizationLambda = param.l2RegularizationLambda, l2RegularizationLambdaDecay = param.l2RegularizationLambdaDecay):
         super(Net, self).__init__()
 
-        print(inputShape)
+        # print(inputShape)
 
         self.inputShape = inputShape
         self.outputShape1 = outputShape1; self.outputShape2 = outputShape2; self.outputShape3 = outputShape3; self.outputShape4 = outputShape4
@@ -267,7 +267,7 @@ class Net(nn.Module):
         self.getLossLossRTVal = loss.cpu().data.numpy()
 
     def saveParameters(self, path):
-        torch.save(self.state_dict(), path)
+        torch.save(self.state_dict(), path + ".txt")
 
     def restoreParameters(self, path):
         self.load_state_dict(torch.load(path))
