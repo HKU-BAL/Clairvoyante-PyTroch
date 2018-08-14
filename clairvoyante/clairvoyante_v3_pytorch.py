@@ -266,6 +266,9 @@ class Net(nn.Module):
 
         self.getLossLossRTVal = loss.cpu().data.numpy()
 
+    def saveParameters(self, path):
+        torch.save(self.state_dict(), path)
+
     def restoreParameters(self, path):
         self.load_state_dict(torch.load(path))
         # f = open("../illumina_parameters.txt", "a")
@@ -310,7 +313,7 @@ class Net(nn.Module):
 
         # print("Epoch: " + str(self.counter) + " ---------------------------- Loss: " + str(loss) + "\n")
         self.counter += 1
-        torch.save(self.state_dict(), "../pytorchModels/trainAll/trainAll_parameters.txt")
+        # torch.save(self.state_dict(), "../pytorchModels/trainAll/trainAll_parameters.txt")
         sys.stdout.flush()
         return loss, None
 
@@ -335,7 +338,7 @@ class Net(nn.Module):
 
         # print("Epoch: " + str(self.counter) + " ---------------------------- Loss: " + str(loss) + "\n")
         self.counter += 1
-        torch.save(self.state_dict(), "../pytorchModels/trainAll/trainAll_parameters.txt")
+        # torch.save(self.state_dict(), "../pytorchModels/trainAll/trainAll_parameters.txt")
         sys.stdout.flush()
 
         self.trainLossRTVal = loss
