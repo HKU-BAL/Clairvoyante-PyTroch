@@ -79,7 +79,7 @@ class Net(nn.Module):
         # # Device configuration
         self.device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
         # self.device = torch.cuda.device(0)
-        print(torch.cuda.get_device_name(0))
+        # print(torch.cuda.get_device_name(0))
         # self.to(self.deivce)
 
     # Implements the same padding feature in Tensorflow.
@@ -94,8 +94,8 @@ class Net(nn.Module):
 
     # Forward propagation
     def forward(self, XPH):
-        print("Shape")
-        print(XPH.shape)
+        # print("Shape")
+        # print(XPH.shape)
         XPH = XPH
 
         # Different non-linear activation functions.
@@ -147,7 +147,7 @@ class Net(nn.Module):
         # 3 output fully connected layers for zygosity, varType and indelLength.
         # Uses SELU and softmax to output result.
         YZygosityFC = selu(self.YZygosityFCLayer(dropout5))
-        print("ZFC: "+str(YZygosityFC)+"\n")
+        # print("ZFC: "+str(YZygosityFC)+"\n")
         YZygosityLogits = torch.add(YZygosityFC, epsilon)
         self.YZygosityLogits = YZygosityLogits
         # print(YZygosityLogits)
@@ -156,7 +156,7 @@ class Net(nn.Module):
         # print(YZygositySoftmax.shape)
 
         YVarTypeFC = selu(self.YVarTypeFCLayer(dropout5))
-        print("VFC: "+str(YVarTypeFC)+"\n")
+        # print("VFC: "+str(YVarTypeFC)+"\n")
         YVarTypeLogits = torch.add(YVarTypeFC, epsilon)
         self.YVarTypeLogits = YVarTypeLogits
         # print(YVarTypeLogits)
@@ -165,7 +165,7 @@ class Net(nn.Module):
         # print(YVarTypeSoftmax.shape)
 
         YIndelLengthFC = selu(self.YIndelLengthFCLayer(dropout5))
-        print("IFC: "+str(YIndelLengthFC)+"\n")
+        # print("IFC: "+str(YIndelLengthFC)+"\n")
         YIndelLengthLogits = torch.add(YIndelLengthFC, epsilon)
         self.YIndelLengthLogits = YIndelLengthLogits
         # print(YIndelLengthLogits)
@@ -177,36 +177,36 @@ class Net(nn.Module):
 
     def costFunction(self, YPH):
         YPH = YPH.float()
-        print("YPH: "+ str(YPH[0]) + "\n")
+        # print("YPH: "+ str(YPH[0]) + "\n")
         # Calculates MSE without computing average.
         mse = nn.MSELoss(reduction='sum')
         loss1 = mse(self.YBaseChangeSigmoid, YPH.narrow(1, 0, self.outputShape1[0]))
-        print(self.YBaseChangeSigmoid)
-        print(YPH.narrow(1, 0, self.outputShape1[0]))
-        print("Loss1: "+str(loss1)+"\n")
+        # print(self.YBaseChangeSigmoid)
+        # print(YPH.narrow(1, 0, self.outputShape1[0]))
+        # print("Loss1: "+str(loss1)+"\n")
 
         log_softmax = nn.LogSoftmax(dim=1)
 
-        print(self.YZygosityLogits)
+        # print(self.YZygosityLogits)
         YZygosityCrossEntropy = log_softmax(self.YZygosityLogits) * -YPH.narrow(1, self.outputShape1[0], self.outputShape2[0])
-        print(YZygosityCrossEntropy)
-        print(YPH.narrow(1, self.outputShape1[0], self.outputShape2[0]))
+        # print(YZygosityCrossEntropy)
+        # print(YPH.narrow(1, self.outputShape1[0], self.outputShape2[0]))
         loss2 = YZygosityCrossEntropy.sum()
-        print("Loss2: "+str(loss2)+"\n")
+        # print("Loss2: "+str(loss2)+"\n")
 
-        print(self.YVarTypeLogits)
+        # print(self.YVarTypeLogits)
         YVarTypeCrossEntropy = log_softmax(self.YVarTypeLogits) * -YPH.narrow(1, self.outputShape1[0]+self.outputShape2[0], self.outputShape3[0])
-        print(YVarTypeCrossEntropy)
-        print(YPH.narrow(1, self.outputShape1[0]+self.outputShape2[0], self.outputShape3[0]))
+        # print(YVarTypeCrossEntropy)
+        # print(YPH.narrow(1, self.outputShape1[0]+self.outputShape2[0], self.outputShape3[0]))
         loss3 = YVarTypeCrossEntropy.sum()
-        print("Loss3: " + str(loss3)+"\n")
+        # print("Loss3: " + str(loss3)+"\n")
 
-        print(self.YIndelLengthLogits)
+        # print(self.YIndelLengthLogits)
         YIndelLengthCrossEntropy = log_softmax(self.YIndelLengthLogits) * -YPH.narrow(1, self.outputShape1[0]+self.outputShape2[0]+self.outputShape3[0], self.outputShape4[0])
-        print(YIndelLengthCrossEntropy)
-        print(YPH.narrow(1, self.outputShape1[0]+self.outputShape2[0]+self.outputShape3[0], self.outputShape4[0]))
+        # print(YIndelLengthCrossEntropy)
+        # print(YPH.narrow(1, self.outputShape1[0]+self.outputShape2[0]+self.outputShape3[0], self.outputShape4[0]))
         loss4 = YIndelLengthCrossEntropy.sum()
-        print("Loss4: " + str(loss4)+"\n")
+        # print("Loss4: " + str(loss4)+"\n")
 
         l2_reg = None
         for name, W in self.named_parameters():
@@ -223,7 +223,7 @@ class Net(nn.Module):
         # print(l2_reg)
 
         lossL2 = l2_reg * self.l2RegularizationLambdaVal
-        print("LossL2: " + str(lossL2)+"\n")
+        # print("LossL2: " + str(lossL2)+"\n")
 
         loss = loss1 + loss2 + loss3 + loss4 + lossL2
         self.loss = loss
@@ -276,18 +276,18 @@ class Net(nn.Module):
         #     f.write("\n")
 
     def predict(self, XArray):
-        print(XArray.shape)
-        print(XArray[0])
+        # print(XArray.shape)
+        # print(XArray[0])
         XArray = torch.from_numpy(XArray).to(self.device).permute(0,3,1,2)
-        print(XArray[0])
+        # print(XArray[0])
         base, zygosity, varType, indelLength = self.forward(XArray)
         return base, zygosity, varType, indelLength
 
     def predictNoRT(self, XArray):
-        print(XArray.shape)
-        print(XArray[0])
+        # print(XArray.shape)
+        # print(XArray[0])
         XArray = torch.from_numpy(XArray).to(self.device).permute(0,3,1,2)
-        print(XArray[0])
+        # print(XArray[0])
         # print(XArray.shape)
         self.predictBaseRTVal = None; self.predictZygosityRTVal = None; self.predictVarTypeRTVal = None; self.predictIndelLengthRTVal = None
         self.predictBaseRTVal, self.predictZygosityRTVal, self.predictVarTypeRTVal, self.predictIndelLengthRTVal = self.forward(XArray)
@@ -308,7 +308,7 @@ class Net(nn.Module):
 
         loss = loss.cpu().data.numpy()
 
-        print("Epoch: " + str(self.counter) + " ---------------------------- Loss: " + str(loss) + "\n")
+        # print("Epoch: " + str(self.counter) + " ---------------------------- Loss: " + str(loss) + "\n")
         self.counter += 1
         torch.save(self.state_dict(), "../pytorchModels/trainAll/trainAll_parameters.txt")
         sys.stdout.flush()
@@ -333,7 +333,7 @@ class Net(nn.Module):
 
         loss = loss.cpu().data.numpy()
 
-        print("Epoch: " + str(self.counter) + " ---------------------------- Loss: " + str(loss) + "\n")
+        # print("Epoch: " + str(self.counter) + " ---------------------------- Loss: " + str(loss) + "\n")
         self.counter += 1
         torch.save(self.state_dict(), "../pytorchModels/trainAll/trainAll_parameters.txt")
         sys.stdout.flush()
