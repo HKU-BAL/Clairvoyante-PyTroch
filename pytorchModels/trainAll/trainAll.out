@@ -1,0 +1,4 @@
+59 Training loss: 0.18633383552891775 Validation loss:  0.1904944985847601
+Epoch time elapsed: 855.19 s
+Training time elapsed: 49574.17 s
+Best validation loss at batch: 29
