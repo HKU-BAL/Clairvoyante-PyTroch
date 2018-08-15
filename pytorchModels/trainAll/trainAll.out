@@ -1,4 +1,155 @@
+Initializing model ...
+Loading the training dataset ...
+The size of training dataset: 11024009
+Start training ...
+Learning rate: 1.00e-03
+L2 regularization lambda: 1.00e-03
+(33, 4, 4)
+GeForce GTX 980
+Shape
+(1000, 4, 33, 4)
+1 Training loss: 0.454928307633303 Validation loss:  0.2774089079727628
+Epoch time elapsed: 760.64 s
+2 Training loss: 0.25077342914393114 Validation loss:  0.2289009973264052
+Epoch time elapsed: 761.90 s
+3 Training loss: 0.2221716174433213 Validation loss:  0.21437399605567553
+Epoch time elapsed: 770.83 s
+4 Training loss: 0.21393491799820966 Validation loss:  0.2073715585178232
+Epoch time elapsed: 782.22 s
+5 Training loss: 0.20422965035647708 Validation loss:  0.2058170818032478
+Epoch time elapsed: 771.36 s
+6 Training loss: 0.1981216155230654 Validation loss:  0.20153555823049368
+Epoch time elapsed: 795.36 s
+7 Training loss: 0.2316303668616233 Validation loss:  0.20216397393305607
+Epoch time elapsed: 775.44 s
+8 Training loss: 0.20311317534539688 Validation loss:  0.20012154855828931
+Epoch time elapsed: 769.80 s
+9 Training loss: 0.19503291575388096 Validation loss:  0.19443823856738204
+Epoch time elapsed: 760.28 s
+10 Training loss: 0.1905722713066674 Validation loss:  0.19053834960437738
+Epoch time elapsed: 778.65 s
+11 Training loss: 0.18876209417255965 Validation loss:  0.18979044403215797
+Epoch time elapsed: 769.69 s
+12 Training loss: 0.18678944464062922 Validation loss:  0.1886971687042142
+Epoch time elapsed: 794.07 s
+13 Training loss: 0.18500311991082147 Validation loss:  0.18998693158387792
+Epoch time elapsed: 786.28 s
+14 Training loss: 0.18818167347133175 Validation loss:  0.19264209895569112
+Epoch time elapsed: 767.67 s
+15 Training loss: 0.18583221885300613 Validation loss:  0.1880942400219392
+Epoch time elapsed: 774.27 s
+16 Training loss: 0.1830782673774719 Validation loss:  0.1890377107790316
+Epoch time elapsed: 778.13 s
+17 Training loss: 0.18276951477599 Validation loss:  0.18981910209956812
+Epoch time elapsed: 789.68 s
+18 Training loss: 0.18189309160031503 Validation loss:  0.18430651358038144
+Epoch time elapsed: 788.50 s
+19 Training loss: 0.1813323508631961 Validation loss:  0.1903461229364308
+Epoch time elapsed: 779.01 s
+20 Training loss: 0.1799946160409247 Validation loss:  0.18682005558471115
+Epoch time elapsed: 776.73 s
+21 Training loss: 0.1815048680679595 Validation loss:  0.19769060652146145
+Epoch time elapsed: 780.12 s
+New learning rate: 1.00e-04
+New L2 regularization lambda: 1.00e-04
+22 Training loss: 0.17904580864774983 Validation loss:  0.18678302414693662
+Epoch time elapsed: 795.67 s
+23 Training loss: 0.1789802125812093 Validation loss:  0.18475952643290142
+Epoch time elapsed: 965.82 s
+24 Training loss: 0.178908497157082 Validation loss:  0.18644086615072972
+Epoch time elapsed: 970.37 s
+25 Training loss: 0.17978210590847193 Validation loss:  0.18707080491849576
+Epoch time elapsed: 870.72 s
+26 Training loss: 0.17796399929024906 Validation loss:  0.18439407043440162
+Epoch time elapsed: 810.60 s
+27 Training loss: 0.1801166496190762 Validation loss:  0.18953181010231657
+Epoch time elapsed: 843.21 s
+28 Training loss: 0.17776819718461548 Validation loss:  0.18907954824096232
+Epoch time elapsed: 929.92 s
+29 Training loss: 0.1781400991363287 Validation loss:  0.1812459614832922
+Epoch time elapsed: 895.99 s
+30 Training loss: 0.17918833792462183 Validation loss:  0.19662122125149378
+Epoch time elapsed: 975.73 s
+31 Training loss: 0.17872899570694595 Validation loss:  0.19057388259717012
+Epoch time elapsed: 877.71 s
+32 Training loss: 0.17990582732655022 Validation loss:  0.18446051589485005
+Epoch time elapsed: 875.62 s
+33 Training loss: 0.17726819897391682 Validation loss:  0.18819928774985936
+Epoch time elapsed: 878.02 s
+34 Training loss: 0.1858240859123825 Validation loss:  0.18508768048607818
+Epoch time elapsed: 928.16 s
+35 Training loss: 0.18359173407315005 Validation loss:  0.18257124530029833
+Epoch time elapsed: 822.69 s
+36 Training loss: 0.18916536184207067 Validation loss:  0.18692418086479035
+Epoch time elapsed: 991.15 s
+37 Training loss: 0.1777791489011115 Validation loss:  0.19010555256628506
+Epoch time elapsed: 806.18 s
+38 Training loss: 0.17783711434738653 Validation loss:  0.1905474916142675
+Epoch time elapsed: 803.81 s
+39 Training loss: 0.17852187443444467 Validation loss:  0.18337764921129096
+Epoch time elapsed: 809.00 s
+40 Training loss: 0.18528417259120297 Validation loss:  0.18965331552931378
+Epoch time elapsed: 991.45 s
+41 Training loss: 0.17926110484957847 Validation loss:  0.19018326223588647
+Epoch time elapsed: 811.06 s
+42 Training loss: 0.17939209364687891 Validation loss:  0.18919559363475819
+Epoch time elapsed: 991.80 s
+43 Training loss: 0.18901850758876085 Validation loss:  0.189486019340802
+Epoch time elapsed: 807.98 s
+44 Training loss: 0.1861538187928618 Validation loss:  0.18891956443386085
+Epoch time elapsed: 804.03 s
+45 Training loss: 0.1790852137112867 Validation loss:  0.1869726999969112
+Epoch time elapsed: 997.19 s
+46 Training loss: 0.22616633582273446 Validation loss:  0.19602096197913105
+Epoch time elapsed: 807.66 s
+47 Training loss: 0.18186445804111653 Validation loss:  0.18868386703160833
+Epoch time elapsed: 806.26 s
+48 Training loss: 0.21186116029129434 Validation loss:  0.19265537128933802
+Epoch time elapsed: 930.98 s
+49 Training loss: 0.18728501103223266 Validation loss:  0.18880054077276817
+Epoch time elapsed: 837.16 s
+New learning rate: 1.00e-05
+New L2 regularization lambda: 1.00e-05
+50 Training loss: 0.18132990102949245 Validation loss:  0.19359675849967667
+Epoch time elapsed: 802.61 s
+51 Training loss: 0.18081673113990673 Validation loss:  0.18964437867878398
+Epoch time elapsed: 994.69 s
+52 Training loss: 0.21267758412768664 Validation loss:  0.1916241084869697
+Epoch time elapsed: 800.92 s
+53 Training loss: 0.2036028753343629 Validation loss:  0.26091432308910634
+Epoch time elapsed: 798.55 s
+54 Training loss: 0.19159789955940185 Validation loss:  0.19382315427756966
+Epoch time elapsed: 952.91 s
+55 Training loss: 0.1849437960064841 Validation loss:  0.1912185358014958
+Epoch time elapsed: 826.20 s
+56 Training loss: 0.18662168180070401 Validation loss:  0.19152088101796472
+Epoch time elapsed: 866.24 s
+57 Training loss: 0.18681680355768968 Validation loss:  0.1909797105270996
+Epoch time elapsed: 892.45 s
+58 Training loss: 0.18455006181279407 Validation loss:  0.1911215203605776
+Epoch time elapsed: 837.80 s
 59 Training loss: 0.18633383552891775 Validation loss:  0.1904944985847601
 Epoch time elapsed: 855.19 s
 Training time elapsed: 49574.17 s
 Best validation loss at batch: 29
+Prediciton time elapsed: 454.61 s
+Testing on the training and validation dataset ...
+Version 2 model, evaluation on base change:
+all/top1/top2/top1p/top2p: 11024009/10234469/10732968/92.84/97.36
+Version 2 model, evaluation on Zygosity:
+2078724 113127
+161747  8670411
+Version 2 model, evaluation on variant type:
+7328193 37418   11700   16078
+25859   3161252 3617    1607
+14831   5724    159719  28882
+15749   1863    14517   197000
+Version 2 model, evaluation on indel length:
+10559877        17231   3210    595     2847    1964
+25777   220035  1743    145     325     308
+7144    25490   34273   2145    3368    634
+4443    5883    3759    8552    6349    628
+4531    1950    4978    3609    20458   4708
+4443    5883    3759    8552    6349    628
+4531    1950    4978    3609    20458   4708
+4874    1631    2477    375     10674   27019
