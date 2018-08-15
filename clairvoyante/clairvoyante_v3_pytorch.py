@@ -236,6 +236,9 @@ class Net(nn.Module):
             self.learningRateVal = self.learningRateVal * self.learningRateDecay
         else:
             self.learningRateVal = learningRate
+        for param_group in self.optimizer.param_groups:
+            param_group['lr'] = self.learningRateVal
+        print(self.optimizer.param_groups[0]['lr'])
         return self.learningRateVal
 
     def setL2RegularizationLambda(self, l2RegularizationLambda=None):
