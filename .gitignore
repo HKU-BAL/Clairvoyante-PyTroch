@@ -4,3 +4,4 @@ training*
 trainAll_cp.out
 pytorchModels/trainAll2/*
 !pytorchModels/trainAll2/v2-000075.txt
+!pytorchModels/trainAll2/trainAll2.out
