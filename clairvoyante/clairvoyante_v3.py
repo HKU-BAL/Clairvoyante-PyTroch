@@ -296,6 +296,7 @@ class Clairvoyante(object):
             for k, v in zip(variables_names, values):
                 h5f = h5py.File('../illumina_2_parameters/'+k[:-2].replace('/','_')+"_"+str(v.shape)+'.h5', 'w')
                 h5f.create_dataset("weights", data=v)
+                h5f.close()
 
                 # f_name = "../illumina_2_parameters/"+k[:-2].replace('/','_')+"_"+str(v.shape)+".txt"
                 # f = open(f_name, "a")
