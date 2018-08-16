@@ -11,6 +11,7 @@ import clairvoyante_v3 as cv
 import clairvoyante_v3_pytorch as cpt
 import tensorflow as tf
 import os
+# import h5py
 from ast import literal_eval as make_tuple
 
 # Saves the weights and biases in fullv3-illumina-novoalign-hg001+hg002-hg38 into files.
