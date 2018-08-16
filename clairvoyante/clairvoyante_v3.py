@@ -2,6 +2,7 @@ import tensorflow as tf
 import selu
 import param
 import numpy as np
+import h5py
 
 class Clairvoyante(object):
 
