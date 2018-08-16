@@ -2,3 +2,5 @@ testingData*
 trainedModels*
 training*
 trainAll_cp.out
+pytorchModels/trainAll2/*
+!pytorchModels/trainAll2/v2-000075.txt
