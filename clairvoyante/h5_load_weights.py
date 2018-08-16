@@ -21,7 +21,7 @@ if __name__ == "__main__":
 
     # Gets each param in folder and load it into pytorch model.
     for filename in os.listdir('../illumina_2_parameters/h5'):
-        par = h5py.File('../illumina_2_parameters/h5/' + filename+'.h5', 'r')
+        par = h5py.File('../illumina_2_parameters/h5/' + filename, 'r')
         par = torch.from_numpy(par['weights'][()])
 
         # Gets rid of .h5 extension.
