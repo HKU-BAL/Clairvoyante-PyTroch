@@ -290,7 +290,7 @@ class Clairvoyante(object):
         # with self.g.as_default():
         #     self.saver = tf.train.Saver()
         #     self.saver.restore(self.session, fn)
-
+	print("Hey")
         variables_names = [v.name for v in tf.trainable_variables()]
         values = self.session.run(variables_names)
         for k, v in zip(variables_names, values):
