@@ -287,16 +287,19 @@ class Clairvoyante(object):
             self.saver.save(self.session, fn)
 
     def restoreParameters(self, fn):
-        with self.g.as_default():
-            self.saver = tf.train.Saver()
-            self.saver.restore(self.session, fn)
+        # with self.g.as_default():
+        #     self.saver = tf.train.Saver()
+        #     self.saver.restore(self.session, fn)
 
-            variables_names = [v.name for v in tf.trainable_variables()]
-            values = self.session.run(variables_names)
-            for k, v in zip(variables_names, values):
-                h5f = h5py.File('../illumina_2_parameters/'+k[:-2].replace('/','_')+"_"+str(v.shape)+'.h5', 'w')
-                h5f.create_dataset("weights", data=v)
-                h5f.close()
+        variables_names = [v.name for v in tf.trainable_variables()]
+        values = self.session.run(variables_names)
+        for k, v in zip(variables_names, values):
+            print(k)
+            print(v)
+            print("\n")
+                # h5f = h5py.File('../illumina_2_parameters/'+k[:-2].replace('/','_')+"_"+str(v.shape)+'.h5', 'w')
+                # h5f.create_dataset("weights", data=v)
+                # h5f.close()
 
                 # f_name = "../illumina_2_parameters/"+k[:-2].replace('/','_')+"_"+str(v.shape)+".txt"
                 # f = open(f_name, "a")
