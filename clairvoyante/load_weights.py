@@ -49,7 +49,7 @@ if __name__ == "__main__":
             # print(dimension)
             # print(par.reshape(dimension))
             # W = torch.from_numpy(par.reshape(dimension)).permute(3,2,0,1)
-            W = torch.from_numpy(par.reshape(dimension)).transpose((3,2,0,1))
+            W = torch.from_numpy(par.reshape(dimension).transpose((3,2,0,1)))
             # print(W)
             # print(W.shape)
             # break
