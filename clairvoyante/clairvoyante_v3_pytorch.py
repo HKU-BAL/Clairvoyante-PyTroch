@@ -6,10 +6,16 @@ import param
 import sys
 import torch.optim as optim
 
-class Net(nn.Module):
+"""
+Initialises Clairvoyante with 3 convolutional layers, 2 hidden fully connected
+layers and 4 output layers. It specifies the parameters for these layers and it
+initialises the NN's weights using He initializtion. Contains different APIs for
+training, testing, loading and saving parameters. Code uses the first GPU in the
+system for training and testing. Pytorch uses NCHW format so all matrices require
+permutation to be used by the code.
+"""
 
-    # Initialises Clairvoyante with 3 convolutional layers, 2 hidden fully connected layers and an output layer.
-    # It specifies the parameters for these layers and it initialises the NN's weights using He initializtion.
+class Net(nn.Module):
     def __init__(self, inputShape = (2*param.flankingBaseNum+1, 4, param.matrixNum),
                        outputShape1 = (4, ), outputShape2 = (2, ), outputShape3 = (4, ), outputShape4 = (6, ),
                        kernelSize1 = (1, 4), kernelSize2 = (2, 4), kernelSize3 = (3, 4),
@@ -20,8 +26,6 @@ class Net(nn.Module):
                        dropoutRateFC4 = param.dropoutRateFC4, dropoutRateFC5 = param.dropoutRateFC5,
                        l2RegularizationLambda = param.l2RegularizationLambda, l2RegularizationLambdaDecay = param.l2RegularizationLambdaDecay):
         super(Net, self).__init__()
-
-        # print(inputShape)
 
         self.inputShape = inputShape
         self.outputShape1 = outputShape1; self.outputShape2 = outputShape2; self.outputShape3 = outputShape3; self.outputShape4 = outputShape4
@@ -35,8 +39,7 @@ class Net(nn.Module):
         self.trainLossRTVal = None; self.trainSummaryRTVal = None; self.getLossLossRTVal = None
         self.predictBaseRTVal = None; self.predictZygosityRTVal = None; self.predictVarTypeRTVal = None; self.predictIndelLengthRTVal = None
 
-        # 3 Convolutional Layers
-        # channel = int(self.inputShape[1])
+        # 3 Convolutional Layers with Max Pooling
         self.conv1 = nn.Conv2d(param.matrixNum, self.numFeature1, self.kernelSize1)
         nn.init.kaiming_normal_(self.conv1.weight, mode='fan_in', nonlinearity='relu')
 
@@ -76,11 +79,8 @@ class Net(nn.Module):
         # Used for epoch counting
         self.counter = 1
 
-        # # Device configuration
+        # GPU Device configuration
         self.device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
-        # self.device = torch.cuda.device(0)
-        # print(torch.cuda.get_device_name(0))
-        # self.to(self.deivce)
 
     # Implements the same padding feature in Tensorflow.
     # kernelSize is a tuple as kernel is not a square.
@@ -89,13 +89,11 @@ class Net(nn.Module):
         kb1 = ka1 - 1 if kernelSize[0] % 2 == 0 else ka1
         ka2 = kernelSize[1] // 2
         kb2 = ka2 - 1 if kernelSize[1] % 2 == 0 else ka2
-        # print((kb2,ka2,kb1,ka1))
+
         return nn.ZeroPad2d((kb2,ka2,kb1,ka1))
 
     # Forward propagation
     def forward(self, XPH):
-        # print("Shape")
-        # print(XPH.shape)
         XPH = XPH
 
         # Different non-linear activation functions.
@@ -104,37 +102,28 @@ class Net(nn.Module):
         # Dim specifies softmax over the row of the tensor.
         softmax = nn.Softmax(dim=1)
 
-        # Convolution layers with max max_pooling and SELU.
+        # 3 convolution layers with max max_pooling and SELU.
         pad1 = self.padding(self.kernelSize1)
-        # print(selu(self.conv1(pad1(XPH))).shape)
         pool1 = F.max_pool2d(selu(self.conv1(pad1(XPH))), self.pollSize1, stride=1)
-        # print(pool1.shape)
 
         pad2 = self.padding(self.kernelSize2)
-        # print(selu(self.conv2(pad2(pool1))).shape)
         pool2 = F.max_pool2d(selu(self.conv2(pad2(pool1))), self.pollSize2, stride=1)
-        # print(pool2.shape)
 
         pad3 = self.padding(self.kernelSize3)
-        # print(selu(self.conv3(pad3(pool2))).shape)
         pool3 = F.max_pool2d(selu(self.conv3(pad3(pool2))), self.pollSize3, stride=1)
-        # print(pool3.shape)
 
         # Flattens output from pool3.
         conv3_flat = pool3.view(-1, self.flat_size)
-        # print(conv3_flat.shape)
 
-        # 2 Hidden Layers that uses SELU and alpha dropout.
+        # 2 Hidden Layers that uses SELU and Alpha dropout.
         # Alphadropout uses bernoulli distribution rather than uniform distribution.
         selu4 = selu(self.fc4(conv3_flat))
         ad4 = nn.AlphaDropout(p=self.dropoutRateFC4Val)
         dropout4 = ad4(selu4)
-        # print(dropout4.shape)
 
         selu5 = selu(self.fc5(dropout4))
         ad5 = nn.AlphaDropout(p=self.dropoutRateFC5Val)
         dropout5 = ad5(selu5)
-        # print(dropout5.shape)
 
         # Epsilon for softmax.
         epsilon = 1e-10
@@ -142,92 +131,61 @@ class Net(nn.Module):
         # 1 output layer that uses sigmoid for base change.
         YBaseChangeSigmoid = sigmoid(self.YBaseChangeSigmoidLayer(dropout4))
         self.YBaseChangeSigmoid = YBaseChangeSigmoid
-        # print(YBaseChangeSigmoid.shape)
 
         # 3 output fully connected layers for zygosity, varType and indelLength.
-        # Uses SELU and softmax to output result.
+        # Uses SELU and softmax to output results.
         YZygosityFC = selu(self.YZygosityFCLayer(dropout5))
-        # print("ZFC: "+str(YZygosityFC)+"\n")
         YZygosityLogits = torch.add(YZygosityFC, epsilon)
         self.YZygosityLogits = YZygosityLogits
-        # print(YZygosityLogits)
         YZygositySoftmax = softmax(YZygosityLogits)
         self.YZygositySoftmax = YZygositySoftmax
-        # print(YZygositySoftmax.shape)
 
         YVarTypeFC = selu(self.YVarTypeFCLayer(dropout5))
-        # print("VFC: "+str(YVarTypeFC)+"\n")
         YVarTypeLogits = torch.add(YVarTypeFC, epsilon)
         self.YVarTypeLogits = YVarTypeLogits
-        # print(YVarTypeLogits)
         YVarTypeSoftmax = softmax(YVarTypeLogits)
         self.YVarTypeSoftmax = YVarTypeSoftmax
-        # print(YVarTypeSoftmax.shape)
 
         YIndelLengthFC = selu(self.YIndelLengthFCLayer(dropout5))
-        # print("IFC: "+str(YIndelLengthFC)+"\n")
         YIndelLengthLogits = torch.add(YIndelLengthFC, epsilon)
         self.YIndelLengthLogits = YIndelLengthLogits
-        # print(YIndelLengthLogits)
         YIndelLengthSoftmax = softmax(YIndelLengthLogits)
         self.YIndelLengthSoftmax = YIndelLengthSoftmax
-        # print(YIndelLengthSoftmax.shape)
 
         return YBaseChangeSigmoid.cpu().data.numpy(),YZygositySoftmax.cpu().data.numpy(),YVarTypeSoftmax.cpu().data.numpy(),YIndelLengthSoftmax.cpu().data.numpy()
 
     def costFunction(self, YPH):
         YPH = YPH.float()
-        # print("YPH: "+ str(YPH[0]) + "\n")
+
         # Calculates MSE without computing average.
         mse = nn.MSELoss(reduction='sum')
         loss1 = mse(self.YBaseChangeSigmoid, YPH.narrow(1, 0, self.outputShape1[0]))
-        # print(self.YBaseChangeSigmoid)
-        # print(YPH.narrow(1, 0, self.outputShape1[0]))
-        # print("Loss1: "+str(loss1)+"\n")
 
         log_softmax = nn.LogSoftmax(dim=1)
 
-        # print(self.YZygosityLogits)
+        # Calculates cross entropy loss for the zygosity, varType and indelLength layers.
         YZygosityCrossEntropy = log_softmax(self.YZygosityLogits) * -YPH.narrow(1, self.outputShape1[0], self.outputShape2[0])
-        # print(YZygosityCrossEntropy)
-        # print(YPH.narrow(1, self.outputShape1[0], self.outputShape2[0]))
         loss2 = YZygosityCrossEntropy.sum()
-        # print("Loss2: "+str(loss2)+"\n")
 
-        # print(self.YVarTypeLogits)
         YVarTypeCrossEntropy = log_softmax(self.YVarTypeLogits) * -YPH.narrow(1, self.outputShape1[0]+self.outputShape2[0], self.outputShape3[0])
-        # print(YVarTypeCrossEntropy)
-        # print(YPH.narrow(1, self.outputShape1[0]+self.outputShape2[0], self.outputShape3[0]))
         loss3 = YVarTypeCrossEntropy.sum()
-        # print("Loss3: " + str(loss3)+"\n")
 
-        # print(self.YIndelLengthLogits)
         YIndelLengthCrossEntropy = log_softmax(self.YIndelLengthLogits) * -YPH.narrow(1, self.outputShape1[0]+self.outputShape2[0]+self.outputShape3[0], self.outputShape4[0])
-        # print(YIndelLengthCrossEntropy)
-        # print(YPH.narrow(1, self.outputShape1[0]+self.outputShape2[0]+self.outputShape3[0], self.outputShape4[0]))
         loss4 = YIndelLengthCrossEntropy.sum()
-        # print("Loss4: " + str(loss4)+"\n")
 
+        # Calculates L2 regualrisation using the weights in the NN.
         l2_reg = None
         for name, W in self.named_parameters():
             if 'bias' not in name:
-                # W = W.to(self.device)
-                # print(name)
-                # print("Weights:\n")
-                # print(W)
-                # print("\n")
                 if l2_reg is None:
                     l2_reg = W.norm(2)
                 else:
                     l2_reg = l2_reg + W.norm(2)
-        # print(l2_reg)
 
         lossL2 = l2_reg * self.l2RegularizationLambdaVal
-        # print("LossL2: " + str(lossL2)+"\n")
 
         loss = loss1 + loss2 + loss3 + loss4 + lossL2
         self.loss = loss
-        # print("Final Loss" + str(loss))
 
         return loss
 
@@ -250,21 +208,16 @@ class Net(nn.Module):
 
     def getLoss(self, batchX, batchY):
         batchX = torch.from_numpy(batchX).to(self.device).permute(0,3,1,2)
-
         out = self(batchX)
-
         loss = self.costFunction(torch.from_numpy(batchY).to(self.device))
 
         return loss.cpu().data.numpy()
 
+    # Stores loss in a private variable.
     def getLossNoRT(self, batchX, batchY):
-
         self.getLossLossRTVal = None
-
         batchX = torch.from_numpy(batchX).to(self.device).permute(0,3,1,2)
-
         out = self(batchX)
-
         loss = self.costFunction(torch.from_numpy(batchY).to(self.device))
 
         self.getLossLossRTVal = loss.cpu().data.numpy()
@@ -274,105 +227,52 @@ class Net(nn.Module):
 
     def restoreParameters(self, path):
         self.load_state_dict(torch.load(path))
-        # f = open("../illumina_parameters.txt", "a")
-        # for name, W in self.named_parameters():
-        #     f.write(name)
-        #     f.write(str(W.shape))
-        #     f.write(str(W))
-        #     f.write("\n")
 
     def predict(self, XArray):
-        # print(XArray.shape)
-        # print(XArray[0])
         XArray = torch.from_numpy(XArray).to(self.device).permute(0,3,1,2)
-        # print(XArray[0])
         base, zygosity, varType, indelLength = self.forward(XArray)
         return base, zygosity, varType, indelLength
 
+    # Stores results in private variables.
     def predictNoRT(self, XArray):
-        # print(XArray.shape)
-        # print(XArray[0])
         XArray = torch.from_numpy(XArray).to(self.device).permute(0,3,1,2)
-        # print(XArray[0])
-        # print(XArray.shape)
         self.predictBaseRTVal = None; self.predictZygosityRTVal = None; self.predictVarTypeRTVal = None; self.predictIndelLengthRTVal = None
         self.predictBaseRTVal, self.predictZygosityRTVal, self.predictVarTypeRTVal, self.predictIndelLengthRTVal = self.forward(XArray)
-        # print(self.predictBaseRTVal, self.predictZygosityRTVal, self.predictVarTypeRTVal, self.predictIndelLengthRTVal)
 
     def train(self, batchX, batchY):
         batchX = torch.from_numpy(batchX).to(self.device).permute(0,3,1,2)
         self.optimizer.zero_grad()
-        # print("BatchX: " + str(batchX[0]))
-        # print("\n")
+
         out = self(batchX)
-        # print("Out: " + str(out))
-        # print("\n")
-        # Why is loss negative?
+
         loss = self.costFunction(torch.from_numpy(batchY).to(self.device))
         loss.backward()
         self.optimizer.step()
 
         loss = loss.cpu().data.numpy()
 
-        # print("Epoch: " + str(self.counter) + " ---------------------------- Loss: " + str(loss) + "\n")
         self.counter += 1
-        # torch.save(self.state_dict(), "../pytorchModels/trainAll/trainAll_parameters.txt")
         sys.stdout.flush()
+
         return loss, None
 
+    # Stores train loss in a private variable.
     def trainNoRT(self, batchX, batchY):
-
         self.trainLossRTVal = None
         self.trainSummaryRTVal = None
 
         batchX = torch.from_numpy(batchX).to(self.device).permute(0,3,1,2)
         self.optimizer.zero_grad()
-        # print("BatchX: " + str(batchX[0]))
-        # print("\n")
+
         out = self(batchX)
-        # print("Out: " + str(out))
-        # print("\n")
-        # Why is loss negative?
+
         loss = self.costFunction(torch.from_numpy(batchY).to(self.device))
         loss.backward()
         self.optimizer.step()
 
         loss = loss.cpu().data.numpy()
 
-        # print("Epoch: " + str(self.counter) + " ---------------------------- Loss: " + str(loss) + "\n")
         self.counter += 1
-        # torch.save(self.state_dict(), "../pytorchModels/trainAll/trainAll_parameters.txt")
         sys.stdout.flush()
 
         self.trainLossRTVal = loss
-
-    # def train(self, batchX, batchY):
-    #     # create your optimizer
-    #     optimizer = optim.Adam(self.parameters(), lr=self.learningRateVal)
-    #
-    #     for epoch in range(10):
-    #         # zero the parameter gradients
-    #         optimizer.zero_grad()
-    #         print(batchX)
-    #         print("\n")
-    #         out = net(batchX)
-    #         print(out)
-    #         print("\n")
-    #         # Why is loss negative?
-    #         loss = self.costFunction(batchY)
-    #         loss.backward()
-    #         optimizer.step()
-    #         print("Epoch: " + str(epoch) + " ----------------------- Loss: " + str(loss) + "\n")
-    #
-    #     return loss
-
-# if __name__ == "__main__":
-#     net = Net()
-#     print(net)
-#
-#     params = list(self.parameters())
-#
-#     input = torch.randn(1, param.matrixNum, 2*param.flankingBaseNum+1, 4).random_(0,5)
-#     YPH = torch.randn(1, 16)
-#
-#     self.train(input, YPH)
