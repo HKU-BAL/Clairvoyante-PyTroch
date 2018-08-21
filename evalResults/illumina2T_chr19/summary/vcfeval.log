@@ -1,0 +1,168 @@
+2018-08-21 17:13:36 serial = 27182818284
+2018-08-21 17:13:36 email = anon
+2018-08-21 17:13:36 RTG version = RTG Tools 3.9 / Core 640a1447d5 (2018-03-22)
+2018-08-21 17:13:36 awt.toolkit = sun.awt.X11.XToolkit
+2018-08-21 17:13:36 file.encoding = ISO-8859-1
+2018-08-21 17:13:36 file.encoding.pkg = sun.io
+2018-08-21 17:13:36 file.separator = /
+2018-08-21 17:13:36 host.name = bal19
+2018-08-21 17:13:36 java.awt.graphicsenv = sun.awt.X11GraphicsEnvironment
+2018-08-21 17:13:36 java.awt.printerjob = sun.print.PSPrinterJob
+2018-08-21 17:13:36 java.class.path = /nas3/rbluo/rbluo/bin/rtg-tools-3.9/RTG.jar
+2018-08-21 17:13:36 java.class.version = 52.0
+2018-08-21 17:13:36 java.endorsed.dirs = /nas3/rbluo/rbluo/bin/rtg-tools-3.9/jre/lib/endorsed
+2018-08-21 17:13:36 java.ext.dirs = /nas3/rbluo/rbluo/bin/rtg-tools-3.9/jre/lib/ext:/usr/java/packages/lib/ext
+2018-08-21 17:13:36 java.home = /nas3/rbluo/rbluo/bin/rtg-tools-3.9/jre
+2018-08-21 17:13:36 java.io.tmpdir = /tmp
+2018-08-21 17:13:36 java.library.path = /nas3/rbluo/rbluo/bin/rtg-tools-3.9
+2018-08-21 17:13:36 java.runtime.name = Java(TM) SE Runtime Environment
+2018-08-21 17:13:36 java.runtime.version = 1.8.0_161-b12
+2018-08-21 17:13:36 java.specification.name = Java Platform API Specification
+2018-08-21 17:13:36 java.specification.vendor = Oracle Corporation
+2018-08-21 17:13:36 java.specification.version = 1.8
+2018-08-21 17:13:36 java.vendor = Oracle Corporation
+2018-08-21 17:13:36 java.vendor.url = http://java.oracle.com/
+2018-08-21 17:13:36 java.vendor.url.bug = http://bugreport.sun.com/bugreport/
+2018-08-21 17:13:36 java.version = 1.8.0_161
+2018-08-21 17:13:36 java.vm.info = mixed mode
+2018-08-21 17:13:36 java.vm.name = Java HotSpot(TM) 64-Bit Server VM
+2018-08-21 17:13:36 java.vm.specification.name = Java Virtual Machine Specification
+2018-08-21 17:13:36 java.vm.specification.vendor = Oracle Corporation
+2018-08-21 17:13:36 java.vm.specification.version = 1.8
+2018-08-21 17:13:36 java.vm.vendor = Oracle Corporation
+2018-08-21 17:13:36 java.vm.version = 25.161-b12
+2018-08-21 17:13:36 lang.version = 1.8.0_161
+2018-08-21 17:13:36 line.separator = 
+
+2018-08-21 17:13:36 models.dir = /nas3/rbluo/rbluo/bin/rtg-tools-3.9/models
+2018-08-21 17:13:36 os.arch = amd64
+2018-08-21 17:13:36 os.freememory = 54773506048
+2018-08-21 17:13:36 os.name = Linux
+2018-08-21 17:13:36 os.totalmemory = 101330350080
+2018-08-21 17:13:36 os.version = 4.4.0-62-generic
+2018-08-21 17:13:36 path.separator = :
+2018-08-21 17:13:36 processor.arch = amd64
+2018-08-21 17:13:36 processor.count = 24
+2018-08-21 17:13:36 references.dir = /nas3/rbluo/rbluo/bin/rtg-tools-3.9/references
+2018-08-21 17:13:36 runtime.freememory = 1462322792
+2018-08-21 17:13:36 runtime.maxmemory = 81063837696
+2018-08-21 17:13:36 runtime.totalMemory = 1517813760
+2018-08-21 17:13:36 sun.arch.data.model = 64
+2018-08-21 17:13:36 sun.boot.class.path = /nas3/rbluo/rbluo/bin/rtg-tools-3.9/jre/lib/resources.jar:/nas3/rbluo/rbluo/bin/rtg-tools-3.9/jre/lib/rt.jar:/nas3/rbluo/rbluo/bin/rtg-tools-3.9/jre/lib/sunrsasign.jar:/nas3/rbluo/rbluo/bin/rtg-tools-3.9/jre/lib/jsse.jar:/nas3/rbluo/rbluo/bin/rtg-tools-3.9/jre/lib/jce.jar:/nas3/rbluo/rbluo/bin/rtg-tools-3.9/jre/lib/charsets.jar:/nas3/rbluo/rbluo/bin/rtg-tools-3.9/jre/lib/jfr.jar:/nas3/rbluo/rbluo/bin/rtg-tools-3.9/jre/classes
+2018-08-21 17:13:36 sun.boot.library.path = /nas3/rbluo/rbluo/bin/rtg-tools-3.9/jre/lib/amd64
+2018-08-21 17:13:36 sun.cpu.endian = little
+2018-08-21 17:13:36 sun.cpu.isalist = 
+2018-08-21 17:13:36 sun.io.unicode.encoding = UnicodeLittle
+2018-08-21 17:13:36 sun.java.command = /nas3/rbluo/rbluo/bin/rtg-tools-3.9/RTG.jar vcfeval -b /nas7/yswong/base/hg19_chr19.vcf.gz -c sorted_chr19.vcf.gz -t /bal1-1/rbluo/hs37d5/human_g1k_v37_decoy.sdf/ -o summary
+2018-08-21 17:13:36 sun.java.launcher = SUN_STANDARD
+2018-08-21 17:13:36 sun.jnu.encoding = ISO-8859-1
+2018-08-21 17:13:36 sun.management.compiler = HotSpot 64-Bit Tiered Compilers
+2018-08-21 17:13:36 sun.os.patch.level = unknown
+2018-08-21 17:13:36 talkback = true
+2018-08-21 17:13:36 user.country = US
+2018-08-21 17:13:36 user.dir = /home/hywlam/Clairvoyante-pt/evalResults/illumina2T_chr19
+2018-08-21 17:13:36 user.home = /home/hywlam
+2018-08-21 17:13:36 user.language = en
+2018-08-21 17:13:36 user.name = hywlam
+2018-08-21 17:13:36 user.timezone = Asia/Hong_Kong
+2018-08-21 17:13:36 vendor = Oracle Corporation
+2018-08-21 17:13:36 gzipfix.enabled = true
+2018-08-21 17:13:36 Command line arguments: rtg vcfeval -b /nas7/yswong/base/hg19_chr19.vcf.gz -c sorted_chr19.vcf.gz -t /bal1-1/rbluo/hs37d5/human_g1k_v37_decoy.sdf/ -o summary
+2018-08-21 17:13:36 Run Id: 7a2ca85d-6836-4009-996c-ba2c3f3de879
+2018-08-21 17:13:36 Referenced SDF-ID: 4075036b-b4f5-416b-892e-b293be46c057 Type: DNA Sequences: 86 Max-Length: 249250621 Min-Length: 4262 Arm: UNKNOWN
+2018-08-21 17:13:36 Skipping reference sequence 1 that is used by neither baseline or calls.
+2018-08-21 17:13:36 Skipping reference sequence 2 that is used by neither baseline or calls.
+2018-08-21 17:13:36 Skipping reference sequence 3 that is used by neither baseline or calls.
+2018-08-21 17:13:36 Skipping reference sequence 4 that is used by neither baseline or calls.
+2018-08-21 17:13:36 Skipping reference sequence 5 that is used by neither baseline or calls.
+2018-08-21 17:13:36 Skipping reference sequence 6 that is used by neither baseline or calls.
+2018-08-21 17:13:36 Skipping reference sequence 7 that is used by neither baseline or calls.
+2018-08-21 17:13:36 Skipping reference sequence 8 that is used by neither baseline or calls.
+2018-08-21 17:13:36 Skipping reference sequence 9 that is used by neither baseline or calls.
+2018-08-21 17:13:36 Skipping reference sequence 10 that is used by neither baseline or calls.
+2018-08-21 17:13:36 Skipping reference sequence 11 that is used by neither baseline or calls.
+2018-08-21 17:13:36 Skipping reference sequence 12 that is used by neither baseline or calls.
+2018-08-21 17:13:36 Skipping reference sequence 13 that is used by neither baseline or calls.
+2018-08-21 17:13:36 Skipping reference sequence 14 that is used by neither baseline or calls.
+2018-08-21 17:13:36 Skipping reference sequence 15 that is used by neither baseline or calls.
+2018-08-21 17:13:36 Skipping reference sequence 16 that is used by neither baseline or calls.
+2018-08-21 17:13:36 Skipping reference sequence 17 that is used by neither baseline or calls.
+2018-08-21 17:13:36 Skipping reference sequence 18 that is used by neither baseline or calls.
+2018-08-21 17:13:36 Skipping reference sequence 20 that is used by neither baseline or calls.
+2018-08-21 17:13:36 Skipping reference sequence 21 that is used by neither baseline or calls.
+2018-08-21 17:13:36 Skipping reference sequence 22 that is used by neither baseline or calls.
+2018-08-21 17:13:36 Skipping reference sequence X that is used by neither baseline or calls.
+2018-08-21 17:13:36 Skipping reference sequence Y that is used by neither baseline or calls.
+2018-08-21 17:13:36 Skipping reference sequence MT that is used by neither baseline or calls.
+2018-08-21 17:13:36 Skipping reference sequence GL000207.1 that is used by neither baseline or calls.
+2018-08-21 17:13:36 Skipping reference sequence GL000226.1 that is used by neither baseline or calls.
+2018-08-21 17:13:36 Skipping reference sequence GL000229.1 that is used by neither baseline or calls.
+2018-08-21 17:13:36 Skipping reference sequence GL000231.1 that is used by neither baseline or calls.
+2018-08-21 17:13:36 Skipping reference sequence GL000210.1 that is used by neither baseline or calls.
+2018-08-21 17:13:36 Skipping reference sequence GL000239.1 that is used by neither baseline or calls.
+2018-08-21 17:13:36 Skipping reference sequence GL000235.1 that is used by neither baseline or calls.
+2018-08-21 17:13:36 Skipping reference sequence GL000201.1 that is used by neither baseline or calls.
+2018-08-21 17:13:36 Skipping reference sequence GL000247.1 that is used by neither baseline or calls.
+2018-08-21 17:13:36 Skipping reference sequence GL000245.1 that is used by neither baseline or calls.
+2018-08-21 17:13:36 Skipping reference sequence GL000197.1 that is used by neither baseline or calls.
+2018-08-21 17:13:36 Skipping reference sequence GL000203.1 that is used by neither baseline or calls.
+2018-08-21 17:13:36 Skipping reference sequence GL000246.1 that is used by neither baseline or calls.
+2018-08-21 17:13:36 Skipping reference sequence GL000249.1 that is used by neither baseline or calls.
+2018-08-21 17:13:36 Skipping reference sequence GL000196.1 that is used by neither baseline or calls.
+2018-08-21 17:13:36 Skipping reference sequence GL000248.1 that is used by neither baseline or calls.
+2018-08-21 17:13:36 Skipping reference sequence GL000244.1 that is used by neither baseline or calls.
+2018-08-21 17:13:36 Skipping reference sequence GL000238.1 that is used by neither baseline or calls.
+2018-08-21 17:13:36 Skipping reference sequence GL000202.1 that is used by neither baseline or calls.
+2018-08-21 17:13:36 Skipping reference sequence GL000234.1 that is used by neither baseline or calls.
+2018-08-21 17:13:36 Skipping reference sequence GL000232.1 that is used by neither baseline or calls.
+2018-08-21 17:13:36 Skipping reference sequence GL000206.1 that is used by neither baseline or calls.
+2018-08-21 17:13:36 Skipping reference sequence GL000240.1 that is used by neither baseline or calls.
+2018-08-21 17:13:36 Skipping reference sequence GL000236.1 that is used by neither baseline or calls.
+2018-08-21 17:13:36 Skipping reference sequence GL000241.1 that is used by neither baseline or calls.
+2018-08-21 17:13:36 Skipping reference sequence GL000243.1 that is used by neither baseline or calls.
+2018-08-21 17:13:36 Skipping reference sequence GL000242.1 that is used by neither baseline or calls.
+2018-08-21 17:13:36 Skipping reference sequence GL000230.1 that is used by neither baseline or calls.
+2018-08-21 17:13:36 Skipping reference sequence GL000237.1 that is used by neither baseline or calls.
+2018-08-21 17:13:36 Skipping reference sequence GL000233.1 that is used by neither baseline or calls.
+2018-08-21 17:13:36 Skipping reference sequence GL000204.1 that is used by neither baseline or calls.
+2018-08-21 17:13:36 Skipping reference sequence GL000198.1 that is used by neither baseline or calls.
+2018-08-21 17:13:36 Skipping reference sequence GL000208.1 that is used by neither baseline or calls.
+2018-08-21 17:13:36 Skipping reference sequence GL000191.1 that is used by neither baseline or calls.
+2018-08-21 17:13:36 Skipping reference sequence GL000227.1 that is used by neither baseline or calls.
+2018-08-21 17:13:36 Skipping reference sequence GL000228.1 that is used by neither baseline or calls.
+2018-08-21 17:13:36 Skipping reference sequence GL000214.1 that is used by neither baseline or calls.
+2018-08-21 17:13:36 Skipping reference sequence GL000221.1 that is used by neither baseline or calls.
+2018-08-21 17:13:36 Skipping reference sequence GL000209.1 that is used by neither baseline or calls.
+2018-08-21 17:13:36 Skipping reference sequence GL000218.1 that is used by neither baseline or calls.
+2018-08-21 17:13:36 Skipping reference sequence GL000220.1 that is used by neither baseline or calls.
+2018-08-21 17:13:36 Skipping reference sequence GL000213.1 that is used by neither baseline or calls.
+2018-08-21 17:13:36 Skipping reference sequence GL000211.1 that is used by neither baseline or calls.
+2018-08-21 17:13:36 Skipping reference sequence GL000199.1 that is used by neither baseline or calls.
+2018-08-21 17:13:36 Skipping reference sequence GL000217.1 that is used by neither baseline or calls.
+2018-08-21 17:13:36 Skipping reference sequence GL000216.1 that is used by neither baseline or calls.
+2018-08-21 17:13:36 Skipping reference sequence GL000215.1 that is used by neither baseline or calls.
+2018-08-21 17:13:36 Skipping reference sequence GL000205.1 that is used by neither baseline or calls.
+2018-08-21 17:13:36 Skipping reference sequence GL000219.1 that is used by neither baseline or calls.
+2018-08-21 17:13:36 Skipping reference sequence GL000224.1 that is used by neither baseline or calls.
+2018-08-21 17:13:36 Skipping reference sequence GL000223.1 that is used by neither baseline or calls.
+2018-08-21 17:13:36 Skipping reference sequence GL000195.1 that is used by neither baseline or calls.
+2018-08-21 17:13:36 Skipping reference sequence GL000212.1 that is used by neither baseline or calls.
+2018-08-21 17:13:36 Skipping reference sequence GL000222.1 that is used by neither baseline or calls.
+2018-08-21 17:13:36 Skipping reference sequence GL000200.1 that is used by neither baseline or calls.
+2018-08-21 17:13:36 Skipping reference sequence GL000193.1 that is used by neither baseline or calls.
+2018-08-21 17:13:36 Skipping reference sequence GL000194.1 that is used by neither baseline or calls.
+2018-08-21 17:13:36 Skipping reference sequence GL000225.1 that is used by neither baseline or calls.
+2018-08-21 17:13:36 Skipping reference sequence GL000192.1 that is used by neither baseline or calls.
+2018-08-21 17:13:36 Skipping reference sequence NC_007605 that is used by neither baseline or calls.
+2018-08-21 17:13:36 Skipping reference sequence hs37d5 that is used by neither baseline or calls.
+2018-08-21 17:13:38 Reference 19 baseline contains 73647 variants.
+2018-08-21 17:13:38 Reference 19 calls contains 284496 variants.
+2018-08-21 17:13:41 Reference 19 had maximum path complexity of 546 at 19:48771920-48772169
+2018-08-21 17:13:45 Representation bias correction factor for SNP 26/18.0 = 1.4444444444444444
+2018-08-21 17:13:45 Representation bias correction factor for NON_SNP 545/553.0 = 0.9855334538878843
+2018-08-21 17:13:45 Threshold  True-pos-baseline  True-pos-call  False-pos  False-neg  Precision  Sensitivity  F-measure
+----------------------------------------------------------------------------------------------------
+    0.000                571            609     283887      73076     0.0021       0.0078     0.0034
+     None                571            609     283887      73076     0.0021       0.0078     0.0034
+
+2018-08-21 17:13:45 Finished successfully in 9 s.
