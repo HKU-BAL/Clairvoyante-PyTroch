@@ -42,10 +42,10 @@ def Run(args):
 
     if args.chkpnt_fn != None:
         m.restoreParameters(os.path.abspath(args.chkpnt_fn))
-    TrainAll(args, m, utils, model)
+    TrainAll(args, m, utils)
 
 
-def TrainAll(args, m, utils, model):
+def TrainAll(args, m, utils):
     logging.info("Loading the training dataset ...")
     if args.bin_fn != None:
         with open(args.bin_fn, "rb") as fh:
@@ -97,7 +97,7 @@ def TrainAll(args, m, utils, model):
     while i < param.maxEpoch:
         threadPool = []
         if datasetPtr < validationStart:
-            threadPool.append(Thread(target=m.trainNoRT, args=(XBatch, YBatch, model, )))
+            threadPool.append(Thread(target=m.trainNoRT, args=(XBatch, YBatch, )))
         elif datasetPtr >= validationStart:
             threadPool.append(Thread(target=m.getLossNoRT, args=(XBatch, YBatch, )))
 
