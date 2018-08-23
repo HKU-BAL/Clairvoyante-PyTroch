@@ -1,16 +1,14 @@
 Initializing model ...
+/usr/local/lib/python2.7/dist-packages/torch/nn/parallel/data_parallel.py:24: UserWarning: 
+    There is an imbalance between your GPUs. You may want to exclude GPU 1 which
+    has less than 75% of the memory or cores of GPU 0. You can do so by setting
+    the device_ids argument to DataParallel, or by setting the CUDA_VISIBLE_DEVICES
+    environment variable.
+  warnings.warn(imbalance_warn.format(device_ids[min_pos], device_ids[max_pos]))
+Loading the training dataset ...
+The size of training dataset: 11024009
+Start training ...
+Learning rate: 1.00e-03
+L2 regularization lambda: 1.00e-03
 ("Let's use", 2L, 'GPUs!')
-Traceback (most recent call last):
-  File "train.py", line 280, in <module>
-    Run(args)
-  File "train.py", line 39, in Run
-    m.to(device)
-  File "/usr/local/lib/python2.7/dist-packages/torch/nn/modules/module.py", line 379, in to
-    return self._apply(convert)
-  File "/usr/local/lib/python2.7/dist-packages/torch/nn/modules/module.py", line 185, in _apply
-    module._apply(fn)
-  File "/usr/local/lib/python2.7/dist-packages/torch/nn/modules/module.py", line 191, in _apply
-    param.data = fn(param.data)
-  File "/usr/local/lib/python2.7/dist-packages/torch/nn/modules/module.py", line 377, in convert
-    return t.to(device, dtype if t.is_floating_point() else None, non_blocking)
-RuntimeError: CUDA error: out of memory
+0.001
