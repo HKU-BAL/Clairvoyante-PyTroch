@@ -35,9 +35,9 @@ def Run(args):
     if torch.cuda.device_count() > 1:
         print("Let's use", torch.cuda.device_count(), "GPUs!")
         # dim = 0 [30, xxx] -> [10, ...], [10, ...], [10, ...] on 3 GPUs
-        m = nn.DataParallel(m, device_ids=[0, 1])
-    m.to(device)
-    m = m.module
+        model = nn.DataParallel(m, device_ids=[0, 1])
+    model.to(device)
+    m = model.module
     # m.init()
 
     if args.chkpnt_fn != None:
@@ -97,7 +97,7 @@ def TrainAll(args, m, utils):
     while i < param.maxEpoch:
         threadPool = []
         if datasetPtr < validationStart:
-            threadPool.append(Thread(target=m.trainNoRT, args=(XBatch, YBatch, )))
+            threadPool.append(Thread(target=m.trainNoRT, args=(XBatch, YBatch, model)))
         elif datasetPtr >= validationStart:
             threadPool.append(Thread(target=m.getLossNoRT, args=(XBatch, YBatch, )))
 

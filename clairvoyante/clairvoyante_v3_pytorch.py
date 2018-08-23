@@ -243,8 +243,8 @@ class Net(nn.Module):
         batchX = torch.from_numpy(batchX).to(self.device).permute(0,3,1,2)
         self.optimizer.zero_grad()
 
-        m = nn.DataParallel(self).cuda()
-        out = m(batchX)
+        # m = nn.DataParallel(self).cuda()
+        out = self(batchX)
 
         loss = self.costFunction(torch.from_numpy(batchY).to(self.device))
         loss.backward()
@@ -258,15 +258,15 @@ class Net(nn.Module):
         return loss, None
 
     # Stores train loss in a private variable.
-    def trainNoRT(self, batchX, batchY):
+    def trainNoRT(self, batchX, batchY, model):
         self.trainLossRTVal = None
         self.trainSummaryRTVal = None
 
         batchX = torch.from_numpy(batchX).to(self.device).permute(0,3,1,2)
         self.optimizer.zero_grad()
 
-        m = nn.DataParallel(self).cuda()
-        out = m(batchX)
+        # m = nn.DataParallel(self).cuda()
+        out = model(batchX)
 
         loss = self.costFunction(torch.from_numpy(batchY).to(self.device))
         loss.backward()
