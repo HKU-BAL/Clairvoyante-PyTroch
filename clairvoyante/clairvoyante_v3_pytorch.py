@@ -258,7 +258,7 @@ class Net(nn.Module):
         return loss, None
 
     # Stores train loss in a private variable.
-    def trainNoRT(self, batchX, batchY, model):
+    def trainNoRT(self, batchX, batchY):
         self.trainLossRTVal = None
         self.trainSummaryRTVal = None
 
