@@ -243,7 +243,8 @@ class Net(nn.Module):
         batchX = torch.from_numpy(batchX).to(self.device).permute(0,3,1,2)
         self.optimizer.zero_grad()
 
-        out = self(batchX)
+        m = nn.DataParallel(self).cuda()
+        out = m(batchX)
 
         loss = self.costFunction(torch.from_numpy(batchY).to(self.device))
         loss.backward()
@@ -264,7 +265,8 @@ class Net(nn.Module):
         batchX = torch.from_numpy(batchX).to(self.device).permute(0,3,1,2)
         self.optimizer.zero_grad()
 
-        out = self(batchX)
+        m = nn.DataParallel(self).cuda()
+        out = m(batchX)
 
         loss = self.costFunction(torch.from_numpy(batchY).to(self.device))
         loss.backward()
