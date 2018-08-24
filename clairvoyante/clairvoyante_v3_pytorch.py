@@ -209,8 +209,8 @@ class Net(nn.Module):
 
     def getLoss(self, batchX, batchY):
         batchX = torch.from_numpy(batchX).to(self.device).permute(0,3,1,2)
-        out = self(batchX)
-        loss = self.costFunction(torch.from_numpy(batchY).to(self.device))
+        base, _, _, _, zygosity, varType, indelLength = self(batchX)
+        loss = self.costFunction(torch.from_numpy(batchY).to(self.device), base, zygosity, varType, indelLength)
 
         return loss.cpu().data.numpy()
 
@@ -218,8 +218,8 @@ class Net(nn.Module):
     def getLossNoRT(self, batchX, batchY):
         self.getLossLossRTVal = None
         batchX = torch.from_numpy(batchX).to(self.device).permute(0,3,1,2)
-        out = self(batchX)
-        loss = self.costFunction(torch.from_numpy(batchY).to(self.device))
+        base, _, _, _, zygosity, varType, indelLength = self(batchX)
+        loss = self.costFunction(torch.from_numpy(batchY).to(self.device), base, zygosity, varType, indelLength)
 
         self.getLossLossRTVal = loss.cpu().data.numpy()
 
@@ -238,7 +238,7 @@ class Net(nn.Module):
     def predictNoRT(self, XArray):
         XArray = torch.from_numpy(XArray).to(self.device).permute(0,3,1,2)
         self.predictBaseRTVal = None; self.predictZygosityRTVal = None; self.predictVarTypeRTVal = None; self.predictIndelLengthRTVal = None
-        self.predictBaseRTVal, self.predictZygosityRTVal, self.predictVarTypeRTVal, self.predictIndelLengthRTVal = self.forward(XArray)
+        self.predictBaseRTVal, self.predictZygosityRTVal, self.predictVarTypeRTVal, self.predictIndelLengthRTVal, _ , _ , _ = self.forward(XArray)
 
         self.predictBaseRTVal = self.predictBaseRTVal.cpu().data.numpy(); self.predictZygosityRTVal = self.predictZygosityRTVal.cpu().data.numpy(); self.predictVarTypeRTVal = self.predictVarTypeRTVal.cpu().data.numpy(); self.predictIndelLengthRTVal = self.predictIndelLengthRTVal.cpu().data.numpy()
 
@@ -246,10 +246,10 @@ class Net(nn.Module):
         batchX = torch.from_numpy(batchX).to(self.device).permute(0,3,1,2)
         self.optimizer.zero_grad()
 
-        # m = nn.DataParallel(self).cuda()
-        out = self(batchX)
+        m = nn.DataParallel(self).cuda()
+        base, _, _, _, zygosity, varType, indelLength = self(batchX)
 
-        loss = self.costFunction(torch.from_numpy(batchY).to(self.device))
+        loss = self.costFunction(torch.from_numpy(batchY).to(self.device), base, zygosity, varType, indelLength)
         loss.backward()
         self.optimizer.step()
 
