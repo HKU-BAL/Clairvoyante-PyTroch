@@ -138,19 +138,19 @@ class Net(nn.Module):
         YZygosityLogits = torch.add(YZygosityFC, epsilon)
         self.YZygosityLogits = YZygosityLogits
         YZygositySoftmax = softmax(YZygosityLogits)
-        self.YZygositySoftmax = YZygositySoftmax
+        # self.YZygositySoftmax = YZygositySoftmax
 
         YVarTypeFC = selu(self.YVarTypeFCLayer(dropout5))
         YVarTypeLogits = torch.add(YVarTypeFC, epsilon)
         self.YVarTypeLogits = YVarTypeLogits
         YVarTypeSoftmax = softmax(YVarTypeLogits)
-        self.YVarTypeSoftmax = YVarTypeSoftmax
+        # self.YVarTypeSoftmax = YVarTypeSoftmax
 
         YIndelLengthFC = selu(self.YIndelLengthFCLayer(dropout5))
         YIndelLengthLogits = torch.add(YIndelLengthFC, epsilon)
         self.YIndelLengthLogits = YIndelLengthLogits
         YIndelLengthSoftmax = softmax(YIndelLengthLogits)
-        self.YIndelLengthSoftmax = YIndelLengthSoftmax
+        # self.YIndelLengthSoftmax = YIndelLengthSoftmax
 
         # return YBaseChangeSigmoid.cpu().data.numpy(),YZygositySoftmax.cpu().data.numpy(),YVarTypeSoftmax.cpu().data.numpy(),YIndelLengthSoftmax.cpu().data.numpy()
         return YBaseChangeSigmoid,YZygositySoftmax,YVarTypeSoftmax,YIndelLengthSoftmax
@@ -270,10 +270,14 @@ class Net(nn.Module):
 
         m = nn.DataParallel(self).cuda()
         out = m(batchX)
-        self = m.module
-        print self.__dict__
+        self.YBaseChangeSigmoid = m.module.YBaseChangeSigmoid
+        self.YZygosityLogits = m.module.YZygosityLogits
+        self.YVarTypeLogits = m.module.YVarTypeLogits
+        self.YIndelLengthLogits = m.module.YIndelLengthLogits
 
-        loss = self.costFunction(torch.from_numpy(batchY).to(self.device))
+        # base, zygosity, varType, indelLength = m(batchX)
+
+        loss = self.costFunction(torch.from_numpy(batchY).to(self.device),base, zygosity, varType, indelLength)
         loss.backward()
         self.optimizer.step()
 
