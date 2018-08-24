@@ -270,10 +270,10 @@ class Net(nn.Module):
 
         m = nn.DataParallel(self).cuda()
         out = m(batchX)
-        self.YBaseChangeSigmoid = m.module.YBaseChangeSigmoid
-        self.YZygosityLogits = m.module.YZygosityLogits
-        self.YVarTypeLogits = m.module.YVarTypeLogits
-        self.YIndelLengthLogits = m.module.YIndelLengthLogits
+        self.YBaseChangeSigmoid = m.YBaseChangeSigmoid
+        self.YZygosityLogits = m.YZygosityLogits
+        self.YVarTypeLogits = m.YVarTypeLogits
+        self.YIndelLengthLogits = m.YIndelLengthLogits
 
         # base, zygosity, varType, indelLength = m(batchX)
 
