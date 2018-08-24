@@ -130,48 +130,48 @@ class Net(nn.Module):
 
         # 1 output layer that uses sigmoid for base change.
         YBaseChangeSigmoid = sigmoid(self.YBaseChangeSigmoidLayer(dropout4))
-        self.YBaseChangeSigmoid = YBaseChangeSigmoid
+        # self.YBaseChangeSigmoid = YBaseChangeSigmoid
 
         # 3 output fully connected layers for zygosity, varType and indelLength.
         # Uses SELU and softmax to output results.
         YZygosityFC = selu(self.YZygosityFCLayer(dropout5))
         YZygosityLogits = torch.add(YZygosityFC, epsilon)
-        self.YZygosityLogits = YZygosityLogits
+        # self.YZygosityLogits = YZygosityLogits
         YZygositySoftmax = softmax(YZygosityLogits)
         # self.YZygositySoftmax = YZygositySoftmax
 
         YVarTypeFC = selu(self.YVarTypeFCLayer(dropout5))
         YVarTypeLogits = torch.add(YVarTypeFC, epsilon)
-        self.YVarTypeLogits = YVarTypeLogits
+        # self.YVarTypeLogits = YVarTypeLogits
         YVarTypeSoftmax = softmax(YVarTypeLogits)
         # self.YVarTypeSoftmax = YVarTypeSoftmax
 
         YIndelLengthFC = selu(self.YIndelLengthFCLayer(dropout5))
         YIndelLengthLogits = torch.add(YIndelLengthFC, epsilon)
-        self.YIndelLengthLogits = YIndelLengthLogits
+        # self.YIndelLengthLogits = YIndelLengthLogits
         YIndelLengthSoftmax = softmax(YIndelLengthLogits)
         # self.YIndelLengthSoftmax = YIndelLengthSoftmax
 
         # return YBaseChangeSigmoid.cpu().data.numpy(),YZygositySoftmax.cpu().data.numpy(),YVarTypeSoftmax.cpu().data.numpy(),YIndelLengthSoftmax.cpu().data.numpy()
-        return YBaseChangeSigmoid,YZygositySoftmax,YVarTypeSoftmax,YIndelLengthSoftmax
+        return YBaseChangeSigmoid,YZygositySoftmax,YVarTypeSoftmax,YIndelLengthSoftmax, YZygosityLogits, YVarTypeLogits, YIndelLengthLogits
 
-    def costFunction(self, YPH):
+    def costFunction(self, YPH, YBaseChangeSigmoid, YZygosityLogits, YVarTypeLogits, YIndelLengthLogits):
         YPH = YPH.float()
 
         # Calculates MSE without computing average.
         mse = nn.MSELoss(reduction='sum')
-        loss1 = mse(self.YBaseChangeSigmoid, YPH.narrow(1, 0, self.outputShape1[0]))
+        loss1 = mse(YBaseChangeSigmoid, YPH.narrow(1, 0, self.outputShape1[0]))
 
         log_softmax = nn.LogSoftmax(dim=1)
 
         # Calculates cross entropy loss for the zygosity, varType and indelLength layers.
-        YZygosityCrossEntropy = log_softmax(self.YZygosityLogits) * -YPH.narrow(1, self.outputShape1[0], self.outputShape2[0])
+        YZygosityCrossEntropy = log_softmax(YZygosityLogits) * -YPH.narrow(1, self.outputShape1[0], self.outputShape2[0])
         loss2 = YZygosityCrossEntropy.sum()
 
-        YVarTypeCrossEntropy = log_softmax(self.YVarTypeLogits) * -YPH.narrow(1, self.outputShape1[0]+self.outputShape2[0], self.outputShape3[0])
+        YVarTypeCrossEntropy = log_softmax(YVarTypeLogits) * -YPH.narrow(1, self.outputShape1[0]+self.outputShape2[0], self.outputShape3[0])
         loss3 = YVarTypeCrossEntropy.sum()
 
-        YIndelLengthCrossEntropy = log_softmax(self.YIndelLengthLogits) * -YPH.narrow(1, self.outputShape1[0]+self.outputShape2[0]+self.outputShape3[0], self.outputShape4[0])
+        YIndelLengthCrossEntropy = log_softmax(YIndelLengthLogits) * -YPH.narrow(1, self.outputShape1[0]+self.outputShape2[0]+self.outputShape3[0], self.outputShape4[0])
         loss4 = YIndelLengthCrossEntropy.sum()
 
         # Calculates L2 regualrisation using the weights in the NN.
@@ -231,7 +231,7 @@ class Net(nn.Module):
 
     def predict(self, XArray):
         XArray = torch.from_numpy(XArray).to(self.device).permute(0,3,1,2)
-        base, zygosity, varType, indelLength = self.forward(XArray)
+        base, zygosity, varType, indelLength, _, _, _  = self.forward(XArray)
         return base.cpu().data.numpy(), zygosity.cpu().data.numpy(), varType.cpu().data.numpy(), indelLength.cpu().data.numpy()
 
     # Stores results in private variables.
@@ -269,15 +269,12 @@ class Net(nn.Module):
         self.optimizer.zero_grad()
 
         m = nn.DataParallel(self).cuda()
-        out = m(batchX)
-        self.YBaseChangeSigmoid = m.YBaseChangeSigmoid
-        self.YZygosityLogits = m.YZygosityLogits
-        self.YVarTypeLogits = m.YVarTypeLogits
-        self.YIndelLengthLogits = m.YIndelLengthLogits
+        # out = m(batchX)
+        base, _, _, _, zygosity, varType, indelLength = m(batchX)
 
         # base, zygosity, varType, indelLength = m(batchX)
 
-        loss = self.costFunction(torch.from_numpy(batchY).to(self.device),base, zygosity, varType, indelLength)
+        loss = self.costFunction(torch.from_numpy(batchY).to(self.device), base, zygosity, varType, indelLength)
         loss.backward()
         self.optimizer.step()
 
