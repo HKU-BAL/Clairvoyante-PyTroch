@@ -36,7 +36,8 @@ def Run(args):
     #     print("Let's use", torch.cuda.device_count(), "GPUs!")
     #     # dim = 0 [30, xxx] -> [10, ...], [10, ...], [10, ...] on 3 GPUs
     #     model = nn.DataParallel(m, device_ids=[0, 1])
-    m.to(device)
+    if torch.cuda.device_count() > 0:
+        m.to(device)
     # m = model.module
     # m.init()
 
