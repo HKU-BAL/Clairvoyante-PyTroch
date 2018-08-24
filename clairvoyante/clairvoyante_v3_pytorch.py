@@ -271,6 +271,7 @@ class Net(nn.Module):
         m = nn.DataParallel(self).cuda()
         out = m(batchX)
         self = m.module
+        print self.__dict__
 
         loss = self.costFunction(torch.from_numpy(batchY).to(self.device))
         loss.backward()
