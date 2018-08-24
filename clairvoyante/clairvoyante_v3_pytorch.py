@@ -232,13 +232,15 @@ class Net(nn.Module):
     def predict(self, XArray):
         XArray = torch.from_numpy(XArray).to(self.device).permute(0,3,1,2)
         base, zygosity, varType, indelLength = self.forward(XArray)
-        return base, zygosity, varType, indelLength
+        return base.cpu().data.numpy(), zygosity.cpu().data.numpy(), varType.cpu().data.numpy(), indelLength.cpu().data.numpy()
 
     # Stores results in private variables.
     def predictNoRT(self, XArray):
         XArray = torch.from_numpy(XArray).to(self.device).permute(0,3,1,2)
         self.predictBaseRTVal = None; self.predictZygosityRTVal = None; self.predictVarTypeRTVal = None; self.predictIndelLengthRTVal = None
         self.predictBaseRTVal, self.predictZygosityRTVal, self.predictVarTypeRTVal, self.predictIndelLengthRTVal = self.forward(XArray)
+
+        self.predictBaseRTVal = self.predictBaseRTVal.cpu().data.numpy(); self.predictZygosityRTVal = self.predictZygosityRTVal.cpu().data.numpy(); self.predictVarTypeRTVal = self.predictVarTypeRTVal.cpu().data.numpy(); self.predictIndelLengthRTVal = self.predictIndelLengthRTVal.cpu().data.numpy()
 
     def train(self, batchX, batchY):
         batchX = torch.from_numpy(batchX).to(self.device).permute(0,3,1,2)
@@ -268,6 +270,7 @@ class Net(nn.Module):
 
         m = nn.DataParallel(self)
         out = m(batchX)
+        self = m.module
 
         loss = self.costFunction(torch.from_numpy(batchY).to(self.device))
         loss.backward()
