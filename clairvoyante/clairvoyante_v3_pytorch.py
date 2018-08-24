@@ -10,9 +10,19 @@ import torch.optim as optim
 Initialises Clairvoyante with 3 convolutional layers, 2 hidden fully connected
 layers and 4 output layers. It specifies the parameters for these layers and it
 initialises the NN's weights using He initializtion. Contains different APIs for
-training, testing, loading and saving parameters. Code uses the first GPU in the
-system for training and testing. Pytorch uses NCHW format so all matrices require
-permutation to be used by the code.
+training, testing, loading and saving parameters.
+
+Pytorch uses NCHW format so all matrices require permutation in order to be used
+by the code.
+
+Use CUDA_VISIBLE_DEVICE environment variable to specify the GPUs to use. This code
+supports GPU parallelism. If no GPUs specified, CPU is used instead.
+
+Note: Add:
+device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
+if torch.cuda.device_count() > 0:
+    m.to(device)
+to train.py and callVar.py after initialising the model to use one or more GPU.
 """
 
 class Net(nn.Module):
@@ -93,6 +103,8 @@ class Net(nn.Module):
         return nn.ZeroPad2d((kb2,ka2,kb1,ka1))
 
     # Forward propagation
+    # Input: Variant tensors
+    # Output: Basechange, zygosity, vartype, indelLength and the logits of the last three.
     def forward(self, XPH):
         XPH = XPH
 
@@ -155,6 +167,7 @@ class Net(nn.Module):
         # return YBaseChangeSigmoid.cpu().data.numpy(),YZygositySoftmax.cpu().data.numpy(),YVarTypeSoftmax.cpu().data.numpy(),YIndelLengthSoftmax.cpu().data.numpy()
         return YBaseChangeSigmoid,YZygositySoftmax,YVarTypeSoftmax,YIndelLengthSoftmax, YZygosityLogits, YVarTypeLogits, YIndelLengthLogits
 
+    # Input: Output of forward function except YZygositySoftmax,YVarTypeSoftmax,YIndelLengthSoftmax     
     def costFunction(self, YPH, YBaseChangeSigmoid, YZygosityLogits, YVarTypeLogits, YIndelLengthLogits):
         YPH = YPH.float()
 
@@ -197,7 +210,7 @@ class Net(nn.Module):
             self.learningRateVal = learningRate
         for param_group in self.optimizer.param_groups:
             param_group['lr'] = self.learningRateVal
-        print(self.optimizer.param_groups[0]['lr'])
+        # print(self.optimizer.param_groups[0]['lr'])
         return self.learningRateVal
 
     def setL2RegularizationLambda(self, l2RegularizationLambda=None):
