@@ -167,7 +167,7 @@ class Net(nn.Module):
         # return YBaseChangeSigmoid.cpu().data.numpy(),YZygositySoftmax.cpu().data.numpy(),YVarTypeSoftmax.cpu().data.numpy(),YIndelLengthSoftmax.cpu().data.numpy()
         return YBaseChangeSigmoid,YZygositySoftmax,YVarTypeSoftmax,YIndelLengthSoftmax, YZygosityLogits, YVarTypeLogits, YIndelLengthLogits
 
-    # Input: Output of forward function except YZygositySoftmax,YVarTypeSoftmax,YIndelLengthSoftmax     
+    # Input: Output of forward function except YZygositySoftmax,YVarTypeSoftmax,YIndelLengthSoftmax
     def costFunction(self, YPH, YBaseChangeSigmoid, YZygosityLogits, YVarTypeLogits, YIndelLengthLogits):
         YPH = YPH.float()
 
@@ -222,10 +222,9 @@ class Net(nn.Module):
 
     def getLoss(self, batchX, batchY):
         batchX = torch.from_numpy(batchX).to(self.device).permute(0,3,1,2)
+        m = self
         if torch.cuda.device_count() > 1:
             m = nn.DataParallel(self).to(self.device)
-        else:
-            m = self
         base, _, _, _, zygosity, varType, indelLength = m(batchX)
         loss = self.costFunction(torch.from_numpy(batchY).to(self.device), base, zygosity, varType, indelLength)
 
@@ -235,10 +234,9 @@ class Net(nn.Module):
     def getLossNoRT(self, batchX, batchY):
         self.getLossLossRTVal = None
         batchX = torch.from_numpy(batchX).to(self.device).permute(0,3,1,2)
+        m = self
         if torch.cuda.device_count() > 1:
             m = nn.DataParallel(self).to(self.device)
-        else:
-            m = self
         base, _, _, _, zygosity, varType, indelLength = m(batchX)
         loss = self.costFunction(torch.from_numpy(batchY).to(self.device), base, zygosity, varType, indelLength)
 
@@ -252,10 +250,9 @@ class Net(nn.Module):
 
     def predict(self, XArray):
         XArray = torch.from_numpy(XArray).to(self.device).permute(0,3,1,2)
+        m = self
         if torch.cuda.device_count() > 1:
             m = nn.DataParallel(self).to(self.device)
-        else:
-            m = self
         base, zygosity, varType, indelLength, _, _, _  = m(XArray)
         return base.cpu().data.numpy(), zygosity.cpu().data.numpy(), varType.cpu().data.numpy(), indelLength.cpu().data.numpy()
 
@@ -263,10 +260,9 @@ class Net(nn.Module):
     def predictNoRT(self, XArray):
         XArray = torch.from_numpy(XArray).to(self.device).permute(0,3,1,2)
         self.predictBaseRTVal = None; self.predictZygosityRTVal = None; self.predictVarTypeRTVal = None; self.predictIndelLengthRTVal = None
+        m = self
         if torch.cuda.device_count() > 1:
             m = nn.DataParallel(self).to(self.device)
-        else:
-            m = self
         self.predictBaseRTVal, self.predictZygosityRTVal, self.predictVarTypeRTVal, self.predictIndelLengthRTVal, _ , _ , _ = m(XArray)
 
         self.predictBaseRTVal = self.predictBaseRTVal.cpu().data.numpy(); self.predictZygosityRTVal = self.predictZygosityRTVal.cpu().data.numpy(); self.predictVarTypeRTVal = self.predictVarTypeRTVal.cpu().data.numpy(); self.predictIndelLengthRTVal = self.predictIndelLengthRTVal.cpu().data.numpy()
@@ -275,10 +271,10 @@ class Net(nn.Module):
         batchX = torch.from_numpy(batchX).to(self.device).permute(0,3,1,2)
         self.optimizer.zero_grad()
 
+        m = self
         if torch.cuda.device_count() > 1:
             m = nn.DataParallel(self).to(self.device)
-        else:
-            m = self
+
         base, _, _, _, zygosity, varType, indelLength = m(batchX)
 
         loss = self.costFunction(torch.from_numpy(batchY).to(self.device), base, zygosity, varType, indelLength)
@@ -300,10 +296,10 @@ class Net(nn.Module):
         batchX = torch.from_numpy(batchX).to(self.device).permute(0,3,1,2)
         self.optimizer.zero_grad()
 
+        m = self
         if torch.cuda.device_count() > 1:
             m = nn.DataParallel(self).to(self.device)
-        else:
-            m = self
+
         # out = m(batchX)
         base, _, _, _, zygosity, varType, indelLength = m(batchX)
 
