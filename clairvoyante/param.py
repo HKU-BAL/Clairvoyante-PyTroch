@@ -8,8 +8,8 @@ matrixNum = 4               # Please change this value in the dataPrepScripts at
 bloscBlockSize = 500
 
 # Model hyperparameters
-trainBatchSize = 5000
-# trainBatchSize = 10000 # Normal size
+# trainBatchSize = 5000
+trainBatchSize = 10000 # Normal size
 # trainBatchSize = 1000 # Fit into one GPU
 predictBatchSize = 1000
 initialLearningRate = 0.001
