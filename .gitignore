@@ -5,3 +5,6 @@ trainAll_cp.out
 pytorchModels/trainAll2/*
 !pytorchModels/trainAll2/v2-000075.txt
 !pytorchModels/trainAll2/trainAll2.out
+pytorchModels/trainAll3_PGPU/*
+!pytorchModels/trainAll3_PGPU/nohup.out
+!pytorchModels/trainAll3_PGPU/v3-000059.txt 
