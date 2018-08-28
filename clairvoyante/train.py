@@ -32,11 +32,12 @@ def Run(args):
     # m = cpt.Net()
     device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
     m = cpt.Net()
-    # if torch.cuda.device_count() > 1:
-    #     print("Let's use", torch.cuda.device_count(), "GPUs!")
+    if torch.cuda.device_count() > 1:
+        print("Let's use", torch.cuda.device_count(), "GPUs!")
     #     # dim = 0 [30, xxx] -> [10, ...], [10, ...], [10, ...] on 3 GPUs
     #     model = nn.DataParallel(m, device_ids=[0, 1])
     if torch.cuda.device_count() > 0:
+        print("Use", torch.cuda.device_count(), "GPUs!")
         m.to(device)
     # m = model.module
     # m.init()
