@@ -15,8 +15,10 @@ training, testing, loading and saving parameters.
 Pytorch uses NCHW format so all matrices require permutation in order to be used
 by the code.
 
-Use CUDA_VISIBLE_DEVICE environment variable to specify the GPUs to use. This code
+Use the CUDA_VISIBLE_DEVICE environment variable to specify the GPUs to use. This code
 supports GPU parallelism. If no GPUs specified, CPU is used instead.
+
+Initialise using .Net().
 
 Note: Add:
 device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
@@ -85,9 +87,6 @@ class Net(nn.Module):
         nn.init.kaiming_normal_(self.YIndelLengthFCLayer.weight, mode='fan_in', nonlinearity='relu')
 
         self.optimizer = optim.Adam(self.parameters(), lr=self.learningRateVal)
-
-        # Used for epoch counting
-        self.counter = 1
 
         # GPU Device configuration
         self.device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
@@ -159,7 +158,7 @@ class Net(nn.Module):
 
         return YBaseChangeSigmoid,YZygositySoftmax,YVarTypeSoftmax,YIndelLengthSoftmax, YZygosityLogits, YVarTypeLogits, YIndelLengthLogits
 
-    # Input: Output of forward function except YZygositySoftmax,YVarTypeSoftmax,YIndelLengthSoftmax
+    # Calculates multi-task loss
     def costFunction(self, YPH, YBaseChangeSigmoid, YZygosityLogits, YVarTypeLogits, YIndelLengthLogits):
         YPH = YPH.float()
 
