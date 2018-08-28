@@ -142,29 +142,21 @@ class Net(nn.Module):
 
         # 1 output layer that uses sigmoid for base change.
         YBaseChangeSigmoid = sigmoid(self.YBaseChangeSigmoidLayer(dropout4))
-        # self.YBaseChangeSigmoid = YBaseChangeSigmoid
 
         # 3 output fully connected layers for zygosity, varType and indelLength.
         # Uses SELU and softmax to output results.
         YZygosityFC = selu(self.YZygosityFCLayer(dropout5))
         YZygosityLogits = torch.add(YZygosityFC, epsilon)
-        # self.YZygosityLogits = YZygosityLogits
         YZygositySoftmax = softmax(YZygosityLogits)
-        # self.YZygositySoftmax = YZygositySoftmax
 
         YVarTypeFC = selu(self.YVarTypeFCLayer(dropout5))
         YVarTypeLogits = torch.add(YVarTypeFC, epsilon)
-        # self.YVarTypeLogits = YVarTypeLogits
         YVarTypeSoftmax = softmax(YVarTypeLogits)
-        # self.YVarTypeSoftmax = YVarTypeSoftmax
 
         YIndelLengthFC = selu(self.YIndelLengthFCLayer(dropout5))
         YIndelLengthLogits = torch.add(YIndelLengthFC, epsilon)
-        # self.YIndelLengthLogits = YIndelLengthLogits
         YIndelLengthSoftmax = softmax(YIndelLengthLogits)
-        # self.YIndelLengthSoftmax = YIndelLengthSoftmax
 
-        # return YBaseChangeSigmoid.cpu().data.numpy(),YZygositySoftmax.cpu().data.numpy(),YVarTypeSoftmax.cpu().data.numpy(),YIndelLengthSoftmax.cpu().data.numpy()
         return YBaseChangeSigmoid,YZygositySoftmax,YVarTypeSoftmax,YIndelLengthSoftmax, YZygosityLogits, YVarTypeLogits, YIndelLengthLogits
 
     # Input: Output of forward function except YZygositySoftmax,YVarTypeSoftmax,YIndelLengthSoftmax
@@ -208,9 +200,10 @@ class Net(nn.Module):
             self.learningRateVal = self.learningRateVal * self.learningRateDecay
         else:
             self.learningRateVal = learningRate
+
         for param_group in self.optimizer.param_groups:
             param_group['lr'] = self.learningRateVal
-        # print(self.optimizer.param_groups[0]['lr'])
+
         return self.learningRateVal
 
     def setL2RegularizationLambda(self, l2RegularizationLambda=None):
@@ -218,6 +211,7 @@ class Net(nn.Module):
             self.l2RegularizationLambdaVal = self.l2RegularizationLambdaVal * self.l2RegularizationLambdaDecay
         else:
             self.l2RegularizationLambdaVal = l2RegularizationLambda
+
         return self.l2RegularizationLambdaVal
 
     def getLoss(self, batchX, batchY):
@@ -225,8 +219,8 @@ class Net(nn.Module):
         m = self
         if torch.cuda.device_count() > 1:
             m = nn.DataParallel(self).to(self.device)
-        base, _, _, _, zygosity, varType, indelLength = m(batchX)
-        loss = self.costFunction(torch.from_numpy(batchY).to(self.device), base, zygosity, varType, indelLength)
+        YBaseChangeSigmoid, _, _, _, YZygosityLogits, YVarTypeLogits, YIndelLengthLogits = m(batchX)
+        loss = self.costFunction(torch.from_numpy(batchY).to(self.device), YBaseChangeSigmoid, YZygosityLogits, YVarTypeLogits, YIndelLengthLogits)
 
         return loss.cpu().data.numpy()
 
@@ -237,11 +231,12 @@ class Net(nn.Module):
         m = self
         if torch.cuda.device_count() > 1:
             m = nn.DataParallel(self).to(self.device)
-        base, _, _, _, zygosity, varType, indelLength = m(batchX)
-        loss = self.costFunction(torch.from_numpy(batchY).to(self.device), base, zygosity, varType, indelLength)
+        YBaseChangeSigmoid, _, _, _, YZygosityLogits, YVarTypeLogits, YIndelLengthLogits = m(batchX)
+        loss = self.costFunction(torch.from_numpy(batchY).to(self.device), YBaseChangeSigmoid, YZygosityLogits, YVarTypeLogits, YIndelLengthLogits)
 
         self.getLossLossRTVal = loss.cpu().data.numpy()
 
+    # Stores parameters in a .txt file.
     def saveParameters(self, path):
         torch.save(self.state_dict(), path + ".txt")
 
@@ -253,8 +248,8 @@ class Net(nn.Module):
         m = self
         if torch.cuda.device_count() > 1:
             m = nn.DataParallel(self).to(self.device)
-        base, zygosity, varType, indelLength, _, _, _  = m(XArray)
-        return base.cpu().data.numpy(), zygosity.cpu().data.numpy(), varType.cpu().data.numpy(), indelLength.cpu().data.numpy()
+        YBaseChangeSigmoid,YZygositySoftmax,YVarTypeSoftmax,YIndelLengthSoftmax, _, _, _  = m(XArray)
+        return YBaseChangeSigmoid.cpu().data.numpy(), YZygositySoftmax.cpu().data.numpy(), YVarTypeSoftmax.cpu().data.numpy(), YIndelLengthSoftmax.cpu().data.numpy()
 
     # Stores results in private variables.
     def predictNoRT(self, XArray):
@@ -275,9 +270,9 @@ class Net(nn.Module):
         if torch.cuda.device_count() > 1:
             m = nn.DataParallel(self).to(self.device)
 
-        base, _, _, _, zygosity, varType, indelLength = m(batchX)
+        YBaseChangeSigmoid, _, _, _, YZygosityLogits, YVarTypeLogits, YIndelLengthLogits = m(batchX)
 
-        loss = self.costFunction(torch.from_numpy(batchY).to(self.device), base, zygosity, varType, indelLength)
+        loss = self.costFunction(torch.from_numpy(batchY).to(self.device), YBaseChangeSigmoid, YZygosityLogits, YVarTypeLogits, YIndelLengthLogits)
         loss.backward()
         self.optimizer.step()
 
@@ -300,12 +295,9 @@ class Net(nn.Module):
         if torch.cuda.device_count() > 1:
             m = nn.DataParallel(self).to(self.device)
 
-        # out = m(batchX)
-        base, _, _, _, zygosity, varType, indelLength = m(batchX)
+        YBaseChangeSigmoid, _, _, _, YZygosityLogits, YVarTypeLogits, YIndelLengthLogits = m(batchX)
 
-        # base, zygosity, varType, indelLength = m(batchX)
-
-        loss = self.costFunction(torch.from_numpy(batchY).to(self.device), base, zygosity, varType, indelLength)
+        loss = self.costFunction(torch.from_numpy(batchY).to(self.device), YBaseChangeSigmoid, YZygosityLogits, YVarTypeLogits, YIndelLengthLogits)
         loss.backward()
         self.optimizer.step()
 

@@ -44,22 +44,19 @@ def Run(args):
         param.NUM_THREADS = args.threads
     device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
     m = cpt.Net()
+
     if torch.cuda.device_count() > 0:
         print("Let's use", torch.cuda.device_count(), "GPUs!")
-        # dim = 0 [30, xxx] -> [10, ...], [10, ...], [10, ...] on 3 GPUs
-    #     model = nn.DataParallel(m)
+
     if torch.cuda.device_count() > 0:
         m.to(device)
 
-    # m.init()
-    #
     m.restoreParameters(os.path.abspath(args.chkpnt_fn))
     Test(args, m, utils)
 
 
 def Output(args, call_fh, num, XBatch, posBatch, base, z, t, l):
     if args.v2 == True or args.v3 == True:
-        # print base
         if num != len(base):
           sys.exit("Inconsistent shape between input tensor and output predictions %d/%d" % (num, len(base)))
         #          --------------  ------  ------------    ------------------
@@ -177,7 +174,6 @@ def Test(args, m, utils):
     end2, num2, XBatch2, posBatch2 = next(tensorGenerator)
     file = open("testfile.txt","w")
     file.write(str(XBatch2[0]))
-    # print(XBatch2)
     m.predictNoRT(XBatch2)
     base = m.predictBaseRTVal; z = m.predictZygosityRTVal; t = m.predictVarTypeRTVal; l = m.predictIndelLengthRTVal
     if end2 == 0:
@@ -199,7 +195,6 @@ def Test(args, m, utils):
                 end = end2; num = num2; XBatch = XBatch2; posBatch = posBatch2
             if end2 == 0:
                 end2 = end3; num2 = num3; XBatch2 = XBatch3; posBatch2 = posBatch3
-            #print >> sys.stderr, end, end2, end3, terminate
             if terminate == 1:
                 break
     elif end2 == 1:
