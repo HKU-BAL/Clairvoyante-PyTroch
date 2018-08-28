@@ -18,7 +18,7 @@ by the code.
 Use the CUDA_VISIBLE_DEVICE environment variable to specify the GPUs to use. This code
 supports GPU parallelism. If no GPUs specified, CPU is used instead.
 
-Initialise using .Net().
+Initialise using {module name}.Net().
 
 Note: Add:
 device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
@@ -215,9 +215,11 @@ class Net(nn.Module):
 
     def getLoss(self, batchX, batchY):
         batchX = torch.from_numpy(batchX).to(self.device).permute(0,3,1,2)
+
         m = self
         if torch.cuda.device_count() > 1:
             m = nn.DataParallel(self).to(self.device)
+
         YBaseChangeSigmoid, _, _, _, YZygosityLogits, YVarTypeLogits, YIndelLengthLogits = m(batchX)
         loss = self.costFunction(torch.from_numpy(batchY).to(self.device), YBaseChangeSigmoid, YZygosityLogits, YVarTypeLogits, YIndelLengthLogits)
 
@@ -227,9 +229,11 @@ class Net(nn.Module):
     def getLossNoRT(self, batchX, batchY):
         self.getLossLossRTVal = None
         batchX = torch.from_numpy(batchX).to(self.device).permute(0,3,1,2)
+
         m = self
         if torch.cuda.device_count() > 1:
             m = nn.DataParallel(self).to(self.device)
+
         YBaseChangeSigmoid, _, _, _, YZygosityLogits, YVarTypeLogits, YIndelLengthLogits = m(batchX)
         loss = self.costFunction(torch.from_numpy(batchY).to(self.device), YBaseChangeSigmoid, YZygosityLogits, YVarTypeLogits, YIndelLengthLogits)
 
@@ -244,19 +248,24 @@ class Net(nn.Module):
 
     def predict(self, XArray):
         XArray = torch.from_numpy(XArray).to(self.device).permute(0,3,1,2)
+
         m = self
         if torch.cuda.device_count() > 1:
             m = nn.DataParallel(self).to(self.device)
+
         YBaseChangeSigmoid,YZygositySoftmax,YVarTypeSoftmax,YIndelLengthSoftmax, _, _, _  = m(XArray)
+
         return YBaseChangeSigmoid.cpu().data.numpy(), YZygositySoftmax.cpu().data.numpy(), YVarTypeSoftmax.cpu().data.numpy(), YIndelLengthSoftmax.cpu().data.numpy()
 
     # Stores results in private variables.
     def predictNoRT(self, XArray):
         XArray = torch.from_numpy(XArray).to(self.device).permute(0,3,1,2)
         self.predictBaseRTVal = None; self.predictZygosityRTVal = None; self.predictVarTypeRTVal = None; self.predictIndelLengthRTVal = None
+
         m = self
         if torch.cuda.device_count() > 1:
             m = nn.DataParallel(self).to(self.device)
+
         self.predictBaseRTVal, self.predictZygosityRTVal, self.predictVarTypeRTVal, self.predictIndelLengthRTVal, _ , _ , _ = m(XArray)
 
         self.predictBaseRTVal = self.predictBaseRTVal.cpu().data.numpy(); self.predictZygosityRTVal = self.predictZygosityRTVal.cpu().data.numpy(); self.predictVarTypeRTVal = self.predictVarTypeRTVal.cpu().data.numpy(); self.predictIndelLengthRTVal = self.predictIndelLengthRTVal.cpu().data.numpy()
