@@ -1,0 +1,128 @@
+Initializing model ...
+Loading the training dataset ...
+The size of training dataset: 11024009
+Start training ...
+Learning rate: 1.00e-03
+L2 regularization lambda: 1.00e-03
+("Let's use", 1L, 'GPUs!')
+1 Training loss: 0.9180760884692122 Validation loss:  0.5001751387318264
+Epoch time elapsed: 191.51 s
+2 Training loss: 0.4346602532077273 Validation loss:  0.3894893142704261
+Epoch time elapsed: 192.01 s
+3 Training loss: 0.35608575897590455 Validation loss:  0.3283039109106074
+Epoch time elapsed: 193.91 s
+4 Training loss: 0.30420209628806516 Validation loss:  0.28155226485595564
+Epoch time elapsed: 194.19 s
+5 Training loss: 0.2661582398417361 Validation loss:  0.25189809257410606
+Epoch time elapsed: 193.16 s
+6 Training loss: 0.24104781869114297 Validation loss:  0.23447765311066748
+Epoch time elapsed: 195.05 s
+7 Training loss: 0.22502500658336613 Validation loss:  0.22391232557205487
+Epoch time elapsed: 194.20 s
+8 Training loss: 0.2132774576415491 Validation loss:  0.21218613601583008
+Epoch time elapsed: 194.56 s
+9 Training loss: 0.20453621213943785 Validation loss:  0.20586657376795012
+Epoch time elapsed: 193.85 s
+10 Training loss: 0.19778798210547358 Validation loss:  0.1986911479961154
+Epoch time elapsed: 194.04 s
+11 Training loss: 0.19164534093202495 Validation loss:  0.19515290876972138
+Epoch time elapsed: 194.16 s
+12 Training loss: 0.18718051722695414 Validation loss:  0.19001002800492744
+Epoch time elapsed: 194.25 s
+13 Training loss: 0.18312446531189094 Validation loss:  0.18798202606423586
+Epoch time elapsed: 194.66 s
+14 Training loss: 0.17984018826242051 Validation loss:  0.18512941393693058
+Epoch time elapsed: 194.37 s
+15 Training loss: 0.17680950652151173 Validation loss:  0.18214311057071814
+Epoch time elapsed: 194.75 s
+16 Training loss: 0.17418929918778664 Validation loss:  0.18121585888953012
+Epoch time elapsed: 194.31 s
+17 Training loss: 0.17188271087433216 Validation loss:  0.17985476248604293
+Epoch time elapsed: 194.87 s
+18 Training loss: 0.1700348175693309 Validation loss:  0.17878803326241424
+Epoch time elapsed: 194.50 s
+19 Training loss: 0.1681475326408075 Validation loss:  0.17717822864370525
+Epoch time elapsed: 195.00 s
+20 Training loss: 0.1664737580838829 Validation loss:  0.17788598346303613
+Epoch time elapsed: 194.79 s
+21 Training loss: 0.16468192571170717 Validation loss:  0.1756340506154887
+Epoch time elapsed: 193.96 s
+22 Training loss: 0.16327587602664495 Validation loss:  0.17602537538775165
+Epoch time elapsed: 194.34 s
+23 Training loss: 0.16201333662572245 Validation loss:  0.17354288435564072
+Epoch time elapsed: 193.64 s
+New learning rate: 1.00e-04
+New L2 regularization lambda: 1.00e-04
+24 Training loss: 0.15005410535116495 Validation loss:  0.16337334377163987
+Epoch time elapsed: 193.98 s
+25 Training loss: 0.14733005007030803 Validation loss:  0.16259752992816345
+Epoch time elapsed: 193.88 s
+26 Training loss: 0.1460597523159214 Validation loss:  0.16179968065821468
+Epoch time elapsed: 193.81 s
+27 Training loss: 0.14522686095576773 Validation loss:  0.16187515538439956
+Epoch time elapsed: 193.71 s
+28 Training loss: 0.14450367011165727 Validation loss:  0.1615092923993945
+Epoch time elapsed: 191.87 s
+29 Training loss: 0.1439068856711415 Validation loss:  0.16148408428894245
+Epoch time elapsed: 191.98 s
+30 Training loss: 0.14347485459380363 Validation loss:  0.16125065202269223
+Epoch time elapsed: 190.73 s
+31 Training loss: 0.142936623377591 Validation loss:  0.16140998278607996
+Epoch time elapsed: 190.71 s
+32 Training loss: 0.14256356785383462 Validation loss:  0.1610371199118295
+Epoch time elapsed: 192.57 s
+33 Training loss: 0.14219497625433739 Validation loss:  0.16097372606342608
+Epoch time elapsed: 192.62 s
+34 Training loss: 0.14172094505562458 Validation loss:  0.16101602857816202
+Epoch time elapsed: 192.44 s
+35 Training loss: 0.1413782854039622 Validation loss:  0.1609949993018834
+Epoch time elapsed: 192.54 s
+36 Training loss: 0.1411963018404029 Validation loss:  0.16135669482993542
+Epoch time elapsed: 192.52 s
+37 Training loss: 0.1407351321836634 Validation loss:  0.1606593564405756
+Epoch time elapsed: 198.24 s
+New learning rate: 1.00e-05
+New L2 regularization lambda: 1.00e-05
+38 Training loss: 0.13929855355206 Validation loss:  0.16039384291624903
+Epoch time elapsed: 204.94 s
+39 Training loss: 0.13887746084732436 Validation loss:  0.16024052897952118
+Epoch time elapsed: 204.85 s
+40 Training loss: 0.138851537819513 Validation loss:  0.16015227844865643
+Epoch time elapsed: 204.73 s
+41 Training loss: 0.13880725997936383 Validation loss:  0.1596885593131682
+Epoch time elapsed: 204.75 s
+42 Training loss: 0.13853566964915034 Validation loss:  0.16046387121351693
+Epoch time elapsed: 204.88 s
+43 Training loss: 0.13852354184985533 Validation loss:  0.15982048864904871
+Epoch time elapsed: 204.60 s
+44 Training loss: 0.1385210768598014 Validation loss:  0.15978541544823757
+Epoch time elapsed: 204.37 s
+45 Training loss: 0.13850032240119559 Validation loss:  0.15981206691727928
+Epoch time elapsed: 204.29 s
+46 Training loss: 0.1384733521749283 Validation loss:  0.15972220435176254
+Epoch time elapsed: 204.07 s
+47 Training loss: 0.1383650923964746 Validation loss:  0.1601298721884046
+Epoch time elapsed: 204.17 s
+48 Training loss: 0.13828041103303343 Validation loss:  0.15984439542541395
+Epoch time elapsed: 204.17 s
+Training time elapsed: 9415.51 s
+Best validation loss at batch: 41
+Testing on the training and validation dataset ...
+Prediciton time elapsed: 98.19 s
+Version 2 model, evaluation on base change:
+all/top1/top2/top1p/top2p: 11024009/9834276/10922960/89.21/99.08
+Version 2 model, evaluation on Zygosity:
+2088901	102950
+132031	8700127
+Version 2 model, evaluation on variant type:
+7347406	24488	9849	11646
+28003	3160841	2380	1111
+13532	5181	167250	23193
+14387	1189	16335	197218
+Version 2 model, evaluation on indel length:
+10562820	15426	2485	990	1584	2419
+21973	223917	1584	160	137	562
+5544	25134	37923	1957	1259	1237
+3254	5587	3479	11982	4481	831
+3303	1753	5277	3246	21774	4881
+3346	1174	2725	574	6188	33043
