@@ -277,7 +277,6 @@ class Net(nn.Module):
 
         loss = loss.cpu().data.numpy()
 
-        self.counter += 1
         sys.stdout.flush()
 
         return loss, None
@@ -302,7 +301,6 @@ class Net(nn.Module):
 
         loss = loss.cpu().data.numpy()
 
-        self.counter += 1
         sys.stdout.flush()
 
         self.trainLossRTVal = loss
