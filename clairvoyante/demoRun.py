@@ -8,6 +8,9 @@ import utils_v2 as utils
 import torch
 # import clairvoyante_v2 as cv
 import clairvoyante_v3_pytorch as cv
+import clairvoyante_v3_pytorch as cpt
+import torch
+import torch.nn as nn
 
 logging.basicConfig(format='%(message)s', level=logging.INFO)
 
