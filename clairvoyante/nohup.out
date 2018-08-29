@@ -1,0 +1,17 @@
+Initializing model ...
+Loading the training dataset ...
+The size of training dataset: 11024009
+Start training ...
+Learning rate: 1.00e-03
+L2 regularization lambda: 1.00e-03
+/usr/local/lib/python2.7/dist-packages/torch/nn/parallel/data_parallel.py:24: UserWarning: 
+    There is an imbalance between your GPUs. You may want to exclude GPU 1 which
+    has less than 75% of the memory or cores of GPU 0. You can do so by setting
+    the device_ids argument to DataParallel, or by setting the CUDA_VISIBLE_DEVICES
+    environment variable.
+  warnings.warn(imbalance_warn.format(device_ids[min_pos], device_ids[max_pos]))
+("Let's use", 2L, 'GPUs!')
+1 Training loss: 0.9103774327237328 Validation loss:  0.514138372512791
+Epoch time elapsed: 350.16 s
+2 Training loss: 0.43687237725422445 Validation loss:  0.383894616736556
+Epoch time elapsed: 345.04 s

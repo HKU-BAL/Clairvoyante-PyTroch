@@ -20,5 +20,4 @@ clairvoyante/demoRun.sh
 clairvoyante/h5*
 clairvoyante/load*
 clairvoyante/save*
-clairvoyante/nohup.out
 clairvoyante/train.sh
