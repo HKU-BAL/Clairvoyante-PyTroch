@@ -36,7 +36,7 @@ GPU parallelism. If no GPUs are specified, the CPU is used instead.
 
 `correctVCFs/` | Contains the VCFs produced by TF Clairvoyante and training and testing data sets 
 ---|---
-`basic_luo_chr21.vcf` | VCF produced by comparing model trained from TF to chr21 vcf
+`basic_luo_chr21.vcf` | VCF produced by CAllVAr using model produced by `demoRun.py`
 `correct_21.vcf	` | `chr21.vcf` in testingData
 `luo_bam_21.vcf` | VCF produced by CallVarBam using fullv3-illumina-novoalign-hg001+hg002-hg38/learningRate1e-3.epoch500
 `luo_tensor_can_21.vcf` | VCF produced by CallVar using fullv3-illumina-novoalign-hg001+hg002-hg38/learningRate1e3.epoch500
