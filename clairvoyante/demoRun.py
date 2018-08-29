@@ -16,7 +16,13 @@ def Run(args):
     logging.info("Initializing model ...")
     utils.SetupEnv()
     device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
-    m = cv.Net()
+    m = cpt.Net()
+
+    if torch.cuda.device_count() > 0:
+        print("Let's use", torch.cuda.device_count(), "GPUs!")
+
+    if torch.cuda.device_count() > 0:
+        m.to(device)
     # m.init()
 
     TrainAll(args, m)
