@@ -20,7 +20,7 @@ device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
 if torch.cuda.device_count() > 0:
     m.to(device)
 ```
-to the run function in train.py and callVar.py after initialising the model to use one or more GPU.
+to the run function in train.py and callVar.py after initialising the model to use one or more GPUs.
 
 ## GPU
 Use the `CUDA_VISIBLE_DEVICE` environment variable to specify the GPUs to use. This can be done using the command `export 
