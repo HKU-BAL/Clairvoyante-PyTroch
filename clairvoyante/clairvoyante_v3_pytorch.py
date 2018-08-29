@@ -12,11 +12,11 @@ layers and 4 output layers. It specifies the parameters for these layers and it
 initialises the NN's weights using He initializtion. Contains different APIs for
 training, testing, loading and saving parameters.
 
-Pytorch uses NCHW format so all matrices require permutation in order to be used
+Pytorch uses the NCHW format for dimensions so all tensors require permutation in order to be used
 by the code.
 
 Use the CUDA_VISIBLE_DEVICE environment variable to specify the GPUs to use. This code
-supports GPU parallelism. If no GPUs specified, CPU is used instead.
+supports GPU parallelism. If no GPUs are specified, the CPU is used instead.
 
 Initialise using {module name}.Net().
 
