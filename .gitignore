@@ -16,3 +16,9 @@ evalResults/h*
 evalResults/i*
 pytorchModels/d*
 pytorchModels/i*
+clairvoyante/demoRun.sh
+clairvoyante/h5*
+clairvoyante/load*
+clairvoyante/save*
+clairvoyante/nohup.out
+clairvoyante/train.sh
