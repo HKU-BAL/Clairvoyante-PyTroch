@@ -19,5 +19,5 @@ pytorchModels/i*
 clairvoyante/demoRun.sh
 clairvoyante/h5*
 clairvoyante/load*
-clairvoyante/save*
+clairvoyante/save_weights*
 clairvoyante/train.sh
