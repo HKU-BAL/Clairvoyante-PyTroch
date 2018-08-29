@@ -27,3 +27,17 @@ Use the `CUDA_VISIBLE_DEVICE` environment variable to specify the GPUs to use. T
 CUDA_VISIBLE_DEVICES="$i"`, where `$i` is an integer from 0 identifying the seqeunce of the GPU to be used. The code supports 
 GPU parallelism. If no GPUs are specified, the CPU is used instead.
 
+## Folder Stucture and Program Descriptions
+
+`clairvoyante/` | Contains the Pytorch Model  
+---|---
+`clairvoyante_v3_pytorch.py` | Pytorch Model of Clairvoyante 
+`clairvoyante_v3_pytorch_test.py` | Unit test cases to test Pytorch model's loss function 
+
+`correctVCFs/` | Contains the VCFs produced by TF Clairvoyante and training and testing data sets 
+---|---
+`basic_luo_chr21.vcf` | VCF produced by comparing model trained from TF to chr21 vcf
+`correct_21.vcf	` | `chr21.vcf` in testingData
+`luo_bam_21.vcf` | VCF produced by CallVarBam using fullv3-illumina-novoalign-hg001+hg002-hg38/learningRate1e-3.epoch500
+`luo_tensor_can_21.vcf` | VCF produced by CallVar using fullv3-illumina-novoalign-hg001+hg002-hg38/learningRate1e3.epoch500
+`ngmlr1_chr19.vcf` | VCF produced by CallVarBam using fullv3-ont-ngmlr-hg001-hg19
