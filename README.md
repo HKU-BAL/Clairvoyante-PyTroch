@@ -1,7 +1,7 @@
 # Clairvoyante-pt
 Pytorch version of Clairvoyante. 
 
-The main file is `clairvoyante_v3_pytorch.py` which contains the code for the Pytorch model. It has the exact same APIs as the tensorflow Clairvoyante model in https://github.com/aquaskyline/Clairvoyante/blob/rbDev/clairvoyante/clairvoyante_v3.py. 
+The main file is `clairvoyante/clairvoyante_v3_pytorch.py` which contains the code for the Pytorch model. It has the exact same APIs as the tensorflow Clairvoyante model in https://github.com/aquaskyline/Clairvoyante/blob/rbDev/clairvoyante/clairvoyante_v3.py. 
 
 The code initialises Clairvoyante with 3 convolutional layers, 2 hidden fully connected layers and 4 output layers. It 
 specifies the parameters for these layers and it initialises the network's weights using He initializtion. 
