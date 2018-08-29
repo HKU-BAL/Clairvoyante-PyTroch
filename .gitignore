@@ -10,4 +10,9 @@ pytorchModels/trainAll3_PGPU/*
 !pytorchModels/trainAll3_PGPU/v3-000059.txt
 pytorchModels/trainAll4_1000PGPU/*
 !pytorchModels/trainAll4_1000PGPU/nohup.out
-!pytorchModels/trainAll4_1000PGPU/v4-000054.txt 
+!pytorchModels/trainAll4_1000PGPU/v4-000054.txt
+evalResults/d*
+evalResults/h*
+evalResults/i*
+pytorchModels/d*
+pytorchModels/i*
