@@ -1,0 +1,9 @@
+Initializing model ...
+Loading the training dataset ...
+The size of training dataset: 11024009
+Start training ...
+Learning rate: 1.00e-03
+L2 regularization lambda: 1.00e-03
+("Let's use", 1L, 'GPUs!')
+1 Training loss: 0.8544271838806585 Validation loss:  0.4838699804970938
+Epoch time elapsed: 603.47 s
