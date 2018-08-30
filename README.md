@@ -8,6 +8,11 @@ specifies the parameters for these layers and it initialises the network's weigh
 
 Pytorch uses NCHW format for tensor dimensions so all tensors require permutation in order to be used by the code.
 
+## Dependencies
+Install this on top of the dependencies and folders listed in https://github.com/aquaskyline/Clairvoyante:
+```bash
+pip install torch torchvision
+```
 ## How to use the module
 Initialise the model in the run function in train.py and callVar.py using 
 ```python
