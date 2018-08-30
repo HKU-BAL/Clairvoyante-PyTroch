@@ -58,9 +58,9 @@ GPU parallelism. If no GPUs are specified, the CPU is used instead.
 ---|---
 `trainAll/` | Model produced by training using the GTX 980.
 `trainAll2/` | Model produced after training a second time using the GTX 980.
-`trainAll3_5000PGPU` | Model produced after training using the GTX 1080 Ti and GTX Titan using a training batch size of 5000.
-`trainAll4_10000PGPU` | Model produced after training using the GTX 1080 Ti and GTX Titan using a training batch size of 10000.
-`trainAll5_1080Ti` | Output produced after training using the GTX 1080 Ti.
-`trainAll6_Titan` | Output produced after training using the GTX Titan.
-`trainAll7_2_1080_Ti` | Output produced after training using two GTX 1080 Ti.
+`trainAll3_5000PGPU/` | Model produced after training using the GTX 1080 Ti and GTX Titan using a training batch size of 5000.
+`trainAll4_10000PGPU/` | Model produced after training using the GTX 1080 Ti and GTX Titan using a training batch size of 10000.
+`trainAll5_1080Ti/` | Output produced after training using the GTX 1080 Ti.
+`trainAll6_Titan/` | Output produced after training using the GTX Titan.
+`trainAll7_2_1080_Ti/` | Output produced after training using two GTX 1080 Ti.
 
