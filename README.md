@@ -31,13 +31,36 @@ GPU parallelism. If no GPUs are specified, the CPU is used instead.
 
 `clairvoyante/` | Contains the Pytorch Model  
 ---|---
-`clairvoyante_v3_pytorch.py` | Pytorch Model of Clairvoyante 
-`clairvoyante_v3_pytorch_test.py` | Unit test cases to test Pytorch model's loss function 
+`clairvoyante_v3_pytorch.py` | Pytorch Model of Clairvoyante. 
+`clairvoyante_v3_pytorch_test.py` | Unit test cases to test Pytorch model's loss function.
 
 `correctVCFs/` | Contains the VCFs produced by TF Clairvoyante and training and testing data sets 
 ---|---
-`basic_luo_chr21.vcf` | VCF produced by CAllVAr using model produced by `demoRun.py`
-`correct_21.vcf	` | `chr21.vcf` in testingData
-`luo_bam_21.vcf` | VCF produced by CallVarBam using fullv3-illumina-novoalign-hg001+hg002-hg38/learningRate1e-3.epoch500
-`luo_tensor_can_21.vcf` | VCF produced by CallVar using fullv3-illumina-novoalign-hg001+hg002-hg38/learningRate1e3.epoch500
-`ngmlr1_chr19.vcf` | VCF produced by CallVarBam using fullv3-ont-ngmlr-hg001-hg19
+`basic_luo_chr21.vcf` | VCF produced by CallVAr using model produced by `demoRun.py`.
+`correct_21.vcf	` | `chr21.vcf` in the testingData folder.
+`luo_bam_21.vcf` | VCF produced by CallVarBam using fullv3-illumina-novoalign-hg001+hg002-hg38/learningRate1e-3.epoch500.
+`luo_tensor_can_21.vcf` | VCF produced by CallVar using fullv3-illumina-novoalign-hg001+hg002-hg38/learningRate1e3.epoch500.
+`ngmlr1_chr19.vcf` | VCF produced by CallVarBam using fullv3-ont-ngmlr-hg001-hg19.
+
+`evalResults/` | Each folder contains a results for a different `vcf-eval`. The results are at `summary/summary.txt` in each folder. 
+---|---
+`TrainBamCPU_chr21/` | Comparison between VCFs made by `train.py` and `CallVarBam.py` and `correct_21.vcf`. **(Used in presentation)**
+`basicLuo_correct/` | Comparison between VCFs made by `train.py` and `correct_21.vcf`. **(Used in presentation)**
+`correct_bam/` | Comparison between VCFs made by `fullv3-illumina-novoalign-hg001+hg002-hg38/learningRate1e3.epoch500` using `CallVarBam.py` and `correct_21.vcf`.
+`luo_correct/` | Comparison between VCFs made by `fullv3-illumina-novoalign-hg001+hg002-hg38/learningRate1e3.epoch500` using `CallVar.py` and `correct_21.vcf`.
+`ngmlr1_chr19/` | Comparison between VCFs made by `fullv3-ont-ngmlr-hg001-hg19` using `CallVarBam.py` and `/nas7/yswong/base/hg19_chr19.vcf.gz`. **(Used in presentation)**
+`trainAll2_chr19/` | Second comparison betwen VCFs produced by CallVarBam using fullv3-ont-ngmlr-hg001-hg19 and `/nas7/yswong/base/hg19_chr19.vcf.gz` using the  GTX 980. **(Used in presentation)**
+`trainAll3_chr19/` | Comparison betwen VCFs produced by `CallVarBam.py` using `fullv3-ont-ngmlr-hg001-hg19` and `/nas7/yswong/base/hg19_chr19.vcf.gz` using the GTX Titan and GTX 1080 Ti with a training batch size of 5000.
+`trainAll4_chr19/` | Comparison betwen VCFs produced by `CallVarBam.py` using `fullv3-ont-ngmlr-hg001-hg19` and `/nas7/yswong/base/hg19_chr19.vcf.gz` using the GTX Titan and GTX 1080 Ti with a training batch size of 10000.
+`trainAll_correct/` | Comparison betwen VCFs produced by `CallVarBam.py` using `fullv3-ont-ngmlr-hg001-hg19` and `/nas7/yswong/base/hg19_chr19.vcf.gz` using the GTX 980.
+
+`pytorchModels/` | Each folder is a training experiment. Each folder contains the output of each training and some also contains the model parameters stored in a txt file. All models uses `/nas7/yswong/trainingData/tensor_all.bin` to train.
+---|---
+`trainAll/` | Model produced by training using the GTX 980.
+`trainAll2/` | Model produced after training a second time using the GTX 980.
+`trainAll3_5000PGPU` | Model produced after training using the GTX 1080 Ti and GTX Titan using a training batch size of 5000.
+`trainAll4_10000PGPU` | Model produced after training using the GTX 1080 Ti and GTX Titan using a training batch size of 10000.
+`trainAll5_1080Ti` | Output produced after training using the GTX 1080 Ti.
+`trainAll6_Titan` | Output produced after training using the GTX Titan.
+`trainAll7_2_1080_Ti` | Output produced after training using two GTX 1080 Ti.
+
