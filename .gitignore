@@ -22,3 +22,5 @@ clairvoyante/load*
 clairvoyante/save_weights*
 clairvoyante/train.sh
 evalResults/chr19
+clairvoyante/nohup.out
+clairvoyante/save_pid.txt
