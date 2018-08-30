@@ -21,3 +21,4 @@ clairvoyante/h5*
 clairvoyante/load*
 clairvoyante/save_weights*
 clairvoyante/train.sh
+evalResults/chr19
